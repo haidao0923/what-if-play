@@ -1,0 +1,5 @@
+{
+  "name": "WIP?",
+  "description": "A collection of fun, minimalist games to play with your friends.",
+  "requestFramePermissions": ["display-capture"]
+}
