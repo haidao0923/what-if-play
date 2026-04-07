@@ -448,23 +448,25 @@ export default function FakeArtist({ isDarkMode, initialPlayers }: { isDarkMode:
       animate={{ opacity: 1 }}
       className="flex flex-col items-center justify-center space-y-4 w-full max-w-2xl mx-auto p-4"
     >
-      <div className="w-full flex items-center justify-between">
-        <div className="flex items-center space-x-3">
-          <div 
-            className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold shadow-lg"
-            style={{ backgroundColor: COLORS[players[drawTurnIdx].colorIndex % COLORS.length] }}
-          >
-            {players[drawTurnIdx].name[0]}
+      {step === 'drawing' && (
+        <div className="w-full flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div 
+              className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold shadow-lg"
+              style={{ backgroundColor: COLORS[players[drawTurnIdx].colorIndex % COLORS.length] }}
+            >
+              {players[drawTurnIdx].name[0]}
+            </div>
+            <div>
+              <p className={`text-sm font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>{players[drawTurnIdx].name}'s Turn</p>
+              <p className={`text-[10px] uppercase font-bold tracking-widest ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Round {drawRound} of {numRounds}</p>
+            </div>
           </div>
-          <div>
-            <p className={`text-sm font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>{players[drawTurnIdx].name}'s Turn</p>
-            <p className={`text-[10px] uppercase font-bold tracking-widest ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Round {drawRound} of {numRounds}</p>
+          <div className={`px-4 py-1 rounded-full text-xs font-black border ${isDarkMode ? 'bg-slate-900 border-slate-800 text-indigo-400' : 'bg-white border-slate-100 text-indigo-600 shadow-sm'}`}>
+            Category: {currentCategory}
           </div>
         </div>
-        <div className={`px-4 py-1 rounded-full text-xs font-black border ${isDarkMode ? 'bg-slate-900 border-slate-800 text-indigo-400' : 'bg-white border-slate-100 text-indigo-600 shadow-sm'}`}>
-          Category: {currentCategory}
-        </div>
-      </div>
+      )}
 
       <div className={`relative w-full aspect-square rounded-[2rem] overflow-hidden border-4 ${isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100 shadow-2xl'}`}>
         <canvas
@@ -478,10 +480,10 @@ export default function FakeArtist({ isDarkMode, initialPlayers }: { isDarkMode:
           onTouchStart={startDrawing}
           onTouchMove={draw}
           onTouchEnd={endDrawing}
-          className="w-full h-full touch-none cursor-crosshair"
+          className={`w-full h-full touch-none ${step === 'drawing' ? 'cursor-crosshair' : 'cursor-default'}`}
         />
         
-        {isDrawing && (
+        {step === 'drawing' && isDrawing && (
           <div className="absolute top-4 right-4 pointer-events-none">
             <motion.div 
               animate={{ scale: [1, 1.2, 1] }}
@@ -493,70 +495,110 @@ export default function FakeArtist({ isDarkMode, initialPlayers }: { isDarkMode:
           </div>
         )}
 
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 pointer-events-none text-center">
-          <p className={`text-[10px] font-bold uppercase tracking-widest opacity-30 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
-            Draw one continuous stroke
-          </p>
-        </div>
-      </div>
-
-      <div className="w-full flex justify-center space-x-2 overflow-x-auto py-2">
-        {players.map((p, i) => (
-          <div 
-            key={i} 
-            className={`flex flex-col items-center space-y-1 transition-all ${i === drawTurnIdx ? 'scale-110' : 'opacity-40'}`}
-          >
-            <div 
-              className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-bold"
-              style={{ backgroundColor: COLORS[p.colorIndex % COLORS.length] }}
-            >
-              {p.name[0]}
-            </div>
-            <div className={`w-1 h-1 rounded-full ${i === drawTurnIdx ? 'bg-indigo-500' : 'transparent'}`} />
+        {step === 'drawing' && (
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 pointer-events-none text-center">
+            <p className={`text-[10px] font-bold uppercase tracking-widest opacity-30 ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>
+              Draw one continuous stroke
+            </p>
           </div>
-        ))}
-      </div>
-    </motion.div>
-  );
-
-  const renderVoting = () => (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="flex flex-col items-center justify-center space-y-8 w-full max-w-md mx-auto p-6"
-    >
-      <div className="text-center space-y-2">
-        <div className={`inline-flex p-4 rounded-3xl mb-4 border transition-colors duration-300 ${isDarkMode ? 'bg-rose-900/30 border-rose-500/20 text-rose-400' : 'bg-rose-50 border-rose-100 text-rose-600'}`}>
-          <Users size={48} />
-        </div>
-        <h2 className={`text-3xl font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>Who is the Fake?</h2>
-        <p className={isDarkMode ? 'text-slate-400' : 'text-slate-500'}>Discuss and vote for the suspect</p>
+        )}
       </div>
 
-      <div className="w-full space-y-3">
-        {players.map((p, i) => (
-          <button
-            key={i}
-            onClick={() => handleVote(i)}
-            className={`w-full p-4 rounded-2xl border-2 transition-all flex items-center justify-between group ${
-              isDarkMode 
-                ? 'bg-slate-900 border-slate-800 hover:border-indigo-500 text-slate-100' 
-                : 'bg-white border-slate-100 hover:border-indigo-500 text-slate-900 shadow-sm'
-            }`}
-          >
-            <div className="flex items-center space-x-4">
+      {step === 'drawing' && (
+        <div className="w-full flex justify-center space-x-2 overflow-x-auto py-2">
+          {players.map((p, i) => (
+            <div 
+              key={i} 
+              className={`flex flex-col items-center space-y-1 transition-all ${i === drawTurnIdx ? 'scale-110' : 'opacity-40'}`}
+            >
               <div 
-                className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold"
+                className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-bold"
                 style={{ backgroundColor: COLORS[p.colorIndex % COLORS.length] }}
               >
                 {p.name[0]}
               </div>
-              <span className="font-bold text-lg">{p.name}</span>
+              <div className={`w-1 h-1 rounded-full ${i === drawTurnIdx ? 'bg-indigo-500' : 'transparent'}`} />
             </div>
-            <div className={`w-6 h-6 rounded-full border-2 transition-all group-hover:border-indigo-500 ${isDarkMode ? 'border-slate-700' : 'border-slate-200'}`} />
-          </button>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
+
+      {step === 'voting' && (
+        <div className="w-full space-y-4">
+          <div className="text-center space-y-1">
+            <h2 className={`text-2xl font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>Who is the Fake Artist?</h2>
+            <p className={`text-xs ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Discuss and vote for the suspect</p>
+          </div>
+          <div className="w-full grid grid-cols-2 gap-3">
+            {players.map((p, i) => (
+              <button
+                key={i}
+                onClick={() => handleVote(i)}
+                className={`p-3 rounded-xl border-2 transition-all flex items-center space-x-3 group ${
+                  isDarkMode 
+                    ? 'bg-slate-900 border-slate-800 hover:border-indigo-500 text-slate-100' 
+                    : 'bg-white border-slate-100 hover:border-indigo-500 text-slate-900 shadow-sm'
+                }`}
+              >
+                <div 
+                  className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
+                  style={{ backgroundColor: COLORS[p.colorIndex % COLORS.length] }}
+                >
+                  {p.name[0]}
+                </div>
+                <span className="font-bold text-sm truncate">{p.name}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {step === 'reveal-fake' && (
+        <div className="w-full space-y-4">
+          {(() => {
+            const isFakeCaught = players[votedIdx]?.id === fakeArtistId;
+            return (
+              <>
+                <div className="text-center space-y-2">
+                  <div className="flex items-center justify-center space-x-4">
+                    <div className={`p-3 rounded-2xl border-2 transition-all duration-500 ${isFakeCaught ? 'bg-green-500/10 border-green-500 text-green-500' : 'bg-rose-500/10 border-rose-500 text-rose-500'}`}>
+                      {isFakeCaught ? <Check size={24} /> : <AlertCircle size={24} />}
+                    </div>
+                    <h2 className={`text-2xl font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>
+                      {isFakeCaught ? 'CAUGHT!' : 'ESCAPED!'}
+                    </h2>
+                  </div>
+                  <p className={`text-sm font-bold ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                    The Fake Artist was <span className="text-indigo-400">{players.find(p => p.id === fakeArtistId)?.name}</span>
+                  </p>
+                </div>
+
+                <div className={`w-full p-6 rounded-3xl border-4 border-dashed text-center space-y-4 ${isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100 shadow-xl'}`}>
+                  <div className="space-y-1">
+                    <p className="text-xs font-bold uppercase tracking-widest text-indigo-500">Fake Artist's Turn</p>
+                    <p className={`text-lg font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>Can you guess the word?</p>
+                  </div>
+                  
+                  <div className="flex flex-col space-y-2">
+                    <button
+                      onClick={() => handleFakeArtistGuess(true)}
+                      className="w-full py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-500 shadow-lg shadow-green-900/20 active:scale-95 text-sm"
+                    >
+                      I guessed it correctly!
+                    </button>
+                    <button
+                      onClick={() => handleFakeArtistGuess(false)}
+                      className={`w-full py-3 rounded-xl font-bold transition-all border text-sm ${isDarkMode ? 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'}`}
+                    >
+                      I have no idea...
+                    </button>
+                  </div>
+                </div>
+              </>
+            );
+          })()}
+        </div>
+      )}
     </motion.div>
   );
 
@@ -633,61 +675,13 @@ export default function FakeArtist({ isDarkMode, initialPlayers }: { isDarkMode:
     );
   };
 
-  const renderRevealFake = () => {
-    const isFakeCaught = players[votedIdx]?.id === fakeArtistId;
-    
-    return (
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col items-center justify-center space-y-8 w-full max-w-md mx-auto p-6"
-      >
-        <div className="text-center space-y-4">
-          <div className={`inline-flex p-6 rounded-[2.5rem] mb-4 border-4 transition-all duration-500 ${isFakeCaught ? 'bg-green-500/10 border-green-500 text-green-500 rotate-12' : 'bg-rose-500/10 border-rose-500 text-rose-500 -rotate-12'}`}>
-            {isFakeCaught ? <Check size={64} /> : <AlertCircle size={64} />}
-          </div>
-          <h2 className={`text-4xl font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>
-            {isFakeCaught ? 'CAUGHT!' : 'ESCAPED!'}
-          </h2>
-          <p className={`text-xl font-bold ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-            The Fake Artist was <span className="text-indigo-400">{players.find(p => p.id === fakeArtistId)?.name}</span>
-          </p>
-        </div>
-
-        <div className={`w-full p-8 rounded-[2.5rem] border-4 border-dashed text-center space-y-6 ${isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100 shadow-2xl'}`}>
-          <div className="space-y-2">
-            <p className="text-sm font-bold uppercase tracking-widest text-indigo-500">Fake Artist's Turn</p>
-            <p className={`text-2xl font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>Can you guess the word?</p>
-          </div>
-          
-          <div className="flex flex-col space-y-3">
-            <button
-              onClick={() => handleFakeArtistGuess(true)}
-              className="w-full py-4 bg-green-600 text-white rounded-2xl font-bold hover:bg-green-500 shadow-lg shadow-green-900/20 active:scale-95"
-            >
-              I guessed it correctly!
-            </button>
-            <button
-              onClick={() => handleFakeArtistGuess(false)}
-              className={`w-full py-4 rounded-2xl font-bold transition-all border ${isDarkMode ? 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'}`}
-            >
-              I have no idea...
-            </button>
-          </div>
-        </div>
-      </motion.div>
-    );
-  };
-
   return (
     <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'bg-slate-950 text-slate-50' : 'bg-slate-50 text-slate-900'}`}>
       <main className="flex flex-col items-center justify-center min-h-[calc(100vh-80px)]">
         <AnimatePresence mode="wait">
           {step === 'setup' && renderSetup()}
           {step === 'reveal' && renderReveal()}
-          {step === 'drawing' && renderDrawing()}
-          {step === 'voting' && renderVoting()}
-          {step === 'reveal-fake' && renderRevealFake()}
+          {(step === 'drawing' || step === 'voting' || step === 'reveal-fake') && renderDrawing()}
           {step === 'results' && renderResults()}
         </AnimatePresence>
       </main>

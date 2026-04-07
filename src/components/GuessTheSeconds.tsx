@@ -258,8 +258,11 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
 
   // Separate effect to handle metronome results when timer stops
   useEffect(() => {
-    if (gameMode === 'metronome' && !isTimerRunning && lastElapsed === targetTime && metronomeTaps.length > 0) {
-      const diff = metronomeTaps.reduce((acc, tap) => acc + tap.error, 0);
+    if (gameMode === 'metronome' && !isTimerRunning && lastElapsed !== null) {
+      const expectedTaps = Math.floor(targetTime / metronomeInterval);
+      const penalty = Math.max(0, expectedTaps - metronomeTaps.length) * (metronomeInterval / 2);
+      const diff = metronomeTaps.reduce((acc, tap) => acc + tap.error, 0) + penalty;
+
       setResults(prev => {
         const next = [...prev];
         const existingIdx = next.findIndex(r => r.id === currentPlayerIndex + 1);
@@ -267,7 +270,7 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
           next.push({
             id: currentPlayerIndex + 1,
             name: playerNames[currentPlayerIndex] || `Player ${currentPlayerIndex + 1}`,
-            elapsedTime: targetTime,
+            elapsedTime: lastElapsed,
             diff,
             metronomeTaps: [...metronomeTaps],
             metronomeInterval
@@ -292,9 +295,17 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
         const target = Math.round(elapsed / metronomeInterval) * metronomeInterval;
         if (target > 0) {
           const error = Math.abs(elapsed - target);
+          const expectedTaps = Math.floor(targetTime / metronomeInterval);
+          const newTapsCount = metronomeTaps.length + 1;
+          
           setMetronomeTaps(prev => [...prev, { time: elapsed, target, error }]);
+          
+          if (newTapsCount >= expectedTaps) {
+            setIsTimerRunning(false);
+            setLastElapsed(elapsed);
+          }
         }
-        return; // Don't stop the timer in metronome mode
+        return;
       }
 
       setIsTimerRunning(false);
@@ -329,12 +340,6 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
           }
           return next;
         });
-      } else if (gameMode === 'metronome') {
-        const target = Math.round(elapsed / metronomeInterval) * metronomeInterval;
-        if (target > 0) {
-          const error = Math.abs(elapsed - target);
-          setMetronomeTaps(prev => [...prev, { time: elapsed, target, error }]);
-        }
       } else {
         let diff = 0;
         let disqualified = false;
@@ -777,8 +782,13 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
                         : 'text-orange-400'
                 }`}>
                   {gameMode === 'metronome' ? (
-                    `Total Error: ${metronomeTaps.reduce((acc, tap) => acc + tap.error, 0).toFixed(3)}s`
-                  ) : gameMode === 'under' && lastElapsed > targetTime ? 'BUSTED!' :
+                  (() => {
+                    const expectedTaps = Math.floor(targetTime / metronomeInterval);
+                    const penalty = Math.max(0, expectedTaps - metronomeTaps.length) * (metronomeInterval / 2);
+                    const totalError = metronomeTaps.reduce((acc, tap) => acc + tap.error, 0) + penalty;
+                    return `Total Error: ${totalError.toFixed(3)}s${penalty > 0 ? ` (+${penalty.toFixed(1)}s penalty)` : ''}`;
+                  })()
+                ) : gameMode === 'under' && lastElapsed > targetTime ? 'BUSTED!' :
                    Math.abs(lastElapsed - effectiveTarget) < 0.1 ? 'PERFECT!' : 
                    Math.abs(lastElapsed - effectiveTarget) < 0.5 ? 'SO CLOSE!' : 
                    lastElapsed > effectiveTarget ? 'TOO LATE' : 'TOO EARLY'}
@@ -915,6 +925,18 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
                       <span className="text-red-400">±{tap.error.toFixed(2)}s</span>
                     </div>
                   ))}
+                  {(() => {
+                    const interval = result.metronomeInterval || 1;
+                    const expectedTaps = Math.floor(targetTime / interval);
+                    const missing = Math.max(0, expectedTaps - result.metronomeTaps.length);
+                    if (missing === 0) return null;
+                    return Array.from({ length: missing }).map((_, i) => (
+                      <div key={`missing-${i}`} className="flex justify-between items-center text-[10px] p-2 rounded-lg bg-red-900/20 border border-red-900/30">
+                        <span className="text-red-400 font-bold">Missing Tap</span>
+                        <span className="text-red-400">±{(interval / 2).toFixed(2)}s</span>
+                      </div>
+                    ));
+                  })()}
                 </div>
                 {result.metronomeTaps.length === 0 && (
                   <p className="text-[10px] text-center text-slate-500 italic">No taps recorded!</p>

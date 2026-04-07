@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Gamepad2, Timer, Sparkles, ChevronRight, Zap, MessageSquare, Users, Search, Share2, Sun, Moon, Plus, X, UserPlus, Medal, Palette } from 'lucide-react';
+import { Gamepad2, Timer, Sparkles, ChevronRight, Zap, MessageSquare, Users, Search, Share2, Sun, Moon, Plus, X, UserPlus, Medal, Palette, Brain } from 'lucide-react';
 import ShareButton from './components/ShareButton';
 import GuessTheSeconds from './components/GuessTheSeconds';
 import CategoryTimer from './components/CategoryTimer';
@@ -10,16 +10,19 @@ import MostLikelyTo from './components/MostLikelyTo';
 import ObservationBingo from './components/ObservationBingo';
 import GauntletMode from './components/GauntletMode';
 import FakeArtist from './components/FakeArtist';
-import ScreenRecorder from './components/ScreenRecorder';
+import GeoTrivia from './components/GeoTrivia';
+import MemoryShape from './components/MemoryShape';
+import ColorMatch from './components/ColorMatch';
 
-type GameType = 'none' | 'guess-seconds' | 'category-timer' | 'password' | 'choice-charades' | 'most-likely-to' | 'observation-bingo' | 'gauntlet' | 'fake-artist';
+type GameType = 'none' | 'guess-seconds' | 'category-timer' | 'password' | 'choice-charades' | 'most-likely-to' | 'observation-bingo' | 'gauntlet' | 'fake-artist' | 'geotrivia' | 'memory-shape' | 'color-match';
 
 export default function App() {
   const [activeGame, setActiveGame] = useState<GameType>('none');
-  const [gauntletConfig, setGauntletConfig] = useState<{ step: 'name' | 'selection' | 'playing' | 'results' | 'leaderboard', type: 'seconds' | 'math' }>({ step: 'name', type: 'seconds' });
+  const [gauntletConfig, setGauntletConfig] = useState<{ step: 'name' | 'selection' | 'playing' | 'results' | 'leaderboard', type: 'seconds' | 'math' | 'memory-classic' | 'memory-progressive' }>({ step: 'name', type: 'seconds' });
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [players, setPlayers] = useState<string[]>([]);
   const [newPlayerName, setNewPlayerName] = useState('');
+  const [playerFilter, setPlayerFilter] = useState<number>(0);
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
@@ -49,7 +52,8 @@ export default function App() {
       description: 'Stop the timer as close to the target as possible without looking.',
       icon: <Timer className="w-8 h-8 text-indigo-500" />,
       color: 'bg-indigo-50',
-      accent: 'indigo'
+      accent: 'indigo',
+      minPlayers: 1
     },
     {
       id: 'category-timer' as GameType,
@@ -57,7 +61,8 @@ export default function App() {
       description: 'Say a word in the category and pass the turn before your time runs out!',
       icon: <Zap className="w-8 h-8 text-rose-500" />,
       color: 'bg-rose-50',
-      accent: 'rose'
+      accent: 'rose',
+      minPlayers: 2
     },
     {
       id: 'password' as GameType,
@@ -65,7 +70,8 @@ export default function App() {
       description: 'Give one-word clues to help your team guess the secret word.',
       icon: <MessageSquare className="w-8 h-8 text-amber-500" />,
       color: 'bg-amber-50',
-      accent: 'amber'
+      accent: 'amber',
+      minPlayers: 2
     },
     {
       id: 'choice-charades' as GameType,
@@ -73,7 +79,8 @@ export default function App() {
       description: 'Fast-paced acting with three difficulty levels at once!',
       icon: <Sparkles className="w-8 h-8 text-rose-500" />,
       color: 'bg-rose-50',
-      accent: 'rose'
+      accent: 'rose',
+      minPlayers: 2
     },
     {
       id: 'most-likely-to' as GameType,
@@ -81,7 +88,8 @@ export default function App() {
       description: 'Point to the person who fits the prompt best. Perfect for waiting in line!',
       icon: <Users className="w-8 h-8 text-indigo-500" />,
       color: 'bg-indigo-50',
-      accent: 'indigo'
+      accent: 'indigo',
+      minPlayers: 2
     },
     {
       id: 'observation-bingo' as GameType,
@@ -89,7 +97,8 @@ export default function App() {
       description: 'Spot items in the crowd to get 3 in a row. Perfect for people-watching!',
       icon: <Search className="w-8 h-8 text-rose-500" />,
       color: 'bg-rose-50',
-      accent: 'rose'
+      accent: 'rose',
+      minPlayers: 1
     },
     {
       id: 'fake-artist' as GameType,
@@ -97,7 +106,35 @@ export default function App() {
       description: 'One person doesn\'t know the word. Draw one stroke at a time to find the imposter!',
       icon: <Palette className="w-8 h-8 text-indigo-500" />,
       color: 'bg-indigo-50',
-      accent: 'indigo'
+      accent: 'indigo',
+      minPlayers: 3
+    },
+    {
+      id: 'geotrivia' as GameType,
+      title: 'GeoTrivia',
+      description: 'Test your US geography! Find the state on a blank map before time runs out.',
+      icon: <Search className="w-8 h-8 text-amber-500" />,
+      color: 'bg-amber-50',
+      accent: 'amber',
+      minPlayers: 1
+    },
+    {
+      id: 'memory-shape' as GameType,
+      title: 'Memory Shape',
+      description: 'Memorize shapes and numbers before they disappear. Can you remember them all?',
+      icon: <Brain className="w-8 h-8 text-violet-500" />,
+      color: 'bg-violet-50',
+      accent: 'violet',
+      minPlayers: 1
+    },
+    {
+      id: 'color-match' as GameType,
+      title: 'Color Match',
+      description: 'Don\'t read the word! Tap the color of the ink as fast as you can.',
+      icon: <Palette className="w-8 h-8 text-emerald-500" />,
+      color: 'bg-emerald-50',
+      accent: 'emerald',
+      minPlayers: 1
     },
   ];
 
@@ -117,7 +154,6 @@ export default function App() {
             </h1>
           </div>
           <div className="flex items-center space-x-2">
-            <ScreenRecorder isDarkMode={isDarkMode} />
             <button
               onClick={toggleTheme}
               className={`p-2 rounded-full transition-colors ${isDarkMode ? 'text-slate-400 hover:text-yellow-400 hover:bg-slate-800' : 'text-slate-500 hover:text-indigo-600 hover:bg-slate-100'}`}
@@ -125,13 +161,13 @@ export default function App() {
               {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
             </button>
             <ShareButton 
-              title="WIP?"
+              title="WI-Play"
               text={`Come play ${games.find(g => g.id === activeGame)?.title} with me!`}
               className={`p-2 transition-colors ${isDarkMode ? 'text-slate-400 hover:text-indigo-400' : 'text-slate-500 hover:text-indigo-600'}`}
             />
           </div>
         </nav>
-        <div className="max-w-5xl mx-auto">
+        <div className={activeGame === 'geotrivia' ? "max-w-7xl mx-auto" : "max-w-5xl mx-auto"}>
           {activeGame === 'guess-seconds' && <GuessTheSeconds isDarkMode={isDarkMode} initialPlayers={players} />}
           {activeGame === 'category-timer' && <CategoryTimer isDarkMode={isDarkMode} initialPlayers={players} />}
           {activeGame === 'password' && <PasswordGame isDarkMode={isDarkMode} initialPlayers={players} />}
@@ -139,6 +175,9 @@ export default function App() {
           {activeGame === 'most-likely-to' && <MostLikelyTo isDarkMode={isDarkMode} initialPlayers={players} />}
           {activeGame === 'observation-bingo' && <ObservationBingo isDarkMode={isDarkMode} initialPlayers={players} />}
           {activeGame === 'fake-artist' && <FakeArtist isDarkMode={isDarkMode} initialPlayers={players} />}
+          {activeGame === 'geotrivia' && <GeoTrivia isDarkMode={isDarkMode} initialPlayers={players} />}
+          {activeGame === 'memory-shape' && <MemoryShape isDarkMode={isDarkMode} initialPlayers={players} />}
+          {activeGame === 'color-match' && <ColorMatch isDarkMode={isDarkMode} initialPlayers={players} />}
           {activeGame === 'gauntlet' && (
             <GauntletMode 
               isDarkMode={isDarkMode} 
@@ -157,7 +196,6 @@ export default function App() {
       {/* Header */}
       <header className="pt-16 pb-8 px-6 text-center space-y-4 relative">
         <div className="absolute top-6 right-6 flex items-center space-x-2">
-          <ScreenRecorder isDarkMode={isDarkMode} />
           <button
             onClick={toggleTheme}
             className={`p-3 rounded-2xl transition-all ${isDarkMode ? 'bg-slate-900 text-slate-400 hover:text-yellow-400 border border-slate-800' : 'bg-white text-slate-500 hover:text-indigo-600 border border-slate-200 shadow-sm'}`}
@@ -168,16 +206,21 @@ export default function App() {
         <motion.div 
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          className={`inline-flex p-4 rounded-3xl shadow-2xl mb-4 border transition-colors duration-300 ${isDarkMode ? 'bg-slate-900 shadow-indigo-900/20 border-slate-800' : 'bg-white shadow-indigo-100 border-slate-100'}`}
+          className={`inline-flex p-1 rounded-3xl shadow-2xl mb-4 border overflow-hidden transition-colors duration-300 ${isDarkMode ? 'bg-slate-900 shadow-indigo-900/20 border-slate-800' : 'bg-white shadow-indigo-100 border-slate-100'}`}
         >
-          <Gamepad2 size={40} className="text-indigo-400" />
+          <img 
+            src="logo.png" 
+            alt="WI-Play Logo" 
+            className="w-20 h-20 object-cover"
+            referrerPolicy="no-referrer"
+          />
         </motion.div>
         <motion.h1 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-5xl font-black tracking-tight"
         >
-          WIP<span className="text-indigo-400">?</span>
+          WI-<span className="text-indigo-400">Play</span>
         </motion.h1>
         <motion.p 
           initial={{ opacity: 0 }}
@@ -194,7 +237,7 @@ export default function App() {
           className="pt-4"
         >
           <ShareButton 
-            title="WIP?"
+            title="WI-Play"
             text="Check out these fun party games! Perfect for playing with friends in person or while waiting in line."
             className={`inline-flex items-center space-x-2 px-6 py-3 rounded-2xl font-bold transition-all border ${isDarkMode ? 'bg-indigo-900/30 text-indigo-400 hover:bg-indigo-900/50 border-indigo-500/20' : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100 border-indigo-200'}`}
           />
@@ -339,11 +382,40 @@ export default function App() {
           </div>
         </motion.div>
       </section>
+      
+      {/* Game Filters */}
+      <section className="max-w-4xl mx-auto px-6 mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between space-y-4 sm:space-y-0">
+          <div className="flex items-center space-x-2">
+            <Users size={18} className={isDarkMode ? 'text-slate-500' : 'text-slate-400'} />
+            <span className={`text-sm font-bold uppercase tracking-wider ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Filter by Players</span>
+          </div>
+          <div className={`flex p-1 rounded-2xl border transition-all ${isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-200 shadow-sm'}`}>
+            {[0, 1, 2, 3].map((count) => (
+              <button
+                key={count}
+                onClick={() => setPlayerFilter(count)}
+                className={`px-4 sm:px-6 py-2 rounded-xl font-bold text-sm transition-all ${
+                  playerFilter === count
+                    ? 'bg-indigo-600 text-white shadow-lg'
+                    : isDarkMode
+                      ? 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                      : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
+                }`}
+              >
+                {count === 0 ? 'ALL' : `${count}+`}
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* Game Grid */}
       <main className="max-w-4xl mx-auto px-6 pb-20">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {games.map((game, index) => (
+          {games
+            .filter(game => playerFilter === 0 || game.minPlayers <= playerFilter)
+            .map((game, index) => (
             <motion.div
               key={game.id}
               initial={{ opacity: 0, y: 20 }}
@@ -390,7 +462,7 @@ export default function App() {
 
       {/* Footer */}
       <footer className={`text-center py-8 text-sm ${isDarkMode ? 'text-slate-600' : 'text-slate-400'}`}>
-        <p>© 2026 WIP?</p>
+        <p>© 2026 WI-Play</p>
       </footer>
     </div>
   );
