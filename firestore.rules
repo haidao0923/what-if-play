@@ -1,0 +1,57 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: gauntlet_leaderboards
+    // Document ID: auto-generated
+    // Fields:
+    //   - playerName: string (required, 1-50 chars)
+    //   - score: number (required, positive)
+    //   - gameType: string (required, enum)
+    //   - timestamp: timestamp (required)
+    //   - userId: string (required, immutable, matches auth.uid)
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+          (request.auth.token.email == "HaiXDao0923@gmail.com" && request.auth.token.email_verified == true));
+    }
+
+    function isValidScore(data) {
+      let validGameTypes = [
+        'seconds', 'math', 'memory-classic', 'memory-progressive', 
+        'geotrivia-time', 'geotrivia-distance', 'color-match', 
+        'color-match-easy', 'color-match-mix'
+      ];
+      return data.keys().hasAll(['playerName', 'score', 'gameType', 'timestamp']) &&
+             data.keys().hasOnly(['playerName', 'score', 'gameType', 'timestamp']) &&
+             data.playerName is string && data.playerName.size() >= 1 && data.playerName.size() <= 50 &&
+             data.score is number && data.score >= 0 &&
+             data.gameType is string && data.gameType in validGameTypes &&
+             data.timestamp is timestamp;
+    }
+
+    match /gauntlet_leaderboards/{scoreId} {
+      allow read: if true; 
+      allow create: if isValidScore(request.resource.data);
+      allow update, delete: if isAdmin(); 
+    }
+  }
+}

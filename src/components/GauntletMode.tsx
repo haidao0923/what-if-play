@@ -1,19 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Trophy, RotateCcw, Play, Users, Timer, ArrowLeft, Sparkles, Zap, ChevronRight, User, Medal, History, Share2, Brain, MapPin, Globe, Palette } from 'lucide-react';
+import { Trophy, RotateCcw, Play, Users, Timer, ArrowLeft, Sparkles, Zap, ChevronRight, User, Medal, History, Share2, Brain, MapPin, Globe, Palette, Clock, Calendar, BarChart3 } from 'lucide-react';
 import ShareButton from './ShareButton';
 import MemoryShape from './MemoryShape';
 import GeoTrivia from './GeoTrivia';
 import ColorMatch from './ColorMatch';
+import { db } from '../firebase';
+import { collection, addDoc, query, where, orderBy, limit, getDocs, serverTimestamp, Timestamp } from 'firebase/firestore';
 
 type GauntletStep = 'name' | 'selection' | 'playing' | 'results' | 'leaderboard';
 type GauntletType = 'seconds' | 'math' | 'memory-classic' | 'memory-progressive' | 'geotrivia-time' | 'geotrivia-distance' | 'color-match' | 'color-match-easy' | 'color-match-mix';
 type MathDifficulty = 'easy' | 'medium' | 'hard' | 'insane';
+type Timeframe = 'daily' | 'weekly' | 'monthly' | 'all-time';
 
 interface LeaderboardEntry {
   name: string;
   score: number; // For seconds: error. For math: total error.
   date: string;
+  timestamp?: Date;
 }
 
 const EASY_OPS = ['+', '-'];
@@ -53,13 +57,17 @@ export default function GauntletMode({
 
   // Leaderboard State
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+  const [leaderboardSource, setLeaderboardSource] = useState<'local' | 'global'>('local');
+  const [globalTimeframe, setGlobalTimeframe] = useState<Timeframe>('all-time');
+  const [isLoadingGlobal, setIsLoadingGlobal] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<{ entry: LeaderboardEntry, index: number } | null>(null);
+  const hasSavedScore = useRef(false);
 
   useEffect(() => {
-    if (initialStep === 'leaderboard') {
-      loadLeaderboard(initialType);
+    if (step === 'leaderboard') {
+      loadLeaderboard(type, leaderboardSource, globalTimeframe);
     }
-  }, [initialStep, initialType]);
+  }, [step, type, leaderboardSource, globalTimeframe]);
 
   const getLeaderboardKey = (t: GauntletType) => {
     if (t === 'seconds') return 'gauntlet_seconds';
@@ -74,17 +82,59 @@ export default function GauntletMode({
     return 'gauntlet_unknown';
   };
 
-  const loadLeaderboard = (t: GauntletType) => {
-    const key = getLeaderboardKey(t);
-    const saved = localStorage.getItem(key);
-    if (saved) {
-      try {
-        setLeaderboard(JSON.parse(saved));
-      } catch (e) {
+  const loadLeaderboard = async (t: GauntletType, source: 'local' | 'global' = leaderboardSource, timeframe: Timeframe = globalTimeframe) => {
+    if (source === 'local') {
+      const key = getLeaderboardKey(t);
+      const saved = localStorage.getItem(key);
+      if (saved) {
+        try {
+          setLeaderboard(JSON.parse(saved));
+        } catch (e) {
+          setLeaderboard([]);
+        }
+      } else {
         setLeaderboard([]);
       }
     } else {
-      setLeaderboard([]);
+      setIsLoadingGlobal(true);
+      try {
+        const isHigherBetter = t.startsWith('memory-') || t === 'geotrivia-time' || t.startsWith('color-match');
+        const q = query(
+          collection(db, 'gauntlet_leaderboards'),
+          where('gameType', '==', t),
+          orderBy('score', isHigherBetter ? 'desc' : 'asc'),
+          limit(200)
+        );
+        const snapshot = await getDocs(q);
+        let entries = snapshot.docs.map(doc => {
+          const data = doc.data();
+          const ts = data.timestamp instanceof Timestamp ? data.timestamp.toDate() : new Date();
+          return {
+            name: data.playerName,
+            score: data.score,
+            date: ts.toLocaleDateString(),
+            timestamp: ts
+          };
+        });
+
+        const now = new Date();
+        if (timeframe === 'daily') {
+          const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+          entries = entries.filter(e => e.timestamp && e.timestamp.getTime() >= startOfToday);
+        } else if (timeframe === 'weekly') {
+          const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay()).getTime();
+          entries = entries.filter(e => e.timestamp && e.timestamp.getTime() >= startOfWeek);
+        } else if (timeframe === 'monthly') {
+          const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+          entries = entries.filter(e => e.timestamp && e.timestamp.getTime() >= startOfMonth);
+        }
+        setLeaderboard(entries.slice(0, 50));
+      } catch (e) {
+        console.error("Error loading global leaderboard", e);
+        setLeaderboard([]);
+      } finally {
+        setIsLoadingGlobal(false);
+      }
     }
   };
 
@@ -94,7 +144,11 @@ export default function GauntletMode({
     return current.some(entry => entry.name.toLowerCase() === name.trim().toLowerCase());
   };
 
-  const saveToLeaderboard = (name: string, score: number, t: GauntletType) => {
+  const saveToLeaderboard = async (name: string, score: number, t: GauntletType) => {
+    if (hasSavedScore.current) return;
+    hasSavedScore.current = true;
+
+    // Local save
     const key = getLeaderboardKey(t);
     const current = JSON.parse(localStorage.getItem(key) || '[]');
     const newEntry: LeaderboardEntry = {
@@ -103,9 +157,39 @@ export default function GauntletMode({
       date: new Date().toLocaleDateString()
     };
     const isHigherBetter = t.startsWith('memory-') || t === 'geotrivia-time' || t.startsWith('color-match');
-    const updated = [...current, newEntry].sort((a, b) => isHigherBetter ? b.score - a.score : a.score - b.score).slice(0, 10);
+    const updated = [...current, newEntry].sort((a, b) => isHigherBetter ? b.score - a.score : a.score - b.score).slice(0, 50);
     localStorage.setItem(key, JSON.stringify(updated));
     setLeaderboard(updated);
+
+    // Global save with rate limiting
+    const RATE_LIMIT_KEY = 'gauntlet_global_save_rate_limit';
+    const MAX_PER_HOUR = 100;
+    const now = Date.now();
+    const oneHour = 60 * 60 * 1000;
+
+    let rateLimitData = JSON.parse(localStorage.getItem(RATE_LIMIT_KEY) || '{"count": 0, "startTime": 0}');
+    
+    if (now - rateLimitData.startTime > oneHour) {
+      rateLimitData = { count: 0, startTime: now };
+    }
+
+    if (rateLimitData.count < MAX_PER_HOUR) {
+      try {
+        await addDoc(collection(db, 'gauntlet_leaderboards'), {
+          playerName: name.trim(),
+          score: parseFloat(score.toFixed(3)),
+          gameType: t,
+          timestamp: serverTimestamp()
+        });
+        
+        rateLimitData.count += 1;
+        localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(rateLimitData));
+      } catch (e) {
+        console.error("Error saving to global leaderboard", e);
+      }
+    } else {
+      console.warn("Global leaderboard rate limit reached (100/hr). Score saved locally only.");
+    }
   };
 
   const deleteFromLeaderboard = (index: number, t: GauntletType) => {
@@ -235,6 +319,7 @@ export default function GauntletMode({
       setDifficulty('easy');
       generateMathEquation('easy');
     }
+    hasSavedScore.current = false;
     setStep('playing');
   };
 
@@ -349,22 +434,13 @@ export default function GauntletMode({
   const renderSelectionStep = () => {
     const games = [
       { 
-        id: 'reaction', 
-        name: 'Reaction', 
+        id: 'seconds-math', 
+        name: 'Seconds', 
         icon: Timer, 
         color: 'indigo',
-        description: 'Test your internal clock. Can you stop exactly at 30 seconds?',
+        description: 'Test your internal clock and math skills. Can you stop exactly at the target?',
         modes: [
-          { id: 'seconds', name: '30s Challenge', desc: 'One round. Closest to 30s wins.' }
-        ]
-      },
-      { 
-        id: 'math', 
-        name: 'Math', 
-        icon: Zap, 
-        color: 'rose',
-        description: 'Solve complex equations and stop the timer at the result.',
-        modes: [
+          { id: 'seconds', name: '30s Challenge', desc: 'One round. Closest to 30s wins.' },
           { id: 'math', name: 'Math Gauntlet', desc: '4 rounds. Easy to Insane.' }
         ]
       },
@@ -415,7 +491,7 @@ export default function GauntletMode({
           <p className={isDarkMode ? 'text-slate-400' : 'text-slate-500'}>Welcome, <span className="text-indigo-400 font-bold">{playerName}</span></p>
         </div>
 
-        <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 w-full">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full">
           {games.map((game) => (
             <button
               key={game.id}
@@ -490,8 +566,7 @@ export default function GauntletMode({
 
   const renderLeaderboardStep = () => {
     const gameGroups = [
-      { id: 'reaction', name: 'Reaction', icon: Timer, modes: [{ id: 'seconds', name: '30s' }] },
-      { id: 'math', name: 'Math', icon: Zap, modes: [{ id: 'math', name: 'Gauntlet' }] },
+      { id: 'seconds-math', name: 'Seconds', icon: Timer, modes: [{ id: 'seconds', name: '30s' }, { id: 'math', name: 'Math' }] },
       { id: 'memory', name: 'Memory', icon: Brain, modes: [{ id: 'memory-classic', name: 'Classic' }, { id: 'memory-progressive', name: 'Prog' }] },
       { id: 'geo', name: 'Geo', icon: MapPin, modes: [{ id: 'geotrivia-time', name: 'Time' }, { id: 'geotrivia-distance', name: 'Dist' }] },
       { id: 'color', name: 'Color', icon: Palette, modes: [{ id: 'color-match-easy', name: 'Easy' }, { id: 'color-match', name: 'Std' }, { id: 'color-match-mix', name: 'Mix' }] }
@@ -549,7 +624,52 @@ export default function GauntletMode({
         </div>
 
         <div className={`w-full p-4 rounded-[2.5rem] border ${isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100 shadow-sm'}`}>
-          <div className="grid grid-cols-5 gap-2 mb-4">
+          {/* Source Selector */}
+          <div className="flex justify-center space-x-2 mb-4">
+            <button
+              onClick={() => setLeaderboardSource('local')}
+              className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-2 ${
+                leaderboardSource === 'local'
+                  ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-900/20'
+                  : isDarkMode ? 'bg-slate-800 text-slate-400 hover:bg-slate-700' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+              }`}
+            >
+              <User size={14} />
+              <span>Local</span>
+            </button>
+            <button
+              onClick={() => setLeaderboardSource('global')}
+              className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-2 ${
+                leaderboardSource === 'global'
+                  ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-900/20'
+                  : isDarkMode ? 'bg-slate-800 text-slate-400 hover:bg-slate-700' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+              }`}
+            >
+              <Globe size={14} />
+              <span>Global</span>
+            </button>
+          </div>
+
+          {/* Timeframe Selector (only for Global) */}
+          {leaderboardSource === 'global' && (
+            <div className="flex justify-center space-x-1 mb-4 overflow-x-auto pb-2 no-scrollbar">
+              {(['daily', 'weekly', 'monthly', 'all-time'] as const).map((tf) => (
+                <button
+                  key={tf}
+                  onClick={() => setGlobalTimeframe(tf)}
+                  className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${
+                    globalTimeframe === tf
+                      ? 'bg-indigo-500/20 text-indigo-400 border border-indigo-500/30'
+                      : isDarkMode ? 'text-slate-500 hover:text-slate-300' : 'text-slate-400 hover:text-slate-600'
+                  }`}
+                >
+                  {tf.replace('-', ' ')}
+                </button>
+              ))}
+            </div>
+          )}
+
+          <div className="grid grid-cols-4 gap-2 mb-4">
             {gameGroups.map((group) => (
               <button
                 key={group.id}
@@ -587,7 +707,12 @@ export default function GauntletMode({
           </div>
 
           <div className={`w-full rounded-2xl border overflow-hidden ${isDarkMode ? 'bg-slate-950 border-slate-800' : 'bg-gray-50 border-gray-100'}`}>
-            {leaderboard.length === 0 ? (
+            {isLoadingGlobal ? (
+              <div className="p-12 text-center space-y-4">
+                <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto" />
+                <p className={`text-xs ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Fetching global scores...</p>
+              </div>
+            ) : leaderboard.length === 0 ? (
               <div className="p-8 text-center space-y-4">
                 <History size={32} className={`mx-auto opacity-20 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`} />
                 <p className={`text-xs ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>No records yet.</p>
@@ -602,7 +727,9 @@ export default function GauntletMode({
                       </span>
                       <div>
                         <p className={`text-sm font-bold ${isDarkMode ? 'text-slate-100' : 'text-slate-900'}`}>{entry.name}</p>
-                        <p className={`text-[8px] ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>{entry.date}</p>
+                        <div className="flex items-center space-x-2">
+                          <p className={`text-[8px] ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>{entry.date}</p>
+                        </div>
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
@@ -847,18 +974,20 @@ export default function GauntletMode({
         <h2 className={`text-4xl font-black ${isDarkMode ? 'text-slate-100' : 'text-gray-900'}`}>Gauntlet Complete!</h2>
         <div className="flex flex-col items-center">
           <p className={`text-xl ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>
-            {type.startsWith('memory-') || type === 'geotrivia-time' || type === 'color-match' ? 'Final Score: ' : 
+            {type.startsWith('memory-') || type === 'geotrivia-time' || type.startsWith('color-match') ? 'Final Score: ' : 
              type === 'geotrivia-distance' ? 'Total Distance: ' : 'Total Error: '}
             <span className="font-black text-indigo-500">
-              {type.startsWith('memory-') || type === 'geotrivia-time' || type === 'color-match' ? `${totalError} pts` : 
+              {type.startsWith('memory-') || type === 'geotrivia-time' || type.startsWith('color-match') ? `${totalError} pts` : 
                type === 'geotrivia-distance' ? `${totalError.toFixed(0)} km` : `±${totalError.toFixed(2)}s`}
             </span>
           </p>
-          <p className={`text-sm mt-1 ${isDarkMode ? 'text-slate-500' : 'text-gray-400'}`}>{playerName}, you've been added to the leaderboard.</p>
+          <p className={`text-sm mt-1 ${isDarkMode ? 'text-slate-500' : 'text-gray-400'}`}>
+            {playerName}, your score has been saved to the local and global leaderboards.
+          </p>
         </div>
       </motion.div>
 
-      {type.startsWith('memory-') || type.startsWith('geotrivia-') ? null : (
+      {type.startsWith('memory-') || type.startsWith('geotrivia-') || type.startsWith('color-match') ? null : (
         <div className="w-full max-w-md space-y-4">
           <h3 className={`text-center font-bold uppercase tracking-widest text-xs ${isDarkMode ? 'text-slate-600' : 'text-gray-400'}`}>Your Performance</h3>
           <div className="space-y-2">
@@ -889,7 +1018,7 @@ export default function GauntletMode({
             ? `I just completed the Memory Shape ${type.split('-')[1]} Gauntlet! 🏆\n\nMy Score: ${totalError} pts\n\nCan you beat my score?`
             : type === 'geotrivia-time'
             ? `I just completed the GeoTrivia Time Challenge Gauntlet! 🏆\n\nMy Score: ${totalError} pts\n\nCan you beat my score?`
-            : type === 'color-match'
+            : type.startsWith('color-match')
             ? `I just completed the Color Match Gauntlet! 🏆\n\nMy Score: ${totalError} pts\n\nCan you beat my score?`
             : type === 'geotrivia-distance'
             ? `I just completed the GeoTrivia Distance Duel Gauntlet! 🏆\n\nMy Total Distance: ${totalError.toFixed(0)} km\n\nCan you beat my score?`
@@ -919,7 +1048,7 @@ export default function GauntletMode({
 
   return (
     <div className={`min-h-screen transition-colors duration-300 font-sans ${isDarkMode ? 'bg-slate-950 text-slate-50' : 'bg-slate-50 text-slate-900'}`}>
-      <main className="flex flex-col items-center justify-center p-6 pt-12">
+      <main className="flex flex-col items-center justify-center p-6 pt-[calc(3rem+env(safe-area-inset-top))]">
         <AnimatePresence mode="wait">
           {step === 'name' && renderNameStep()}
           {step === 'selection' && renderSelectionStep()}

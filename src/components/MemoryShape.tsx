@@ -98,6 +98,7 @@ export default function MemoryShape({
   const [playerResults, setPlayerResults] = useState<PlayerResult[]>([]);
   
   const [timeLeft, setTimeLeft] = useState(5);
+  const hasTriggeredEnd = useRef(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Initialize gauntlet game immediately if in gauntlet mode
@@ -116,8 +117,12 @@ export default function MemoryShape({
 
   // Trigger onGameEnd when game ends
   useEffect(() => {
-    if (gameState === 'ended' && onGameEnd && playerResults.length > 0) {
+    if (gameState === 'ended' && onGameEnd && playerResults.length > 0 && !hasTriggeredEnd.current) {
+      hasTriggeredEnd.current = true;
       onGameEnd(playerResults[0].score);
+    }
+    if (gameState !== 'ended') {
+      hasTriggeredEnd.current = false;
     }
   }, [gameState, onGameEnd, playerResults]);
 

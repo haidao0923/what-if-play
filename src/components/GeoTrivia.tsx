@@ -108,6 +108,7 @@ export default function GeoTrivia({
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
   const processingTapRef = useRef(false);
+  const hasTriggeredEnd = useRef(false);
 
   const projection = d3.geoAlbersUsa().scale(1000).translate([480, 300]);
   const pathGenerator = d3.geoPath().projection(projection);
@@ -128,9 +129,13 @@ export default function GeoTrivia({
 
   // Handle game end for gauntlet
   useEffect(() => {
-    if (isGauntlet && gameState === 'ended' && onGameEnd) {
+    if (isGauntlet && gameState === 'ended' && onGameEnd && !hasTriggeredEnd.current) {
+      hasTriggeredEnd.current = true;
       const finalScore = gameMode === 'time' ? score : playerResults[0]?.totalDistance || 0;
       onGameEnd(finalScore);
+    }
+    if (gameState !== 'ended') {
+      hasTriggeredEnd.current = false;
     }
   }, [isGauntlet, gameState, onGameEnd, gameMode, score, playerResults]);
 

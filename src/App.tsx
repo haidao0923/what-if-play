@@ -141,7 +141,7 @@ export default function App() {
   if (activeGame !== 'none') {
     return (
       <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'bg-slate-950 text-slate-50' : 'bg-slate-50 text-slate-900'}`}>
-        <nav className={`p-4 flex items-center justify-between backdrop-blur-md border-b sticky top-0 z-50 transition-colors duration-300 ${isDarkMode ? 'bg-slate-900/50 border-slate-800' : 'bg-white/80 border-slate-200'}`}>
+        <nav className={`p-4 pt-[calc(1rem+env(safe-area-inset-top))] flex items-center justify-between backdrop-blur-md border-b sticky top-0 z-50 transition-colors duration-300 ${isDarkMode ? 'bg-slate-900/50 border-slate-800' : 'bg-white/80 border-slate-200'}`}>
           <div className="flex items-center">
             <button 
               onClick={() => setActiveGame('none')}
@@ -194,8 +194,8 @@ export default function App() {
   return (
     <div className={`min-h-screen transition-colors duration-300 font-sans ${isDarkMode ? 'bg-slate-950 text-slate-50' : 'bg-slate-50 text-slate-900'}`}>
       {/* Header */}
-      <header className="pt-16 pb-8 px-6 text-center space-y-4 relative">
-        <div className="absolute top-6 right-6 flex items-center space-x-2">
+      <header className="pt-[calc(4rem+env(safe-area-inset-top))] pb-8 px-6 text-center space-y-4 relative">
+        <div className="absolute top-[calc(1.5rem+env(safe-area-inset-top))] right-6 flex items-center space-x-2">
           <button
             onClick={toggleTheme}
             className={`p-3 rounded-2xl transition-all ${isDarkMode ? 'bg-slate-900 text-slate-400 hover:text-yellow-400 border border-slate-800' : 'bg-white text-slate-500 hover:text-indigo-600 border border-slate-200 shadow-sm'}`}
@@ -209,7 +209,7 @@ export default function App() {
           className={`inline-flex p-1 rounded-3xl shadow-2xl mb-4 border overflow-hidden transition-colors duration-300 ${isDarkMode ? 'bg-slate-900 shadow-indigo-900/20 border-slate-800' : 'bg-white shadow-indigo-100 border-slate-100'}`}
         >
           <img 
-            src="logo.png" 
+            src="/logo.png" 
             alt="WI-Play Logo" 
             className="w-20 h-20 object-cover"
             referrerPolicy="no-referrer"

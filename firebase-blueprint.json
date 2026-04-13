@@ -1,0 +1,22 @@
+{
+  "entities": {
+    "GauntletScore": {
+      "title": "Gauntlet Score",
+      "description": "A score entry for a gauntlet game",
+      "type": "object",
+      "properties": {
+        "playerName": { "type": "string", "description": "The name of the player" },
+        "score": { "type": "number", "description": "The score achieved (lower is usually better for gauntlet)" },
+        "gameType": { "type": "string", "description": "The type of gauntlet game" },
+        "timestamp": { "type": "string", "format": "date-time", "description": "When the score was achieved" }
+      },
+      "required": ["playerName", "score", "gameType", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/gauntlet_leaderboards/{scoreId}": {
+      "schema": "GauntletScore",
+      "description": "Global leaderboard entries for all gauntlet games"
+    }
+  }
+}

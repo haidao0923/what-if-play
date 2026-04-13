@@ -411,7 +411,7 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
 
   if (gameState === 'setup') {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[80vh] p-6 space-y-8">
+      <div className="flex flex-col items-center justify-center min-h-[80vh] p-6 pt-[env(safe-area-inset-top)] space-y-8">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -672,7 +672,7 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
     const effectiveTarget = gameMode === 'math' ? mathEquation.result : targetTime;
     
     return (
-      <div className="flex flex-col items-center justify-center min-h-[80vh] p-6 space-y-12">
+      <div className="flex flex-col items-center justify-center min-h-[80vh] p-6 pt-[env(safe-area-inset-top)] space-y-12">
         <div className="text-center space-y-2">
           <h3 className={`text-xl font-medium transition-colors ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>{playerNames[currentPlayerIndex]}'s Turn</h3>
           <div className="flex flex-col items-center">
