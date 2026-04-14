@@ -20,7 +20,21 @@ const WORDS = [
   "Kite", "Lion", "Moon", "Nurse", "Orange", "Piano", "Quiet", "Rocket", "Sun", "Train",
   "Under", "Village", "Whale", "Yellow", "Zoo", "Bread", "Cheese", "Dance", "Earth", "Forest",
   "Game", "Heart", "Ink", "Joke", "Key", "Leaf", "Milk", "Night", "Paper", "Rain",
-  "Star", "Tree", "Up", "Voice", "Water", "Box", "Cat", "Dog", "End", "Fish"
+  "Star", "Tree", "Up", "Voice", "Water", "Box", "Cat", "Dog", "End", "Fish",
+  "Acorn", "Anchor", "Ant", "Axe", "Baby", "Bag", "Bat", "Bed", "Bee", "Bell",
+  "Bird", "Boat", "Bone", "Boot", "Bowl", "Boy", "Bug", "Bus", "Cake", "Can",
+  "Cap", "Car", "Chair", "Clock", "Cloud", "Coat", "Comb", "Cow", "Cup", "Desk",
+  "Door", "Drum", "Duck", "Ear", "Eye", "Fan", "Feet", "Flag", "Foot", "Fork",
+  "Fox", "Frog", "Gate", "Girl", "Glove", "Goat", "Gum", "Hair", "Hand", "Hat",
+  "Hen", "Hill", "Hippopotamus", "Horse", "House", "Jar", "Jeep", "Jet", "Key", "King",
+  "Knee", "Knife", "Lamp", "Leg", "Lip", "Lock", "Log", "Map", "Mask", "Mat",
+  "Mop", "Mouse", "Mouth", "Nail", "Neck", "Nest", "Net", "Nose", "Nut", "Pan",
+  "Pen", "Pig", "Pin", "Pot", "Rat", "Ring", "Road", "Rock", "Roof", "Rope",
+  "Sack", "Sail", "Sand", "Saw", "Seal", "Seed", "Ship", "Shirt", "Shoe", "Sink",
+  "Soap", "Sock", "Sofa", "Soup", "Spoon", "Stair", "Stem", "Stick", "Stool", "Stove",
+  "Suit", "Table", "Tail", "Tap", "Tent", "Tie", "Toe", "Tool", "Top", "Toy",
+  "Tray", "Truck", "Tub", "Vase", "Vest", "Wall", "Wasp", "Watch", "Web", "Wheel",
+  "Whip", "Wig", "Wind", "Wing", "Wire", "Wolf", "Worm", "Yard", "Yarn", "Yo-yo"
 ];
 
 export default function PasswordGame({ isDarkMode = true, initialPlayers = [] }: { isDarkMode?: boolean, initialPlayers?: string[] }) {
@@ -225,17 +239,23 @@ export default function PasswordGame({ isDarkMode = true, initialPlayers = [] }:
           </div>
 
           <div className={`rounded-2xl p-4 border transition-colors duration-300 ${isDarkMode ? 'bg-amber-900/20 border-amber-800/30' : 'bg-amber-50 border-amber-100'}`}>
-            <div className={`flex items-center justify-center space-x-2 font-bold mb-2 text-sm ${isDarkMode ? 'text-amber-400' : 'text-amber-600'}`}>
+            <div className={`flex items-center justify-center space-x-2 font-bold mb-3 text-sm ${isDarkMode ? 'text-amber-400' : 'text-amber-600'}`}>
               <Sparkles size={16} />
               <span>How to Play</span>
             </div>
-            <div className={`text-xs leading-relaxed text-center ${isDarkMode ? 'text-amber-300/70' : 'text-amber-700/70'}`}>
-              1. Divide into teams. One player per team is the Clue Giver.<br/>
-              2. Only Clue Givers see the secret word.<br/>
-              3. Team 1's Clue Giver gives a <b>one-word clue</b>.<br/>
-              4. Their team has one chance to guess the word.<br/>
-              5. If wrong, the turn passes to the next team's Clue Giver.<br/>
-              6. First team to guess correctly wins the point!
+            <div className="grid grid-cols-1 gap-3 text-left">
+              <div className="flex items-start space-x-3">
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-100 text-amber-600'}`}>1</div>
+                <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Divide into teams. One player per team is the Clue Giver (only they see the word).</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-100 text-amber-600'}`}>2</div>
+                <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Clue Giver gives a **one-word clue**. Their team has one chance to guess.</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-amber-500/20 text-amber-400' : 'bg-amber-100 text-amber-600'}`}>3</div>
+                <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>If wrong, the next team gets a turn with a new clue. First team to guess wins the point!</p>
+              </div>
             </div>
           </div>
         </motion.div>
@@ -419,36 +439,42 @@ export default function PasswordGame({ isDarkMode = true, initialPlayers = [] }:
     const guessers = currentTeam.players.filter((_, i) => i !== currentTeam.clueGiverIndex);
 
     return (
-      <div className="flex flex-col items-center justify-center min-h-[80vh] p-6 space-y-8">
+      <div className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 space-y-4 sm:space-y-8 overflow-hidden">
         {/* Scoreboard Header */}
         <div className="w-full max-w-md flex justify-between items-center px-4">
           {teams.map((team, idx) => (
             <div key={team.id} className={`flex flex-col items-center ${idx === currentTeamIndex ? 'opacity-100' : 'opacity-40'}`}>
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-black text-xl ${idx === currentTeamIndex ? 'bg-amber-500 text-white shadow-lg' : 'bg-gray-200 text-gray-500'}`}>
+              <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center font-black text-lg sm:text-xl transition-colors ${
+                idx === currentTeamIndex 
+                  ? 'bg-amber-500 text-white shadow-lg' 
+                  : isDarkMode ? 'bg-slate-800 text-slate-500' : 'bg-gray-200 text-gray-500'
+              }`}>
                 {team.score}
               </div>
-              <span className="text-[10px] font-bold uppercase mt-1">{team.name}</span>
+              <span className={`text-[8px] sm:text-[10px] font-bold uppercase mt-1 transition-colors ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>{team.name}</span>
             </div>
           ))}
         </div>
 
-        <div className="text-center space-y-2">
+        <div className="text-center space-y-1 sm:space-y-2">
           <motion.div 
             key={gameState}
             initial={{ y: 10, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className={`inline-block px-6 py-2 rounded-full font-black text-sm tracking-widest uppercase ${
-              gameState === 'clue-giving' ? 'bg-indigo-100 text-indigo-600' : 'bg-green-100 text-green-600'
+            className={`inline-block px-4 py-1 sm:px-6 sm:py-2 rounded-full font-black text-[10px] sm:text-sm tracking-widest uppercase transition-colors ${
+              gameState === 'clue-giving' 
+                ? isDarkMode ? 'bg-indigo-900/30 text-indigo-400' : 'bg-indigo-100 text-indigo-600' 
+                : isDarkMode ? 'bg-green-900/30 text-green-400' : 'bg-green-100 text-green-600'
             }`}
           >
             {gameState === 'clue-giving' ? 'Clue Giving' : 'Guessing'}
           </motion.div>
-          <h2 className="text-3xl font-black text-gray-900">{currentTeam.name}</h2>
+          <h2 className={`text-2xl sm:text-3xl font-black transition-colors ${isDarkMode ? 'text-slate-100' : 'text-gray-900'}`}>{currentTeam.name}</h2>
         </div>
 
-        <div className="relative w-64 h-64 flex items-center justify-center">
+        <div className="relative w-48 h-48 sm:w-64 sm:h-64 flex items-center justify-center">
           <svg className="w-full h-full -rotate-90 transform">
-            <circle cx="50%" cy="50%" r="45%" className="stroke-gray-100 fill-none" strokeWidth="8" />
+            <circle cx="50%" cy="50%" r="45%" className={`fill-none transition-colors ${isDarkMode ? 'stroke-slate-800' : 'stroke-gray-100'}`} strokeWidth="8" />
             <motion.circle
               cx="50%"
               cy="50%"
@@ -462,45 +488,51 @@ export default function PasswordGame({ isDarkMode = true, initialPlayers = [] }:
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-6xl font-black tabular-nums">{Math.ceil(timeLeft)}</span>
-            <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Seconds</span>
+            <span className={`text-4xl sm:text-6xl font-black tabular-nums transition-colors ${isDarkMode ? 'text-slate-100' : 'text-gray-900'}`}>{Math.ceil(timeLeft)}</span>
+            <span className={`text-[10px] sm:text-xs font-bold uppercase tracking-widest transition-colors ${isDarkMode ? 'text-slate-500' : 'text-gray-400'}`}>Seconds</span>
           </div>
         </div>
 
-        <div className="w-full max-w-md bg-white rounded-3xl shadow-xl p-8 border border-gray-100 space-y-6">
-          <div className="flex items-center justify-center space-x-4">
-            <div className="text-center flex-1 p-4 bg-gray-50 rounded-2xl">
-              <p className="text-[10px] font-bold text-gray-400 uppercase mb-1">Clue Giver</p>
-              <p className="font-bold text-gray-900">{clueGiver}</p>
+        <div className={`w-full max-w-md rounded-3xl shadow-xl p-6 sm:p-8 border transition-colors duration-300 space-y-4 sm:space-y-6 ${
+          isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-gray-100'
+        }`}>
+          <div className="flex items-center justify-center space-x-2 sm:space-x-4">
+            <div className={`text-center flex-1 p-3 sm:p-4 rounded-2xl transition-colors ${isDarkMode ? 'bg-slate-800' : 'bg-gray-50'}`}>
+              <p className={`text-[8px] sm:text-[10px] font-bold uppercase mb-1 transition-colors ${isDarkMode ? 'text-slate-500' : 'text-gray-400'}`}>Clue Giver</p>
+              <p className={`font-bold text-sm sm:text-base transition-colors ${isDarkMode ? 'text-slate-100' : 'text-gray-900'}`}>{clueGiver}</p>
             </div>
-            <div className="text-gray-300">
-              <ChevronRight />
+            <div className={`transition-colors ${isDarkMode ? 'text-slate-700' : 'text-gray-300'}`}>
+              <ChevronRight size={20} />
             </div>
-            <div className="text-center flex-1 p-4 bg-gray-50 rounded-2xl">
-              <p className="text-[10px] font-bold text-gray-400 uppercase mb-1">Guessers</p>
-              <p className="font-bold text-gray-900">{guessers.join(", ")}</p>
+            <div className={`text-center flex-1 p-3 sm:p-4 rounded-2xl transition-colors ${isDarkMode ? 'bg-slate-800' : 'bg-gray-50'}`}>
+              <p className={`text-[8px] sm:text-[10px] font-bold uppercase mb-1 transition-colors ${isDarkMode ? 'text-slate-500' : 'text-gray-400'}`}>Guessers</p>
+              <p className={`font-bold text-sm sm:text-base transition-colors ${isDarkMode ? 'text-slate-100' : 'text-gray-900'}`}>{guessers.join(", ")}</p>
             </div>
           </div>
 
-          <div className="p-4 bg-amber-50 rounded-2xl border border-amber-100 text-center">
-            <p className="text-[10px] font-bold text-amber-600 uppercase mb-1">Secret Word (Clue Giver Only)</p>
-            <p className="text-2xl font-black text-gray-900">{currentWord}</p>
+          <div className={`p-3 sm:p-4 rounded-2xl border transition-colors ${
+            isDarkMode ? 'bg-amber-900/20 border-amber-800/30' : 'bg-amber-50 border-amber-100'
+          } text-center`}>
+            <p className={`text-[8px] sm:text-[10px] font-bold uppercase mb-1 transition-colors ${isDarkMode ? 'text-amber-500/70' : 'text-amber-600'}`}>Secret Word (Clue Giver Only)</p>
+            <p className={`text-xl sm:text-2xl font-black transition-colors ${isDarkMode ? 'text-slate-100' : 'text-gray-900'}`}>{currentWord}</p>
           </div>
 
           {gameState === 'guessing' && (
-            <div className="grid grid-cols-2 gap-4 pt-4">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 pt-2 sm:pt-4">
               <button 
                 onClick={handleWrongGuess}
-                className="py-4 bg-red-50 text-red-600 rounded-2xl font-bold flex items-center justify-center space-x-2 hover:bg-red-100 transition-all"
+                className={`py-3 sm:py-4 rounded-2xl font-bold flex items-center justify-center space-x-2 transition-all text-sm sm:text-base ${
+                  isDarkMode ? 'bg-red-900/20 text-red-400 hover:bg-red-900/30' : 'bg-red-50 text-red-600 hover:bg-red-100'
+                }`}
               >
-                <XCircle size={20} />
+                <XCircle size={18} className="sm:w-5 sm:h-5" />
                 <span>Wrong</span>
               </button>
               <button 
                 onClick={handleCorrectGuess}
-                className="py-4 bg-green-500 text-white rounded-2xl font-bold flex items-center justify-center space-x-2 shadow-lg shadow-green-100 hover:bg-green-600 transition-all"
+                className="py-3 sm:py-4 bg-green-500 text-white rounded-2xl font-bold flex items-center justify-center space-x-2 shadow-lg shadow-green-900/20 hover:bg-green-600 transition-all text-sm sm:text-base"
               >
-                <CheckCircle2 size={20} />
+                <CheckCircle2 size={18} className="sm:w-5 sm:h-5" />
                 <span>Correct</span>
               </button>
             </div>
@@ -509,9 +541,9 @@ export default function PasswordGame({ isDarkMode = true, initialPlayers = [] }:
           {gameState === 'clue-giving' && (
             <button 
               onClick={startGuessing}
-              className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold flex items-center justify-center space-x-2 shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all"
+              className="w-full py-3 sm:py-4 bg-indigo-600 text-white rounded-2xl font-bold flex items-center justify-center space-x-2 shadow-lg shadow-indigo-900/20 hover:bg-indigo-700 transition-all text-sm sm:text-base"
             >
-              <MessageSquare size={20} />
+              <MessageSquare size={18} className="sm:w-5 sm:h-5" />
               <span>Clue Given!</span>
             </button>
           )}

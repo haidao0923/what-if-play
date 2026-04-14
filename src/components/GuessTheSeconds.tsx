@@ -411,65 +411,86 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
 
   if (gameState === 'setup') {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[80vh] p-6 pt-[env(safe-area-inset-top)] space-y-8">
+      <div className="flex flex-col items-center justify-center py-4 sm:py-8 px-4 sm:px-6 space-y-6 sm:space-y-8 w-full max-w-md mx-auto">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center space-y-4 max-w-md"
+          className="text-center space-y-4 w-full"
         >
           <div className="space-y-2">
-            <h2 className={`text-4xl font-bold tracking-tight ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>Guess the Seconds</h2>
-            <p className={isDarkMode ? 'text-slate-400' : 'text-slate-600'}>How accurate is your internal clock?</p>
+            <h2 className={`text-3xl sm:text-4xl font-bold tracking-tight ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>Guess the Seconds</h2>
+            <p className={`text-sm sm:text-base ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>How accurate is your internal clock?</p>
           </div>
           
           <div className={`rounded-2xl p-4 border transition-colors duration-300 ${isDarkMode ? 'bg-indigo-900/20 border-indigo-800/30' : 'bg-indigo-50 border-indigo-100'}`}>
-            <div className={`flex items-center justify-center space-x-2 font-bold mb-2 text-sm ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`}>
+            <div className={`flex items-center justify-center space-x-2 font-bold mb-3 text-sm ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`}>
               <Sparkles size={16} />
               <span>How to Play</span>
             </div>
-            <div className={`text-xs leading-relaxed ${isDarkMode ? 'text-indigo-300/70' : 'text-indigo-700/70'}`}>
+            <div className="grid grid-cols-1 gap-3 text-left">
               {gameMode === 'math' ? (
                 <>
-                  1. Start the timer to reveal a math equation (result between 5-15).<br/>
-                  2. Solve it in your head while the clock is ticking!<br/>
-                  3. Stop the timer when you think the result has passed in seconds.<br/>
-                  4. Difficulty affects complexity: Easy (2-3 ops), Medium (3-4 ops), Hard (4-5 ops), Impossible (6 ops).<br/>
-                  5. Repeat {numEquations} times. Your score is the total error!
+                  <div className="flex items-start space-x-3">
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-indigo-500/20 text-indigo-400' : 'bg-indigo-100 text-indigo-600'}`}>1</div>
+                    <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Start the timer to reveal a math equation (result between 5-15).</p>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-indigo-500/20 text-indigo-400' : 'bg-indigo-100 text-indigo-600'}`}>2</div>
+                    <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Solve it in your head and stop the timer when you think the result has passed in seconds.</p>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-indigo-500/20 text-indigo-400' : 'bg-indigo-100 text-indigo-600'}`}>3</div>
+                    <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Repeat {numEquations} times. The player with the lowest total error wins!</p>
+                  </div>
                 </>
               ) : gameMode === 'metronome' ? (
                 <>
-                  1. Choose your beat interval (1s, 2s, or 3s).<br/>
-                  2. First tap starts the {targetTime}-second challenge.<br/>
-                  3. Tap on every beat to maintain the rhythm.<br/>
-                  4. Your score is the cumulative error from the target beats.<br/>
-                  5. Lowest total error wins!
+                  <div className="flex items-start space-x-3">
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-indigo-500/20 text-indigo-400' : 'bg-indigo-100 text-indigo-600'}`}>1</div>
+                    <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Choose your beat interval. First tap starts the {targetTime}-second challenge.</p>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-indigo-500/20 text-indigo-400' : 'bg-indigo-100 text-indigo-600'}`}>2</div>
+                    <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Tap on every beat to maintain the rhythm until the time is up.</p>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-indigo-500/20 text-indigo-400' : 'bg-indigo-100 text-indigo-600'}`}>3</div>
+                    <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Your score is the cumulative error from the target beats. Lowest error wins!</p>
+                  </div>
                 </>
               ) : (
                 <>
-                  1. Choose your game mode and target time.<br/>
-                  2. Each player takes turns tapping the screen to start a hidden timer.<br/>
-                  3. Tap again when you think the time is right.<br/>
-                  4. Closest to the goal wins!
+                  <div className="flex items-start space-x-3">
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-indigo-500/20 text-indigo-400' : 'bg-indigo-100 text-indigo-600'}`}>1</div>
+                    <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Choose your game mode and target time.</p>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-indigo-500/20 text-indigo-400' : 'bg-indigo-100 text-indigo-600'}`}>2</div>
+                    <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Each player takes turns tapping the screen to start and stop a hidden timer.</p>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-indigo-500/20 text-indigo-400' : 'bg-indigo-100 text-indigo-600'}`}>3</div>
+                    <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Try to stop the timer as close to the target time as possible!</p>
+                  </div>
                 </>
               )}
             </div>
           </div>
         </motion.div>
 
-        <div className="w-full max-w-md space-y-6">
-
-          <div className={`rounded-3xl shadow-2xl p-8 space-y-8 border transition-colors duration-300 ${isDarkMode ? 'bg-slate-900 shadow-black/50 border-slate-800' : 'bg-white shadow-indigo-100 border-slate-100'}`}>
+        <div className="w-full space-y-6">
+          <div className={`rounded-3xl shadow-2xl p-6 sm:p-8 space-y-6 sm:space-y-8 border transition-colors duration-300 ${isDarkMode ? 'bg-slate-900 shadow-black/50 border-slate-800' : 'bg-white shadow-indigo-100 border-slate-100'}`}>
             <div className="space-y-4">
               <label className={`flex items-center space-x-2 text-sm font-medium ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
                 <Zap size={18} className="text-indigo-400" />
                 <span>Game Mode</span>
               </label>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {modes.map((m) => (
                   <button
                     key={m.id}
                     onClick={() => setGameMode(m.id as GameMode)}
-                    className={`p-3 rounded-2xl text-xs font-bold transition-all border-2 ${
+                    className={`p-2 sm:p-3 rounded-2xl text-[10px] sm:text-xs font-bold transition-all border-2 ${
                       gameMode === m.id 
                         ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-900/20' 
                         : isDarkMode ? 'bg-slate-800 border-slate-700 text-slate-400 hover:border-indigo-500/50' : 'bg-slate-50 border-slate-200 text-slate-500 hover:border-indigo-400'
@@ -495,7 +516,7 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
                   value={seedInput}
                   onChange={(e) => setSeedInput(e.target.value)}
                   placeholder="Format: e42-myseed"
-                  className={`w-full p-3 rounded-xl border-2 outline-none transition-all text-sm font-mono ${
+                  className={`w-full p-2 sm:p-3 rounded-xl border-2 outline-none transition-all text-xs sm:text-sm font-mono ${
                     seedInput && !isValidSeed 
                       ? isDarkMode ? 'border-red-900/50 bg-red-900/20 text-red-200' : 'border-red-200 bg-red-50 text-red-600'
                       : isDarkMode ? 'bg-slate-800 border-transparent focus:border-indigo-500 focus:bg-slate-700 text-slate-100 placeholder:text-slate-500' : 'bg-slate-50 border-transparent focus:border-indigo-500 focus:bg-white text-slate-900 placeholder:text-slate-400'
@@ -524,7 +545,7 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
                     <button
                       key={interval}
                       onClick={() => setMetronomeInterval(interval)}
-                      className={`p-3 rounded-2xl text-xs font-bold transition-all border-2 ${
+                      className={`p-2 sm:p-3 rounded-2xl text-[10px] sm:text-xs font-bold transition-all border-2 ${
                         metronomeInterval === interval 
                           ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-900/20' 
                           : isDarkMode ? 'bg-slate-800 border-slate-700 text-slate-400 hover:border-indigo-500/50' : 'bg-slate-50 border-slate-200 text-slate-500 hover:border-indigo-400'
@@ -537,7 +558,7 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
               </div>
             )}
 
-            <div className={`space-y-8 transition-opacity ${seedInput ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
+            <div className={`space-y-6 sm:space-y-8 transition-opacity ${seedInput ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
               {gameMode === 'math' && (
                 <div className="space-y-4">
                   <label className={`flex items-center space-x-2 text-sm font-medium ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
@@ -549,7 +570,7 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
                       <button
                         key={d}
                         onClick={() => setDifficulty(d)}
-                        className={`p-3 rounded-2xl text-xs font-bold transition-all border-2 capitalize ${
+                        className={`p-2 sm:p-3 rounded-2xl text-[10px] sm:text-xs font-bold transition-all border-2 capitalize ${
                           difficulty === d 
                             ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-900/20' 
                             : isDarkMode ? 'bg-slate-800 border-slate-700 text-slate-400 hover:border-indigo-500/50' : 'bg-slate-50 border-slate-200 text-slate-500 hover:border-indigo-400'
@@ -568,17 +589,17 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
                     <Timer size={18} className="text-indigo-400" />
                     <span>Number of Equations</span>
                   </label>
-                  <div className={`flex items-center justify-between p-2 rounded-2xl transition-colors duration-300 ${isDarkMode ? 'bg-slate-800' : 'bg-slate-100'}`}>
+                  <div className={`flex items-center justify-between p-1 sm:p-2 rounded-2xl transition-colors duration-300 ${isDarkMode ? 'bg-slate-800' : 'bg-slate-100'}`}>
                     <button 
                       onClick={() => setNumEquations(Math.max(1, numEquations - 1))}
-                      className={`w-12 h-12 flex items-center justify-center rounded-xl shadow-sm transition-colors ${isDarkMode ? 'bg-slate-700 text-slate-100 hover:bg-slate-600' : 'bg-white text-slate-900 hover:bg-slate-50'}`}
+                      className={`w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl shadow-sm transition-colors ${isDarkMode ? 'bg-slate-700 text-slate-100 hover:bg-slate-600' : 'bg-white text-gray-900 hover:bg-slate-50'}`}
                     >
                       -
                     </button>
-                    <span className={`text-2xl font-bold ${isDarkMode ? 'text-slate-100' : 'text-slate-900'}`}>{numEquations}</span>
+                    <span className={`text-xl sm:text-2xl font-bold ${isDarkMode ? 'text-slate-100' : 'text-slate-900'}`}>{numEquations}</span>
                     <button 
                       onClick={() => setNumEquations(Math.min(15, numEquations + 1))}
-                      className={`w-12 h-12 flex items-center justify-center rounded-xl shadow-sm transition-colors ${isDarkMode ? 'bg-slate-700 text-slate-100 hover:bg-slate-600' : 'bg-white text-slate-900 hover:bg-slate-50'}`}
+                      className={`w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl shadow-sm transition-colors ${isDarkMode ? 'bg-slate-700 text-slate-100 hover:bg-slate-600' : 'bg-white text-gray-900 hover:bg-slate-50'}`}
                     >
                       +
                     </button>
@@ -591,17 +612,17 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
                   <Users size={18} className="text-indigo-400" />
                   <span>Number of Players</span>
                 </label>
-                <div className={`flex items-center justify-between p-2 rounded-2xl transition-colors duration-300 ${isDarkMode ? 'bg-slate-800' : 'bg-slate-100'}`}>
+                <div className={`flex items-center justify-between p-1 sm:p-2 rounded-2xl transition-colors duration-300 ${isDarkMode ? 'bg-slate-800' : 'bg-slate-100'}`}>
                   <button 
                     onClick={() => updateNumPlayers(numPlayers - 1)}
-                    className={`w-12 h-12 flex items-center justify-center rounded-xl shadow-sm transition-colors ${isDarkMode ? 'bg-slate-700 text-slate-100 hover:bg-slate-600' : 'bg-white text-slate-900 hover:bg-slate-50'}`}
+                    className={`w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl shadow-sm transition-colors ${isDarkMode ? 'bg-slate-700 text-slate-100 hover:bg-slate-600' : 'bg-white text-gray-900 hover:bg-slate-50'}`}
                   >
                     -
                   </button>
-                  <span className={`text-2xl font-bold ${isDarkMode ? 'text-slate-100' : 'text-slate-900'}`}>{numPlayers}</span>
+                  <span className={`text-xl sm:text-2xl font-bold ${isDarkMode ? 'text-slate-100' : 'text-slate-900'}`}>{numPlayers}</span>
                   <button 
                     onClick={() => updateNumPlayers(Math.min(15, numPlayers + 1))}
-                    className={`w-12 h-12 flex items-center justify-center rounded-xl shadow-sm transition-colors ${isDarkMode ? 'bg-slate-700 text-slate-100 hover:bg-slate-600' : 'bg-white text-slate-900 hover:bg-slate-50'}`}
+                    className={`w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl shadow-sm transition-colors ${isDarkMode ? 'bg-slate-700 text-slate-100 hover:bg-slate-600' : 'bg-white text-gray-900 hover:bg-slate-50'}`}
                   >
                     +
                   </button>
@@ -614,7 +635,7 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
                 <Users size={18} className="text-indigo-400" />
                 <span>Player Names (Optional)</span>
               </label>
-              <div className="space-y-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+              <div className="space-y-2 max-h-32 sm:max-h-48 overflow-y-auto pr-2 custom-scrollbar">
                 {playerNames.map((name, i) => (
                   <input
                     key={i}
@@ -622,7 +643,7 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
                     value={name}
                     onChange={(e) => handleNameChange(i, e.target.value)}
                     placeholder={`Player ${i + 1}`}
-                    className={`w-full p-3 rounded-xl border border-transparent outline-none transition-all text-sm ${
+                    className={`w-full p-2 sm:p-3 rounded-xl border border-transparent outline-none transition-all text-xs sm:text-sm ${
                       isDarkMode 
                         ? 'bg-slate-800 text-slate-100 focus:border-indigo-500 focus:bg-slate-700 placeholder:text-slate-500' 
                         : 'bg-gray-50 text-gray-900 focus:border-indigo-500 focus:bg-white placeholder:text-gray-400'
@@ -646,7 +667,7 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
                   onChange={(e) => setTargetTime(parseInt(e.target.value))}
                   className={`w-full h-2 rounded-lg appearance-none cursor-pointer accent-indigo-500 ${isDarkMode ? 'bg-slate-700' : 'bg-gray-200'}`}
                 />
-                <div className="text-center text-3xl font-black text-indigo-500">
+                <div className="text-center text-2xl sm:text-3xl font-black text-indigo-500">
                   {targetTime}s
                 </div>
               </div>
@@ -655,7 +676,7 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
             <button 
               onClick={startGame}
               disabled={!isValidSeed}
-              className={`w-full py-4 text-white rounded-2xl font-bold text-lg shadow-lg transition-all flex items-center justify-center space-x-2 ${
+              className={`w-full py-3 sm:py-4 text-white rounded-2xl font-bold text-base sm:text-lg shadow-lg transition-all flex items-center justify-center space-x-2 ${
                 isValidSeed ? 'bg-indigo-600 shadow-indigo-900/20 hover:bg-indigo-500 active:scale-95' : 'bg-slate-800 text-slate-600 cursor-not-allowed shadow-none'
               }`}
             >
@@ -672,37 +693,37 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
     const effectiveTarget = gameMode === 'math' ? mathEquation.result : targetTime;
     
     return (
-      <div className="flex flex-col items-center justify-center min-h-[80vh] p-6 pt-[env(safe-area-inset-top)] space-y-12">
+      <div className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 pt-[env(safe-area-inset-top)] space-y-6 sm:space-y-12 overflow-hidden">
         <div className="text-center space-y-2">
-          <h3 className={`text-xl font-medium transition-colors ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>{playerNames[currentPlayerIndex]}'s Turn</h3>
+          <h3 className={`text-lg sm:text-xl font-medium transition-colors ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>{playerNames[currentPlayerIndex]}'s Turn</h3>
           <div className="flex flex-col items-center">
-            <span className="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-1">
+            <span className="text-[10px] sm:text-xs font-bold text-indigo-400 uppercase tracking-widest mb-1">
               {gameMode} mode {gameMode === 'math' && `(Attempt ${currentAttemptIndex + 1}/${numEquations})`}
               {gameMode === 'metronome' && `(Beat: ${metronomeInterval}s)`}
             </span>
             {gameMode === 'math' && (
-              <div className="flex flex-col items-center mb-2">
-                <span className={`text-[10px] font-mono uppercase ${isDarkMode ? 'text-slate-500' : 'text-gray-400'}`}>Seed: {activeSeed}</span>
-                <span className={`text-[8px] font-bold uppercase tracking-widest ${isCustomSeed ? 'text-indigo-400' : isDarkMode ? 'text-slate-500' : 'text-gray-400'}`}>
+              <div className="flex flex-col items-center mb-1 sm:mb-2">
+                <span className={`text-[8px] sm:text-[10px] font-mono uppercase ${isDarkMode ? 'text-slate-500' : 'text-gray-400'}`}>Seed: {activeSeed}</span>
+                <span className={`text-[7px] sm:text-[8px] font-bold uppercase tracking-widest ${isCustomSeed ? 'text-indigo-400' : isDarkMode ? 'text-slate-500' : 'text-gray-400'}`}>
                   {isCustomSeed ? 'Custom Seed' : 'Randomized Seed'}
                 </span>
               </div>
             )}
             {gameMode === 'math' ? (
-              <div className="h-12 flex items-center justify-center">
+              <div className="h-10 sm:h-12 flex items-center justify-center">
                 {isTimerRunning || lastElapsed !== null ? (
-                  <p className="text-4xl font-black text-indigo-400 tracking-tight">{mathEquation.text}</p>
+                  <p className="text-2xl sm:text-4xl font-black text-indigo-400 tracking-tight">{mathEquation.text}</p>
                 ) : (
-                  <p className={`text-lg font-bold italic ${isDarkMode ? 'text-slate-500' : 'text-gray-400'}`}>Equation will appear on start...</p>
+                  <p className={`text-sm sm:text-lg font-bold italic ${isDarkMode ? 'text-slate-500' : 'text-gray-400'}`}>Equation will appear on start...</p>
                 )}
               </div>
             ) : gameMode === 'metronome' ? (
-              <div className="h-12 flex flex-col items-center justify-center">
-                <p className={`text-2xl font-bold transition-colors ${isDarkMode ? 'text-slate-50' : 'text-gray-900'}`}>
+              <div className="h-10 sm:h-12 flex flex-col items-center justify-center">
+                <p className={`text-xl sm:text-2xl font-bold transition-colors ${isDarkMode ? 'text-slate-50' : 'text-gray-900'}`}>
                   Goal: <span className="text-indigo-400">{targetTime}s</span>
                 </p>
                 {isTimerRunning && (
-                  <div className="w-48 h-1 bg-slate-800 rounded-full mt-2 overflow-hidden">
+                  <div className="w-32 sm:w-48 h-1 bg-slate-800 rounded-full mt-1 sm:mt-2 overflow-hidden">
                     <motion.div 
                       initial={{ width: 0 }}
                       animate={{ width: '100%' }}
@@ -713,18 +734,18 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
                 )}
               </div>
             ) : (
-              <p className={`text-2xl font-bold transition-colors ${isDarkMode ? 'text-slate-50' : 'text-gray-900'}`}>Goal: <span className="text-indigo-400">{effectiveTarget}s</span></p>
+              <p className={`text-xl sm:text-2xl font-bold transition-colors ${isDarkMode ? 'text-slate-50' : 'text-gray-900'}`}>Goal: <span className="text-indigo-400">{effectiveTarget}s</span></p>
             )}
           </div>
         </div>
 
         <div 
           onClick={lastElapsed === null ? handleTap : undefined}
-          className={`relative w-64 h-64 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300 ${
-            isTimerRunning ? 'scale-110' : 'scale-100'
+          className={`relative w-48 h-48 sm:w-64 sm:h-64 rounded-full flex items-center justify-center cursor-pointer transition-all duration-300 ${
+            isTimerRunning ? 'scale-105 sm:scale-110' : 'scale-100'
           }`}
         >
-          <div className={`absolute inset-0 border-8 rounded-full transition-colors ${isDarkMode ? 'border-slate-800' : 'border-gray-100'}`}></div>
+          <div className={`absolute inset-0 border-4 sm:border-8 rounded-full transition-colors ${isDarkMode ? 'border-slate-800' : 'border-gray-100'}`}></div>
           
           <AnimatePresence>
             {isTimerRunning && (
@@ -737,29 +758,29 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
                 exit={{ opacity: 0 }}
                 transition={{ 
                   repeat: Infinity, 
-                  duration: 1.73, // Non-integer duration to avoid being a reliable metronome
+                  duration: 1.73, 
                   ease: "easeInOut" 
                 }}
-                className="absolute inset-0 bg-indigo-500/20 rounded-full blur-2xl"
+                className="absolute inset-0 bg-indigo-500/20 rounded-full blur-xl sm:blur-2xl"
               />
             )}
           </AnimatePresence>
 
           <div className="text-center z-10">
             {!isTimerRunning && lastElapsed === null && (
-              <div className="flex flex-col items-center space-y-2">
-                <Play size={48} className="text-indigo-400" fill="currentColor" />
-                <span className="font-bold text-slate-500">TAP TO START</span>
+              <div className="flex flex-col items-center space-y-1 sm:space-y-2">
+                <Play size={32} className="text-indigo-400 sm:w-12 sm:h-12" fill="currentColor" />
+                <span className="font-bold text-xs sm:text-sm text-slate-500">TAP TO START</span>
               </div>
             )}
             {isTimerRunning && (
-              <div className="flex flex-col items-center space-y-2">
-                <div className="w-4 h-4 bg-red-500 rounded-full animate-pulse" />
-                <span className="font-bold text-indigo-400">
+              <div className="flex flex-col items-center space-y-1 sm:space-y-2">
+                <div className="w-3 h-3 sm:w-4 sm:h-4 bg-red-500 rounded-full animate-pulse" />
+                <span className="font-bold text-xs sm:text-sm text-indigo-400">
                   {gameMode === 'metronome' ? 'KEEP THE BEAT!' : 'TAP TO STOP'}
                 </span>
                 {gameMode === 'metronome' && (
-                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                  <span className="text-[8px] sm:text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                     {metronomeTaps.length} Taps recorded
                   </span>
                 )}
@@ -771,8 +792,8 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
                 animate={{ scale: 1, opacity: 1 }}
                 className="flex flex-col items-center"
               >
-                <span className={`text-5xl font-black transition-colors ${isDarkMode ? 'text-slate-50' : 'text-gray-900'}`}>{lastElapsed.toFixed(2)}s</span>
-                <span className={`text-sm font-bold mt-2 ${
+                <span className={`text-3xl sm:text-5xl font-black transition-colors ${isDarkMode ? 'text-slate-50' : 'text-gray-900'}`}>{lastElapsed.toFixed(2)}s</span>
+                <span className={`text-xs sm:text-sm font-bold mt-1 sm:mt-2 ${
                   gameMode === 'metronome'
                     ? 'text-indigo-400'
                     : gameMode === 'under' && lastElapsed > targetTime 
@@ -786,7 +807,7 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
                     const expectedTaps = Math.floor(targetTime / metronomeInterval);
                     const penalty = Math.max(0, expectedTaps - metronomeTaps.length) * (metronomeInterval / 2);
                     const totalError = metronomeTaps.reduce((acc, tap) => acc + tap.error, 0) + penalty;
-                    return `Total Error: ${totalError.toFixed(3)}s${penalty > 0 ? ` (+${penalty.toFixed(1)}s penalty)` : ''}`;
+                    return `Error: ${totalError.toFixed(3)}s`;
                   })()
                 ) : gameMode === 'under' && lastElapsed > targetTime ? 'BUSTED!' :
                    Math.abs(lastElapsed - effectiveTarget) < 0.1 ? 'PERFECT!' : 
@@ -794,7 +815,7 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
                    lastElapsed > effectiveTarget ? 'TOO LATE' : 'TOO EARLY'}
                 </span>
                 {gameMode === 'math' && (
-                  <span className={`text-xs font-bold mt-1 ${isDarkMode ? 'text-slate-500' : 'text-gray-400'}`}>Target was {effectiveTarget}s</span>
+                  <span className={`text-[10px] sm:text-xs font-bold mt-0.5 sm:mt-1 ${isDarkMode ? 'text-slate-500' : 'text-gray-400'}`}>Target was {effectiveTarget}s</span>
                 )}
               </motion.div>
             )}
@@ -806,7 +827,7 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             onClick={nextAction}
-            className={`px-8 py-4 rounded-2xl font-bold shadow-xl transition-all ${
+            className={`w-full max-w-xs py-3 sm:py-4 rounded-2xl font-bold shadow-xl transition-all text-sm sm:text-base ${
               isDarkMode ? 'bg-slate-800 text-slate-50 hover:bg-slate-700' : 'bg-gray-900 text-white hover:bg-gray-800'
             }`}
           >
@@ -820,19 +841,21 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
     );
   }
 
+  const winner = [...results].sort((a, b) => a.diff - b.diff)[0];
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-[80vh] p-6 space-y-8">
+    <div className="flex flex-col items-center justify-center py-4 sm:py-8 px-4 sm:px-6 space-y-6 sm:space-y-8 w-full max-w-md mx-auto">
       <motion.div 
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="text-center space-y-4"
+        className="text-center space-y-4 w-full"
       >
-        <div className={`inline-flex p-4 rounded-full mb-2 transition-colors ${isDarkMode ? 'bg-yellow-900/30 text-yellow-400' : 'bg-yellow-100 text-yellow-600'}`}>
-          <Trophy size={48} />
+        <div className={`inline-flex p-3 sm:p-4 rounded-full mb-2 transition-colors ${isDarkMode ? 'bg-yellow-900/30 text-yellow-400' : 'bg-yellow-100 text-yellow-600'}`}>
+          <Trophy size={40} className="sm:w-12 sm:h-12" />
         </div>
-        <h2 className={`text-4xl font-black transition-colors ${isDarkMode ? 'text-slate-100' : 'text-gray-900'}`}>Results</h2>
+        <h2 className={`text-3xl sm:text-4xl font-black transition-colors ${isDarkMode ? 'text-slate-100' : 'text-gray-900'}`}>Results</h2>
         <div className="flex flex-col items-center">
-          <span className="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-1">{gameMode} mode</span>
+          <span className="text-[10px] sm:text-xs font-bold text-indigo-400 uppercase tracking-widest mb-1">{gameMode} mode</span>
           {gameMode === 'math' && (
             <div className="flex flex-col items-center mb-2">
               <span className={`text-[10px] font-mono uppercase ${isDarkMode ? 'text-slate-500' : 'text-gray-400'}`}>Seed: {activeSeed}</span>
@@ -842,43 +865,43 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
             </div>
           )}
           {gameMode !== 'math' && (
-            <p className={`text-xl transition-colors ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>Goal was <span className="font-bold text-indigo-400">{targetTime}s</span></p>
+            <p className={`text-base sm:text-lg transition-colors ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>Goal was <span className="font-bold text-indigo-400">{targetTime}s</span></p>
           )}
         </div>
       </motion.div>
 
-      <div className="w-full max-w-md space-y-4">
+      <div className="w-full space-y-4 max-h-80 overflow-y-auto pr-2 custom-scrollbar">
         {results.sort((a, b) => a.diff - b.diff).map((result, index) => (
           <div key={result.id} className="space-y-2">
             <motion.div 
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.1 }}
-              className={`flex items-center justify-between p-5 rounded-2xl border-2 transition-colors duration-300 ${
+              className={`flex items-center justify-between p-4 sm:p-5 rounded-2xl border-2 transition-colors duration-300 ${
                 index === 0 && !result.disqualified 
                   ? isDarkMode ? 'bg-indigo-900/30 border-indigo-800' : 'bg-indigo-50 border-indigo-500' 
                   : isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-gray-100'
               } ${result.disqualified ? 'opacity-60 grayscale' : ''}`}
             >
-              <div className="flex items-center space-x-4">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-colors ${
+              <div className="flex items-center space-x-3 sm:space-x-4">
+                <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center font-bold text-sm sm:text-base transition-colors ${
                   index === 0 && !result.disqualified ? 'bg-indigo-600 text-white' : isDarkMode ? 'bg-slate-800 text-slate-400' : 'bg-gray-100 text-gray-400'
                 }`}>
                   {result.disqualified ? 'X' : index + 1}
                 </div>
                 <div>
-                  <p className={`font-bold transition-colors ${isDarkMode ? 'text-slate-50' : 'text-gray-900'}`}>{result.name}</p>
-                  <p className={`text-xs transition-colors ${isDarkMode ? 'text-slate-500' : 'text-gray-400'}`}>
+                  <p className={`font-bold text-sm sm:text-base transition-colors ${isDarkMode ? 'text-slate-50' : 'text-gray-900'}`}>{result.name}</p>
+                  <p className={`text-[10px] sm:text-xs transition-colors ${isDarkMode ? 'text-slate-500' : 'text-gray-400'}`}>
                     {gameMode === 'math' ? `${result.mathAttempts?.length} attempts` : `${result.elapsedTime.toFixed(2)}s elapsed`}
                   </p>
                 </div>
               </div>
               <div className="text-right">
-                <p className={`font-black transition-colors ${index === 0 && !result.disqualified ? 'text-indigo-400' : isDarkMode ? 'text-slate-50' : 'text-gray-900'}`}>
+                <p className={`font-black text-sm sm:text-base transition-colors ${index === 0 && !result.disqualified ? 'text-indigo-400' : isDarkMode ? 'text-slate-50' : 'text-gray-900'}`}>
                   {result.disqualified ? 'BUST' : `±${result.diff.toFixed(2)}s`}
                 </p>
                 {gameMode === 'math' && (
-                  <p className={`text-[10px] font-bold uppercase tracking-tighter transition-colors ${isDarkMode ? 'text-slate-500' : 'text-gray-400'}`}>Total Error</p>
+                  <p className={`text-[8px] sm:text-[10px] font-bold uppercase tracking-tighter transition-colors ${isDarkMode ? 'text-slate-500' : 'text-gray-400'}`}>Total Error</p>
                 )}
               </div>
             </motion.div>
@@ -887,12 +910,12 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
               <motion.div 
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
-                className={`rounded-2xl p-4 border space-y-2 ml-4 transition-colors duration-300 ${
+                className={`rounded-2xl p-3 sm:p-4 border space-y-2 ml-4 transition-colors duration-300 ${
                   isDarkMode ? 'bg-slate-800/50 border-slate-800' : 'bg-gray-50 border-gray-100'
                 }`}
               >
                 {result.mathAttempts.map((attempt, i) => (
-                  <div key={i} className="flex justify-between items-center text-xs">
+                  <div key={i} className="flex justify-between items-center text-[10px] sm:text-xs">
                     <div className="flex flex-col">
                       <span className="font-mono text-indigo-400 font-bold">{attempt.equation}</span>
                       <span className={`transition-colors ${isDarkMode ? 'text-slate-500' : 'text-gray-400'}`}>Target: {attempt.target}s</span>
@@ -910,17 +933,17 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
               <motion.div 
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
-                className={`rounded-2xl p-4 border space-y-2 ml-4 transition-colors duration-300 ${
+                className={`rounded-2xl p-3 sm:p-4 border space-y-2 ml-4 transition-colors duration-300 ${
                   isDarkMode ? 'bg-slate-800/50 border-slate-800' : 'bg-gray-50 border-gray-100'
                 }`}
               >
-                <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2">
+                <div className="flex justify-between items-center text-[8px] sm:text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2">
                   <span>Tap Analysis</span>
                   <span>Interval: {result.metronomeInterval}s</span>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   {result.metronomeTaps.map((tap, i) => (
-                    <div key={i} className="flex justify-between items-center text-[10px] p-2 rounded-lg bg-slate-900/30">
+                    <div key={i} className="flex justify-between items-center text-[8px] sm:text-[10px] p-2 rounded-lg bg-slate-900/30">
                       <span className="text-indigo-400 font-bold">Tap {i + 1}</span>
                       <span className="text-red-400">±{tap.error.toFixed(2)}s</span>
                     </div>
@@ -931,7 +954,7 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
                     const missing = Math.max(0, expectedTaps - result.metronomeTaps.length);
                     if (missing === 0) return null;
                     return Array.from({ length: missing }).map((_, i) => (
-                      <div key={`missing-${i}`} className="flex justify-between items-center text-[10px] p-2 rounded-lg bg-red-900/20 border border-red-900/30">
+                      <div key={`missing-${i}`} className="flex justify-between items-center text-[8px] sm:text-[10px] p-2 rounded-lg bg-red-900/20 border border-red-900/30">
                         <span className="text-red-400 font-bold">Missing Tap</span>
                         <span className="text-red-400">±{(interval / 2).toFixed(2)}s</span>
                       </div>
@@ -947,22 +970,22 @@ export default function GuessTheSeconds({ isDarkMode = true, initialPlayers = []
         ))}
       </div>
 
-      <div className="flex flex-col w-full max-w-md space-y-3">
+      <div className="flex flex-col w-full space-y-3">
         <ShareButton 
           title="Guess the Seconds Results"
           text={`I just played Guess the Seconds (${gameMode} mode)${gameMode === 'math' ? ` with seed: ${activeSeed}` : ''}! 🏆\n\nFinal Rankings:\n${results.sort((a, b) => a.diff - b.diff).map((r, i) => `${i + 1}. ${r.name} (±${r.diff.toFixed(2)}s)`).join('\n')}`}
-          className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold shadow-lg hover:bg-indigo-500 transition-all"
+          className="w-full py-3 sm:py-4 bg-indigo-600 text-white rounded-2xl font-black text-base sm:text-lg shadow-xl shadow-indigo-900/20 hover:bg-indigo-500 transition-all flex items-center justify-center space-x-2"
         />
         <button 
           onClick={startGame}
-          className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold shadow-lg hover:bg-indigo-500 transition-all flex items-center justify-center space-x-2"
+          className="w-full py-3 sm:py-4 bg-indigo-600 text-white rounded-2xl font-black text-base sm:text-lg shadow-xl shadow-indigo-900/20 hover:bg-indigo-500 transition-all flex items-center justify-center space-x-2"
         >
           <RotateCcw size={20} />
           <span>Play Again</span>
         </button>
         <button 
           onClick={resetGame}
-          className={`w-full py-4 rounded-2xl font-bold transition-all flex items-center justify-center space-x-2 ${
+          className={`w-full py-3 sm:py-4 rounded-2xl font-black text-base sm:text-lg transition-all flex items-center justify-center space-x-2 ${
             isDarkMode ? 'bg-slate-800 text-slate-400 hover:bg-slate-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >

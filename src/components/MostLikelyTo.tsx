@@ -234,14 +234,25 @@ export default function MostLikelyTo({ isDarkMode = true, initialPlayers = [] }:
           <p className={`font-medium ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>Point to the person who fits best!</p>
         </div>
 
-        <div className={`rounded-2xl p-4 border transition-colors ${isDarkMode ? 'bg-indigo-900/20 border-indigo-800/30' : 'bg-indigo-50 border-indigo-100'}`}>
-          <div className="flex items-center justify-center space-x-2 font-bold text-indigo-500 mb-2 text-sm">
+        <div className={`rounded-2xl p-4 border transition-colors duration-300 ${isDarkMode ? 'bg-indigo-900/20 border-indigo-800/30' : 'bg-indigo-50 border-indigo-100'}`}>
+          <div className={`flex items-center justify-center space-x-2 font-bold mb-3 text-sm ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`}>
             <Sparkles size={16} />
             <span>How to Play</span>
           </div>
-          <p className={`text-xs leading-relaxed text-center ${isDarkMode ? 'text-indigo-300/70' : 'text-indigo-700/70'}`}>
-            Read the prompt aloud. On the count of three, everyone points to the person they think fits best. The person with the most fingers pointed at them "wins" the round!
-          </p>
+          <div className="grid grid-cols-1 gap-3 text-left">
+            <div className="flex items-start space-x-3">
+              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-indigo-500/20 text-indigo-400' : 'bg-indigo-100 text-indigo-600'}`}>1</div>
+              <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Read the prompt aloud. Everyone thinks about who fits it best.</p>
+            </div>
+            <div className="flex items-start space-x-3">
+              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-indigo-500/20 text-indigo-400' : 'bg-indigo-100 text-indigo-600'}`}>2</div>
+              <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>On the count of three, everyone points to their chosen person.</p>
+            </div>
+            <div className="flex items-start space-x-3">
+              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-indigo-500/20 text-indigo-400' : 'bg-indigo-100 text-indigo-600'}`}>3</div>
+              <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>The person with the most fingers pointed at them "wins" the round!</p>
+            </div>
+          </div>
         </div>
       </motion.div>
 

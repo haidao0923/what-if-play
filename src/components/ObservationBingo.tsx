@@ -6,162 +6,186 @@ import ShareButton from './ShareButton';
 
 const BINGO_DATA: Record<string, string[]> = {
   "General": [
-    "A person on a phone", "A person wearing a hat", "A person checking their watch", "A red piece of clothing",
-    "A person yawning", "A child laughing", "A person with a shopping bag", "A person with glasses",
-    "A person drinking something", "A blue backpack", "A person wearing sneakers", "A person with a beard",
-    "A person wearing headphones", "A person talking loudly", "A yellow item", "A person leaning against a wall",
-    "A person holding a coffee cup", "A person in a suit", "A person with a stroller", "A person with a colorful umbrella",
-    "A person wearing a watch", "A person with a ponytail", "A person wearing a hoodie", "A person with a backpack",
-    "A person checking their phone", "A person with a tattoo", "A person wearing boots", "A person with a scarf",
-    "A person looking at a menu", "A person with a reusable water bottle", "A person wearing a denim jacket",
-    "A person with a striped shirt", "A person wearing jewelry", "A person with a messenger bag", "A person wearing sunglasses",
-    "A person eating an apple", "A person with a green shirt", "A person running", "A person with a dog",
-    "A person riding a bike", "A person with a white t-shirt", "A person wearing a belt", "A person with a ring",
-    "A person with a notebook", "A person with a pen", "A person wearing a skirt", "A person with a dress",
-    "A person wearing sandals", "A person with a cap", "A person with a keychain", "A person with a wallet",
-    "A person with a tie", "A person wearing a vest", "A person with a briefcase", "A person with a umbrella"
+    "using phone", "hat", "checking watch", "red clothing",
+    "yawning", "child laughing", "shopping bag", "glasses",
+    "drinking", "blue backpack", "sneakers", "beard",
+    "headphones", "talking loudly", "yellow item", "leaning on wall",
+    "coffee cup", "suit", "stroller", "colorful umbrella",
+    "watch", "ponytail", "hoodie", "backpack",
+    "checking phone", "tattoo", "boots", "scarf",
+    "looking at sign", "reusable water bottle", "denim jacket",
+    "striped shirt", "jewelry", "messenger bag", "sunglasses",
+    "eating apple", "green shirt", "running", "dog",
+    "riding bike", "white t‑shirt", "belt", "ring",
+    "notebook", "pen", "skirt", "dress",
+    "sandals", "cap", "keychain", "wallet",
+    "tie", "vest", "briefcase", "umbrella"
   ],
   "Mall": [
-    "A person carrying 3+ bags", "A mannequin with no head", "A person eating a pretzel", "A security guard on a Segway",
-    "A 'Sale' sign over 50%", "A person trying on shoes", "A fountain with coins", "A person waiting outside a store",
-    "A massage chair in use", "A person looking at a directory", "A stroller with two kids", "A person with a shopping cart",
-    "A bright neon sign", "A person sitting on a bench", "A person with a coffee cup", "A person checking their watch",
-    "A person with a backpack", "A person wearing sunglasses indoors", "A person with a colorful umbrella",
-    "A person wearing a hoodie", "A person with a ponytail", "A person checking their phone", "A person with a tattoo",
-    "A person wearing boots", "A person with a scarf", "A person looking at a menu", "A person with a reusable water bottle",
-    "A person wearing a denim jacket", "A person with a striped shirt", "A person wearing jewelry", "A person with a messenger bag",
-    "A person eating at the food court", "A person with a cinema ticket", "A person looking at jewelry", "A person with a toy store bag",
-    "A person trying on a hat", "A person with a perfume sample", "A person looking at electronics", "A person with a sports store bag",
-    "A person using an escalator", "A person with an elevator", "A person looking at a map", "A person with a gift card",
-    "A person waiting for a friend", "A person with a phone case", "A person looking at shoes", "A person with a watch store bag",
-    "A person with a balloon", "A person with a pretzel", "A person looking at a window display", "A person with a receipt"
+    "3+ shopping bags", "mannequin", "eating pretzel", "security guard",
+    "Sale sign >50%", "trying on shoes", "fountain", "waiting outside",
+    "massage chair", "looking at directory", "stroller (2 kids)", "shopping cart",
+    "neon sign", "sitting on bench", "coffee cup", "checking watch",
+    "backpack", "sunglasses indoors", "colorful umbrella",
+    "hoodie", "ponytail", "checking phone", "tattoo",
+    "boots", "scarf", "looking at menu", "reusable water bottle",
+    "denim jacket", "striped shirt", "jewelry", "messenger bag",
+    "food court", "cinema ticket", "looking at jewelry", "toy store bag",
+    "trying on hat", "perfume sample", "electronics", "sports store bag",
+    "using escalator", "elevator", "looking at map", "gift card",
+    "waiting for friend", "phone case", "looking at shoes", "watch store bag",
+    "balloon", "pretzel", "window display", "receipt"
   ],
   "Airport": [
-    "A person sleeping at a gate", "A pilot walking by", "A suitcase with a bright ribbon", "A person looking at the departures board",
-    "A person wearing a neck pillow", "A person running to a gate", "A service animal", "A person eating a $15 sandwich",
-    "A person with 3+ carry-ons", "A person charging their phone", "A flight attendant crew", "A person reading a physical book",
-    "A child with a rolling suitcase", "A person wearing noise-canceling headphones", "A person looking out the window",
-    "A person with a duty-free bag", "A person wearing a 'destination' shirt", "A person checking their passport",
-    "A person with a laptop on their lap", "A person buying a magazine", "A person with a coffee cup", "A person checking their watch",
-    "A person with a backpack", "A person wearing a hoodie", "A person with a ponytail", "A person on a phone",
-    "A person wearing a hat", "A red piece of clothing", "A person yawning", "A person with glasses", "A person drinking something",
-    "A person with a boarding pass in hand", "A person with a luggage tag", "A person looking at a watch", "A person with a travel pillow",
-    "A person wearing a tracksuit", "A person looking at a gate number", "A person with a water bottle",
-    "A person using a tablet", "A person with a camera", "A person looking at a souvenir", "A person with a neck strap",
-    "A person wearing a jacket", "A person with a scarf", "A person looking at a map", "A person with a phone",
-    "A person with a rolling bag", "A person with a neck pillow", "A person looking at a flight screen", "A person with a passport"
+    "sleeping at gate", "pilot", "suitcase (ribbon)", "departures board",
+    "neck pillow", "running to gate", "service animal", "$15 sandwich",
+    "3+ carry-ons", "charging phone", "flight crew", "reading book",
+    "child (rolling bag)", "noise-canceling headphones", "looking out window",
+    "duty-free bag", "destination shirt", "checking passport",
+    "laptop on lap", "buying magazine", "coffee cup", "checking watch",
+    "backpack", "hoodie", "ponytail", "using phone",
+    "hat", "red clothing", "yawning", "glasses", "drinking",
+    "boarding pass", "luggage tag", "looking at watch", "travel pillow",
+    "tracksuit", "gate number", "water bottle",
+    "using tablet", "camera", "looking at souvenir", "neck strap",
+    "jacket", "scarf", "looking at map", "phone",
+    "rolling bag", "neck pillow", "flight screen", "passport"
   ],
   "Park": [
-    "A dog catching a frisbee", "A person on a picnic blanket", "A person jogging with a dog", "A person reading under a tree",
-    "A squirrel eating a nut", "A person playing a guitar", "A child on a swing", "A person taking a photo of a flower",
-    "A person on a bicycle", "A person flying a kite", "A person with a yoga mat", "A person feeding birds",
-    "A person wearing a sun hat", "A person pushing a stroller", "A person with a reusable water bottle", "A person wearing sneakers",
-    "A person with a backpack", "A person checking their phone", "A person with a ponytail", "A person wearing sunglasses",
-    "A person with a beard", "A person laughing", "A yellow flower", "A person on a bench", "A person checking their watch",
-    "A person on a phone", "A person wearing a hat", "A red piece of clothing", "A person yawning", "A person with glasses",
-    "A person walking a dog", "A person with a frisbee", "A person playing catch", "A person with a soccer ball",
-    "A person sitting on the grass", "A person with a book", "A person wearing a t-shirt", "A person with a cap",
-    "A person looking at a bird", "A person with a camera", "A person taking a selfie", "A person wearing shorts",
-    "A person with sandals", "A person with a water bottle", "A person with a snack", "A person with a picnic basket",
-    "A person with a kite", "A person playing with a ball", "A person on a path", "A person looking at a tree"
+    "dog catching frisbee", "on picnic blanket", "jogging with dog", "reading under tree",
+    "squirrel eating nut", "playing guitar", "child on swing", "photo of flower",
+    "riding bike", "flying kite", "yoga mat", "feeding birds",
+    "sun hat", "pushing stroller", "water bottle", "sneakers",
+    "backpack", "checking phone", "ponytail", "sunglasses",
+    "beard", "laughing", "yellow flower", "sitting on bench", "checking watch",
+    "using phone", "hat", "red clothing", "yawning", "glasses",
+    "walking dog", "frisbee", "playing catch", "soccer ball",
+    "sitting on grass", "book", "t‑shirt", "cap",
+    "looking at bird", "camera", "taking selfie", "shorts",
+    "sandals", "water bottle", "snack", "picnic basket",
+    "kite", "playing with ball", "on path", "looking at tree"
   ],
   "Amusement Center": [
-    "A person winning a giant plushie", "A person playing air hockey", "A person concentrated on a claw machine", "A person with a bucket of tickets",
-    "A person eating nachos", "A loud 'Jackpot' sound", "A person playing a racing game", "A person wearing a VR headset",
-    "A person dancing on a rhythm game", "A person with a glowing drink", "A person taking a photo in a booth", "A person with a lanyard",
-    "A person wearing a gaming t-shirt", "A person with a backpack", "A person checking their phone", "A person with a ponytail",
-    "A person wearing sneakers", "A person laughing", "A person talking loudly", "A person with a hoodie",
-    "A person checking their watch", "A person with glasses", "A person drinking something", "A yellow item", "A person leaning against a wall",
-    "A person playing a pinball machine", "A person with a prize", "A person looking at a game menu", "A person with a card",
-    "A person using a joystick", "A person with a button", "A person looking at a screen", "A person with a headset",
-    "A person wearing a cap", "A person with a t-shirt", "A person with a drink", "A person with a snack",
-    "A person sitting on a stool", "A person standing", "A person looking at a prize counter", "A person with a ticket",
-    "A person with a bucket of tokens", "A person with a game card", "A person looking at a high score", "A person with a joystick"
+    "winning plushie", "playing air hockey", "claw machine", "bucket of tickets",
+    "eating nachos", "Jackpot sound", "racing game", "VR headset",
+    "rhythm game", "glowing drink", "photo booth", "lanyard",
+    "gaming t‑shirt", "backpack", "checking phone", "ponytail",
+    "sneakers", "laughing", "talking loudly", "hoodie",
+    "checking watch", "glasses", "drinking", "yellow item", "leaning on wall",
+    "playing pinball", "prize", "game menu", "card",
+    "using joystick", "button", "looking at screen", "headset",
+    "cap", "t‑shirt", "drink", "snack",
+    "sitting on stool", "standing", "prize counter", "ticket",
+    "bucket of tokens", "game card", "high score", "joystick"
   ],
   "Theme Park": [
-    "A person wearing mouse ears", "A person with a churro", "A person soaked from a water ride", "A person with a fast-pass lanyard",
-    "A person screaming on a drop", "A person with a giant balloon", "A person looking at a park map", "A person in a matching family t-shirt",
-    "A person carrying a souvenir bucket", "A person with a misting fan", "A person waiting in a 60+ min line", "A person with a stroller",
-    "A person wearing a sun hat", "A person with a backpack", "A person checking their phone", "A person with a ponytail",
-    "A person wearing sneakers", "A person laughing", "A person talking loudly", "A person with a hoodie",
-    "A person checking their watch", "A person with glasses", "A person drinking something", "A yellow item", "A person leaning against a wall",
-    "A person wearing a poncho", "A person with a turkey leg", "A person taking a photo of a character", "A person with a souvenir bag",
-    "A person looking at a wait time board", "A person with a popcorn bucket", "A person wearing a theme park shirt", "A person with a sun hat",
-    "A person using a locker", "A person with a stroller", "A person looking at a map", "A person with a phone",
-    "A person wearing a lanyard", "A person with a badge", "A person with a water bottle", "A person with a snack",
-    "A person with a souvenir hat", "A person with a cotton candy", "A person looking at a parade", "A person with a wand"
+    "mouse ears", "churro", "soaked from ride", "fast-pass lanyard",
+    "screaming on ride", "giant balloon", "park map", "family t‑shirt",
+    "souvenir bucket", "misting fan", "60+ min wait", "stroller",
+    "sun hat", "backpack", "checking phone", "ponytail",
+    "sneakers", "laughing", "talking loudly", "hoodie",
+    "checking watch", "glasses", "drinking", "yellow item", "leaning on wall",
+    "poncho", "turkey leg", "photo with character", "souvenir bag",
+    "wait time board", "popcorn bucket", "theme park shirt", "sun hat",
+    "using locker", "stroller", "looking at map", "phone",
+    "lanyard", "badge", "water bottle", "snack",
+    "souvenir hat", "cotton candy", "watching parade", "wand"
   ],
   "Restaurant": [
-    "A person sending back a dish", "A person taking a photo of their food", "A person dropping a fork", "A person looking at a wine list",
-    "A person eating with chopsticks", "A person wearing a napkin as a bib", "A person paying with a stack of cash", "A person with a birthday candle",
-    "A person checking their reflection in a spoon", "A person with a high chair", "A person asking for the check", "A person with a reusable water bottle",
-    "A person wearing a suit", "A person with a backpack", "A person checking their phone", "A person with a ponytail",
-    "A person wearing sneakers", "A person laughing", "A person talking loudly", "A person with a hoodie",
-    "A person checking their watch", "A person with glasses", "A person drinking something", "A yellow item", "A person leaning against a wall",
-    "A person eating a dessert", "A person with a menu", "A person looking at a waiter", "A person with a glass",
-    "A person using a napkin", "A person with a plate", "A person looking at a table", "A person with a chair",
-    "A person wearing a dress", "A person with a shirt", "A person with a tie", "A person with a watch",
-    "A person looking at a phone", "A person with a wallet", "A person paying a bill", "A person with a receipt",
-    "A person with a salt shaker", "A person with a pepper mill", "A person looking at a specials board", "A person with a menu"
+    "sending back dish", "photo of food", "dropping fork", "wine list",
+    "eating with chopsticks", "napkin as bib", "paying with cash", "birthday candle",
+    "checking reflection", "high chair", "asking for check", "water bottle",
+    "suit", "backpack", "checking phone", "ponytail",
+    "sneakers", "laughing", "talking loudly", "hoodie",
+    "checking watch", "glasses", "drinking", "yellow item", "leaning on wall",
+    "eating dessert", "menu", "looking at waiter", "glass",
+    "using napkin", "plate", "looking at table", "chair",
+    "dress", "shirt", "tie", "watch",
+    "looking at phone", "wallet", "paying bill", "receipt",
+    "salt shaker", "pepper mill", "specials board", "menu"
   ],
   "High School": [
-    "A person wearing a letterman jacket", "A student running to class", "A teacher with a stack of papers", "A person with a musical instrument case",
-    "A group of students laughing loudly", "A person wearing a school spirit shirt", "A student with a very heavy backpack", "A person using a locker",
-    "A person with a sports ball", "A person wearing a lanyard", "A student on a skateboard", "A person with a reusable water bottle",
-    "A person wearing glasses", "A person checking their phone", "A student with a colorful backpack", "A person wearing a hoodie",
-    "A person with a ponytail", "A person wearing sneakers", "A person with a denim jacket", "A person wearing jewelry",
-    "A person with a messenger bag", "A person wearing a watch", "A person with a tattoo", "A person wearing boots", "A person with a scarf",
-    "A person eating a lunchbox", "A student with a textbook", "A person looking at a schedule", "A person with a pen",
-    "A person using a calculator", "A student with a notebook", "A person wearing a cap", "A person with a t-shirt",
-    "A person sitting on a bench", "A person standing in a hallway", "A person looking at a poster", "A person with a badge",
-    "A person wearing a belt", "A person with a ring", "A person with a keychain", "A person with a wallet",
-    "A person with a gym bag", "A student with a binder", "A person looking at a trophy case", "A person with a school bag"
+    "letterman jacket", "running to class", "teacher with papers", "instrument case",
+    "students laughing", "school spirit shirt", "heavy backpack", "using locker",
+    "sports ball", "lanyard", "skateboarder", "water bottle",
+    "glasses", "checking phone", "colorful backpack", "hoodie",
+    "ponytail", "sneakers", "denim jacket", "jewelry",
+    "messenger bag", "watch", "tattoo", "boots", "scarf",
+    "eating lunch", "textbook", "checking schedule", "pen",
+    "using calculator", "notebook", "cap", "t‑shirt",
+    "sitting on bench", "standing in hallway", "looking at poster", "badge",
+    "belt", "ring", "keychain", "wallet",
+    "gym bag", "binder", "looking at trophies", "school bag"
   ],
   "University": [
-    "A person carrying a laptop", "A student with a coffee cup", "A person riding a bike", "A person wearing a university hoodie",
-    "A student reading a thick textbook", "A professor with a briefcase", "A person walking while looking at a phone", "A group of students studying on grass",
-    "A person with a yoga mat", "A person wearing noise-canceling headphones", "A person with a messenger bag", "A student wearing a club t-shirt",
-    "A person with a longboard", "A person with a reusable water bottle", "A person wearing a hat", "A person with a beard",
-    "A person wearing a watch", "A person with a ponytail", "A person wearing sneakers", "A person with a backpack",
-    "A person checking their phone", "A person with a tattoo", "A person wearing boots", "A person with a scarf", "A person looking at a menu",
-    "A person eating at a campus cafe", "A student with a tablet", "A person looking at a campus map", "A person with a badge",
-    "A person using a library book", "A student with a notebook", "A person wearing a university cap", "A person with a university t-shirt",
-    "A person sitting in a lecture hall", "A person standing in a plaza", "A person looking at a flyer", "A person with a lanyard",
-    "A person wearing a jacket", "A person with a bag", "A person with a water bottle", "A person with a snack",
-    "A person with a student ID", "A person with a research poster", "A person looking at a campus event", "A person with a laptop"
+    "carrying laptop", "coffee cup", "riding bike", "university hoodie",
+    "thick textbook", "professor", "walking & texting", "studying on grass",
+    "yoga mat", "noise-canceling headphones", "messenger bag", "club t‑shirt",
+    "longboard", "water bottle", "hat", "beard",
+    "watch", "ponytail", "sneakers", "backpack",
+    "checking phone", "tattoo", "boots", "scarf", "looking at menu",
+    "eating at cafe", "tablet", "looking at map", "badge",
+    "library book", "notebook", "university cap", "university t‑shirt",
+    "sitting in lecture", "standing in plaza", "looking at flyer", "lanyard",
+    "jacket", "bag", "water bottle", "snack",
+    "student ID", "research poster", "checking events", "laptop"
   ],
   "Commute": [
-    "A person sleeping on a shoulder", "A person with a physical newspaper", "A person running for the doors", "A person with a bike on board",
-    "A person giving up their seat", "A person with a very large instrument", "A person eating a smelly snack", "A person with a wet umbrella",
-    "A person reading a Kindle", "A person with a briefcase", "A person wearing a high-vis vest", "A person with a skateboard",
-    "A person checking the transit app", "A person with a coffee in a thermos", "A person wearing a winter coat in summer", "A person with a rolling bag",
-    "A person talking to themselves", "A person with a colorful hat", "A person wearing a mask", "A person with a backpack on their front",
-    "A person looking at a map", "A person with a badge", "A person with a water bottle", "A person with a snack",
-    "A person reading a book", "A person with headphones", "A person looking out the window", "A person with a phone"
+    "sleeping on shoulder", "physical newspaper", "running for doors", "bike on board",
+    "giving up seat", "large instrument", "smelly snack", "wet umbrella",
+    "reading Kindle", "briefcase", "high-vis vest", "skateboard",
+    "checking transit app", "coffee in thermos", "winter coat in summer", "rolling bag",
+    "talking to self", "colorful hat", "mask", "backpack on front",
+    "looking at map", "badge", "water bottle", "snack",
+    "reading book", "headphones", "looking out window", "phone"
   ],
   "Coffee Shop": [
-    "A person with a laptop covered in stickers", "A person ordering a complex drink", "A person waiting for a name that isn't theirs", "A person reading a poetry book",
-    "A person with a reusable cup", "A person working on a screenplay", "A person taking a photo of latte art", "A person with a dog outside",
-    "A person wearing a beanie in warm weather", "A person with a sketchbook", "A person having a job interview", "A person with a pastry",
-    "A person looking for a power outlet", "A person with a large headphones", "A person wearing a scarf indoors", "A person with a messenger bag",
-    "A person checking their watch", "A person with a phone", "A person with a notebook", "A person with a pen",
-    "A person drinking an espresso", "A person with a tablet", "A person talking on a laptop", "A person with a backpack"
+    "laptop with stickers", "ordering complex drink", "waiting for order", "reading poetry",
+    "reusable cup", "person writing", "photo of latte art", "dog outside",
+    "beanie in summer", "sketchbook", "job interview", "pastry",
+    "looking for outlet", "large headphones", "scarf indoors", "messenger bag",
+    "checking watch", "phone", "notebook", "pen",
+    "drinking espresso", "tablet", "talking on laptop", "backpack"
   ],
   "Grocery Store": [
-    "A person with a overflowing cart", "A person comparing two identical items", "A person eating a grape from a bag", "A person with a reusable bag",
-    "A person looking for a specific aisle", "A person with a crying toddler", "A person with a stack of coupons", "A person with a basket of only snacks",
-    "A person wearing pajamas", "A person with a flower bouquet", "A person checking the expiration date", "A person with a rotisserie chicken",
-    "A person waiting at the deli counter", "A person with a large pack of water", "A person wearing a hat", "A person with a phone",
-    "A person looking at a list", "A person with a wallet", "A person paying a bill", "A person with a receipt",
-    "A person with a frozen pizza", "A person with a milk carton", "A person looking at a price tag", "A person with a shopping bag"
+    "overflowing cart", "comparing items", "eating a grape", "reusable bag",
+    "looking for aisle", "crying toddler", "stack of coupons", "basket of snacks",
+    "pajamas", "flower bouquet", "checking expiration", "rotisserie chicken",
+    "waiting at deli", "large pack of water", "hat", "phone",
+    "checking list", "wallet", "paying bill", "receipt",
+    "frozen pizza", "milk carton", "checking price", "shopping bag"
   ],
   "Nature Walk": [
-    "A bird with bright feathers", "A person with a walking stick", "A person taking a macro photo of a bug", "A person wearing zip-off pants",
-    "A person with a large camera lens", "A person with a hydration pack", "A person identifying a plant", "A person with a dog on a long leash",
-    "A person wearing a sun hat", "A person with a binoculars", "A person with a field guide", "A person with a reusable water bottle",
-    "A person with a backpack", "A person checking their phone for GPS", "A person with a ponytail", "A person wearing hiking boots",
-    "A person with a beard", "A person laughing", "A yellow flower", "A person on a trail marker", "A person checking their watch",
-    "A person looking at a butterfly", "A person with a camera", "A person taking a selfie", "A person with a snack"
+    "bird with bright feathers", "walking stick", "photo of a bug", "zip-off pants",
+    "large camera lens", "hydration pack", "identifying plant", "dog on long leash",
+    "sun hat", "binoculars", "field guide", "water bottle",
+    "backpack", "checking GPS", "ponytail", "hiking boots",
+    "beard", "laughing", "yellow flower", "trail marker", "checking watch",
+    "looking at butterfly", "camera", "taking selfie", "snack"
+  ],
+  "Library": [
+    "sleeping on book", "stack of 5+ books", "headphones", "whispering",
+    "microfilm reader", "colorful bookmark", "looking at map", "laptop",
+    "using printer", "looking for book", "reusable bag", "glasses",
+    "notebook", "pen", "checking watch", "ponytail",
+    "sweater", "backpack", "reading magazine", "newspaper",
+    "using computer", "library card", "checking bulletin", "water bottle"
+  ],
+  "Beach": [
+    "giant inflatable", "building sandcastle", "sun hat", "surfboard",
+    "applying sunscreen", "reading in chair", "colorful towel", "playing frisbee",
+    "cooler", "sunglasses", "beach ball", "collecting shells",
+    "kite", "flip-flops", "snorkel", "metal detector",
+    "beach umbrella", "swimsuit", "cover-up", "straw bag",
+    "photo of waves", "seagull nearby", "ice cream", "cold drink"
+  ],
+  "City Street": [
+    "hailing taxi", "street map", "eating hot dog", "briefcase",
+    "suit", "messenger bag", "looking at storefront", "coffee cup",
+    "using crosswalk", "colorful umbrella", "headphones", "backpack",
+    "checking phone", "dog", "riding bike", "riding scooter",
+    "hat", "shopping bag", "checking watch", "camera",
+    "taking selfie", "tourist map", "backpack on front", "stroller"
   ]
 };
 
@@ -234,12 +258,12 @@ export default function ObservationBingo({ isDarkMode = true, initialPlayers = [
     const currentItems = BINGO_DATA[location] || [];
     const indices = items.map(text => currentItems.indexOf(text));
     
-    // If all items are in the predefined list and it's not the "Custom" location
-    if (location !== "Custom" && indices.every(idx => idx !== -1)) {
+    // If all items are in the predefined list and it's not the "Custom"location
+    if (location !== "Custom"&& indices.every(idx => idx !== -1)) {
       return ALPHABET[locIdx] + ALPHABET[size] + indices.map(i => ALPHABET[i]).join('');
     }
     
-    // Otherwise, use a "Compressed Long Code" format
+    // Otherwise, use a "Compressed Long Code"format
     // Format: Z + Size + Base64(Deflate(JSON([location, ...items])))
     try {
       const data = { l: location, s: size, w: items };
@@ -253,7 +277,7 @@ export default function ObservationBingo({ isDarkMode = true, initialPlayers = [
         binary += String.fromCharCode(bytes[i]);
       }
       const b64 = btoa(binary);
-      return "Z" + ALPHABET[size] + b64;
+      return "Z"+ ALPHABET[size] + b64;
     } catch (e) {
       return "CUSTOM";
     }
@@ -324,12 +348,12 @@ export default function ObservationBingo({ isDarkMode = true, initialPlayers = [
       }
     }
 
-    const currentItems = targetLocation === "Custom" 
+    const currentItems = targetLocation === "Custom"
       ? customWordsInput.split(',').map(s => s.trim()).filter(s => s.length > 0)
       : BINGO_DATA[targetLocation];
 
     if (!selectedIndices && !selectedTexts) {
-      if (targetLocation === "Custom" && currentItems.length < targetSize * targetSize) {
+      if (targetLocation === "Custom"&& currentItems.length < targetSize * targetSize) {
         setError(`Please provide at least ${targetSize * targetSize} words for a ${targetSize}x${targetSize} board.`);
         return;
       }
@@ -485,19 +509,30 @@ export default function ObservationBingo({ isDarkMode = true, initialPlayers = [
             </h2>
             <p className={`font-medium pt-2 ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Choose your challenge</p>
             <div className={`rounded-2xl p-4 border mt-4 transition-colors duration-300 ${isDarkMode ? 'bg-rose-900/20 border-rose-800/30' : 'bg-rose-50 border-rose-100'}`}>
-              <div className={`flex items-center justify-center space-x-2 font-bold mb-1 text-sm ${isDarkMode ? 'text-rose-400' : 'text-rose-600'}`}>
+              <div className={`flex items-center justify-center space-x-2 font-bold mb-3 text-sm ${isDarkMode ? 'text-rose-400' : 'text-rose-600'}`}>
                 <Sparkles size={16} />
                 <span>How to Play</span>
               </div>
-              <p className={`text-xs leading-relaxed max-w-xs mx-auto ${isDarkMode ? 'text-rose-300/70' : 'text-rose-700/70'}`}>
-                Spot items in the crowd to mark your board. In Duo mode, if an opponent has claimed a square, you can clear it by spotting a different instance of that item. Spot another one again to claim it for yourself!
-              </p>
+              <div className="grid grid-cols-1 gap-3 text-left">
+                <div className="flex items-start space-x-3">
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-rose-500/20 text-rose-400' : 'bg-rose-100 text-rose-600'}`}>1</div>
+                  <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Spot items in the crowd to mark your board. Get a line or blackout to win!</p>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-rose-500/20 text-rose-400' : 'bg-rose-100 text-rose-600'}`}>2</div>
+                  <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>In Duo mode, if an opponent has claimed a square, you can clear it by spotting the item again.</p>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-rose-500/20 text-rose-400' : 'bg-rose-100 text-rose-600'}`}>3</div>
+                  <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Spot it once more to claim it for yourself! First to reach the goal wins.</p>
+                </div>
+              </div>
             </div>
           </div>
 
           <div className={`space-y-4 p-8 rounded-[2.5rem] shadow-2xl border transition-colors duration-300 ${isDarkMode ? 'bg-slate-900 border-slate-800 shadow-black/50' : 'bg-white border-slate-100 shadow-rose-100'}`}>
             <div className="space-y-3">
-              <label className={`text-xs font-black uppercase tracking-widest block text-left ml-2 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Location</label>
+              <label className={`text-sm font-black uppercase tracking-widest block text-left ml-2 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Location</label>
               <div className="relative">
                 <select 
                   value={location}
@@ -513,7 +548,7 @@ export default function ObservationBingo({ isDarkMode = true, initialPlayers = [
               </div>
             </div>
 
-            {location === "Custom" && (
+            {location === "Custom"&& (
               <div className="space-y-3">
                 <label className={`text-xs font-black uppercase tracking-widest block text-left ml-2 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Custom Word List</label>
                 <textarea 
@@ -687,7 +722,7 @@ export default function ObservationBingo({ isDarkMode = true, initialPlayers = [
           <div className="grid grid-cols-2 gap-3">
             <button 
               onClick={() => {
-                const items = location === "Custom" 
+                const items = location === "Custom"
                   ? customWordsInput.split(',').map(s => s.trim()).filter(s => s.length > 0)
                   : BINGO_DATA[location];
                 if (items.length < gridSize * gridSize) return;
@@ -743,7 +778,7 @@ export default function ObservationBingo({ isDarkMode = true, initialPlayers = [
                 </div>
                 
                 <div className="p-4 border-b border-slate-800 bg-slate-900/30 space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">Custom Text</label>
+                  <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-2">Custom Text</label>
                   <div className="flex space-x-2">
                     <input 
                       type="text"
@@ -768,7 +803,7 @@ export default function ObservationBingo({ isDarkMode = true, initialPlayers = [
 
                 <div className="flex-1 overflow-y-auto p-4 space-y-2 custom-scrollbar">
                   <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-2">Pick from {location}</label>
-                  {location !== "Custom" ? (
+                  {location !== "Custom"? (
                     BINGO_DATA[location].map((item, idx) => (
                       <button
                         key={idx}
@@ -809,24 +844,24 @@ export default function ObservationBingo({ isDarkMode = true, initialPlayers = [
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-[80vh] p-6 space-y-6">
+    <div className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 space-y-4 sm:space-y-6 overflow-x-hidden">
       <div className="w-full max-w-md flex justify-between items-center px-2">
         <div className="flex flex-col">
-          <span className={`text-[10px] font-black uppercase tracking-widest ${isDarkMode ? 'text-rose-400' : 'text-rose-600'}`}>
+          <span className={`text-base sm:text-lg font-black uppercase tracking-widest ${isDarkMode ? 'text-rose-400' : 'text-rose-600'}`}>
             {playerMode === '1' ? (subMode === 'line' ? 'Line Mode' : 'Blackout Mode') : (subMode === 'tictactoe' ? 'Tic Tac Toe' : 'Race to 5')}
           </span>
-          <h3 className={`text-xl font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>Observation Bingo</h3>
-          <span className={`text-[10px] font-bold uppercase tracking-widest ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>{location}</span>
+          <h3 className={`text-2xl sm:text-3xl font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>Observation Bingo</h3>
+          <span className={`text-base sm:text-lg font-bold uppercase tracking-widest ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>{location}</span>
           {!boardCode.startsWith('Z') && boardCode !== 'CUSTOM' && (
-            <span className={`text-[8px] font-mono uppercase ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Code: {boardCode}</span>
+            <span className={`text-sm sm:text-base font-mono uppercase ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Code: {boardCode}</span>
           )}
-          <span className={`text-[8px] font-bold uppercase tracking-widest ${isCustomBoard ? (isDarkMode ? 'text-rose-400' : 'text-rose-600') : (isDarkMode ? 'text-slate-600' : 'text-slate-400')}`}>
+          <span className={`text-sm sm:text-base font-bold uppercase tracking-widest ${isCustomBoard ? (isDarkMode ? 'text-rose-400' : 'text-rose-600') : (isDarkMode ? 'text-slate-600' : 'text-slate-400')}`}>
             {isCustomBoard ? 'Custom Board' : 'Randomized Board'}
           </span>
         </div>
-        <div className={`flex items-center space-x-2 px-4 py-2 rounded-2xl shadow-sm border transition-colors duration-300 ${isDarkMode ? 'bg-slate-900 border-slate-800 shadow-black/20' : 'bg-white border-slate-100 shadow-rose-100'}`}>
-          <Timer size={16} className="text-rose-500" />
-          <span className={`font-mono font-bold ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>{formatTime(timer)}</span>
+        <div className={`flex items-center space-x-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-2xl shadow-sm border transition-colors duration-300 ${isDarkMode ? 'bg-slate-900 border-slate-800 shadow-black/20' : 'bg-white border-slate-100 shadow-rose-100'}`}>
+          <Timer size={16} className="text-rose-500 sm:w-5 sm:h-5"/>
+          <span className={`font-mono font-bold text-lg sm:text-xl ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>{formatTime(timer)}</span>
         </div>
       </div>
 
@@ -837,55 +872,57 @@ export default function ObservationBingo({ isDarkMode = true, initialPlayers = [
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.5 }}
-              className={`absolute inset-0 z-50 flex flex-col items-center justify-center backdrop-blur-sm rounded-[2.5rem] border-4 shadow-2xl p-8 text-center transition-colors duration-300 ${isDarkMode ? 'bg-slate-900/95 border-rose-600 shadow-black/50' : 'bg-white/95 border-rose-500 shadow-rose-200'}`}
+              className={`absolute inset-0 z-50 flex flex-col items-center justify-center backdrop-blur-sm rounded-[2rem] sm:rounded-[2.5rem] border-4 shadow-2xl p-4 sm:p-8 text-center transition-colors duration-300 overflow-y-auto ${isDarkMode ? 'bg-slate-900/95 border-rose-600 shadow-black/50' : 'bg-white/95 border-rose-500 shadow-rose-200'}`}
             >
-              <button 
-                onClick={() => setShowWinScreen(false)}
-                className={`absolute top-4 right-4 p-2 transition-colors ${isDarkMode ? 'text-slate-500 hover:text-slate-300' : 'text-slate-400 hover:text-slate-600'}`}
-              >
-                <X size={24} />
-              </button>
-              <Trophy className="text-rose-500 w-20 h-20 mb-4" />
-              <h3 className={`text-4xl font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>
-                {playerMode === '1' ? 'VICTORY!' : (winner === 'p1' ? `${p1Name.toUpperCase()} WINS!` : `${p2Name.toUpperCase()} WINS!`)}
-              </h3>
-              <p className={`font-bold mt-2 text-lg ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Time: {formatTime(timer)}</p>
-              <div className="flex flex-col w-full space-y-3 mt-8">
-                <ShareButton 
-                  title="Observation Bingo Results"
-                  text={`I just played Observation Bingo (${playerMode === '1' ? (subMode === 'line' ? 'Line' : subMode === 'blackout' ? 'Blackout' : 'Custom') : (subMode === 'tictactoe' ? 'Tic Tac Toe' : 'Race to 5')} mode)! 🏆\n\nTime: ${formatTime(timer)}\n\n${playerMode === '2' ? (winner === 'p1' ? `${p1Name} won!` : `${p2Name} won!`) : ''}${!boardCode.startsWith('Z') && boardCode !== 'CUSTOM' ? `\n\nBoard Code: ${boardCode}` : ''}`}
-                  className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-black shadow-lg hover:bg-indigo-700 transition-colors flex items-center justify-center space-x-2"
-                />
+              <div className="flex flex-col items-center justify-center w-full py-2 sm:py-4">
                 <button 
-                  onClick={() => generateGrid()}
-                  className="w-full py-4 bg-rose-600 text-white rounded-2xl font-black shadow-lg hover:bg-rose-700 transition-colors flex items-center justify-center space-x-2"
+                  onClick={() => setShowWinScreen(false)}
+                  className={`absolute top-2 right-2 sm:top-4 sm:right-4 p-2 transition-colors z-10 ${isDarkMode ? 'text-slate-500 hover:text-slate-300' : 'text-slate-400 hover:text-slate-600'}`}
                 >
-                  <RotateCcw size={20} />
-                  <span>Play Again</span>
+                  <X size={20} className="sm:w-6 sm:h-6"/>
                 </button>
-                <button 
-                  onClick={() => setGameState('setup')}
-                  className={`w-full py-4 rounded-2xl font-black transition-colors ${isDarkMode ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
-                >
-                  Change Mode
-                </button>
-                <button 
-                  onClick={() => setShowHistory(true)}
-                  className={`w-full py-4 border-2 rounded-2xl font-black transition-colors flex items-center justify-center space-x-2 ${isDarkMode ? 'bg-slate-900 border-slate-800 text-slate-300 hover:border-rose-500/50 hover:text-rose-400' : 'bg-white border-slate-200 text-slate-400 hover:border-rose-500/50 hover:text-rose-600'}`}
-                >
-                  <RotateCcw size={20} className="rotate-90" />
-                  <span>View Move History</span>
-                </button>
+                <Trophy className="text-rose-500 w-10 h-10 sm:w-20 sm:h-20 mb-1 sm:mb-4"/>
+                <h3 className={`text-xl sm:text-4xl font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>
+                  {playerMode === '1' ? 'VICTORY!' : (winner === 'p1' ? `${p1Name.toUpperCase()} WINS!` : `${p2Name.toUpperCase()} WINS!`)}
+                </h3>
+                <p className={`font-bold mt-0.5 sm:mt-2 text-sm sm:text-lg ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Time: {formatTime(timer)}</p>
+                <div className="flex flex-col w-full space-y-2 sm:space-y-3 mt-3 sm:mt-8">
+                  <ShareButton 
+                    title="Observation Bingo Results"
+                    text={`I just played Observation Bingo (${playerMode === '1' ? (subMode === 'line' ? 'Line' : subMode === 'blackout' ? 'Blackout' : 'Custom') : (subMode === 'tictactoe' ? 'Tic Tac Toe' : 'Race to 5')} mode)! 🏆\n\nTime: ${formatTime(timer)}\n\n${playerMode === '2' ? (winner === 'p1' ? `${p1Name} won!` : `${p2Name} won!`) : ''}${!boardCode.startsWith('Z') && boardCode !== 'CUSTOM' ? `\n\nBoard Code: ${boardCode}` : ''}`}
+                    className="w-full py-2.5 sm:py-4 bg-indigo-600 text-white rounded-2xl font-black shadow-lg hover:bg-indigo-700 transition-colors flex items-center justify-center space-x-2 text-xs sm:text-base"
+                  />
+                  <button 
+                    onClick={() => generateGrid()}
+                    className="w-full py-2.5 sm:py-4 bg-rose-600 text-white rounded-2xl font-black shadow-lg hover:bg-rose-700 transition-colors flex items-center justify-center space-x-2 text-xs sm:text-base"
+                  >
+                    <RotateCcw size={16} className="sm:w-5 sm:h-5"/>
+                    <span>Play Again</span>
+                  </button>
+                  <button 
+                    onClick={() => setGameState('setup')}
+                    className={`w-full py-2.5 sm:py-4 rounded-2xl font-black transition-colors text-xs sm:text-base ${isDarkMode ? 'bg-slate-800 text-slate-300 hover:bg-slate-700' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                  >
+                    Change Mode
+                  </button>
+                  <button 
+                    onClick={() => setShowHistory(true)}
+                    className={`w-full py-2.5 sm:py-4 border-2 rounded-2xl font-black transition-colors flex items-center justify-center space-x-2 text-xs sm:text-base ${isDarkMode ? 'bg-slate-900 border-slate-800 text-slate-300 hover:border-rose-500/50 hover:text-rose-400' : 'bg-white border-slate-200 text-slate-400 hover:border-rose-500/50 hover:text-rose-600'}`}
+                  >
+                    <RotateCcw size={16} className="rotate-90 sm:w-5 sm:h-5"/>
+                    <span>View Move History</span>
+                  </button>
+                </div>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
 
-        <div className={`grid gap-3 ${gridSize === 3 ? 'grid-cols-3' : gridSize === 4 ? 'grid-cols-4' : 'grid-cols-5'}`}>
+        <div className={`grid ${gridSize === 5 ? 'gap-1.5 sm:gap-3' : 'gap-2 sm:gap-3'} ${gridSize === 3 ? 'grid-cols-3' : gridSize === 4 ? 'grid-cols-4' : 'grid-cols-5'}`}>
           {grid.map((square, index) => (
             <div key={index} className="relative aspect-square">
               <div className={`
-                w-full h-full p-3 rounded-3xl border-2 transition-all flex flex-col items-center justify-center text-center relative overflow-hidden
+                w-full h-full p-1 sm:p-3 rounded-xl sm:rounded-3xl border-2 transition-all flex flex-col items-center justify-center text-center relative overflow-hidden
                 ${square.owner === 'p1' ? 'bg-rose-600 border-rose-700 text-white shadow-lg shadow-rose-900/20' : 
                   square.owner === 'p2' ? 'bg-indigo-600 border-indigo-700 text-white shadow-lg shadow-indigo-900/20' : 
                   isDarkMode ? 'bg-slate-900 border-slate-800 text-slate-300 shadow-sm' : 'bg-white border-slate-100 text-slate-600 shadow-sm shadow-rose-100'}
@@ -894,16 +931,20 @@ export default function ObservationBingo({ isDarkMode = true, initialPlayers = [
                 {!square.owner && playerMode === '2' && (
                   <div className="absolute inset-0 flex flex-col opacity-10">
                     <div className={`flex-1 bg-rose-500 border-b ${isDarkMode ? 'border-slate-700' : 'border-slate-200'}`} />
-                    <div className="flex-1 bg-indigo-500" />
+                    <div className="flex-1 bg-indigo-500"/>
                   </div>
                 )}
 
-                <span className={`text-[10px] md:text-xs font-bold leading-tight relative z-10 ${square.owner ? 'text-white' : isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
+                <span className={`
+                  ${gridSize === 5 ? 'text-[10px] sm:text-sm' : gridSize === 4 ? 'text-sm sm:text-xl' : 'text-base sm:text-3xl'}
+                  font-bold leading-[1.1] relative z-10 break-normal px-1
+                  ${square.owner ? 'text-white' : isDarkMode ? 'text-slate-300' : 'text-slate-700'}
+                `}>
                   {square.text}
                 </span>
                 
-                {square.owner === 'p1' && <X className="absolute top-1 right-1 text-white opacity-40 w-8 h-8" />}
-                {square.owner === 'p2' && <Circle className="absolute top-1 right-1 text-white opacity-40 w-8 h-8" />}
+                {square.owner === 'p1' && <X className="absolute top-0.5 right-0.5 text-white opacity-40 w-1/4 h-1/4 max-w-[20px] max-h-[20px]"/>}
+                {square.owner === 'p2' && <Circle className="absolute top-0.5 right-0.5 text-white opacity-40 w-1/4 h-1/4 max-w-[20px] max-h-[20px]"/>}
               </div>
 
               {/* Interaction Layer */}
@@ -917,15 +958,15 @@ export default function ObservationBingo({ isDarkMode = true, initialPlayers = [
                   <div className="absolute inset-0 flex flex-col">
                     <button 
                       onClick={() => handleSquareClick(index, 'p1')}
-                      className="flex-1 w-full bg-rose-500/0 hover:bg-rose-500/10 transition-colors rounded-t-3xl flex items-center justify-center group relative"
+                      className="flex-1 w-full bg-rose-500/0 hover:bg-rose-500/10 transition-colors rounded-t-xl sm:rounded-t-3xl flex items-center justify-center group relative"
                     >
-                      <span className="opacity-0 group-hover:opacity-100 text-[8px] font-black text-rose-600 uppercase relative z-10">P1 Spot</span>
+                      <span className="opacity-0 group-hover:opacity-100 text-[10px] sm:text-xs font-black text-rose-600 uppercase relative z-10">P1</span>
                     </button>
                     <button 
                       onClick={() => handleSquareClick(index, 'p2')}
-                      className="flex-1 w-full bg-indigo-500/0 hover:bg-indigo-500/10 transition-colors rounded-b-3xl flex items-center justify-center group relative"
+                      className="flex-1 w-full bg-indigo-500/0 hover:bg-indigo-500/10 transition-colors rounded-b-xl sm:rounded-b-3xl flex items-center justify-center group relative"
                     >
-                      <span className="opacity-0 group-hover:opacity-100 text-[8px] font-black text-indigo-600 uppercase relative z-10">P2 Spot</span>
+                      <span className="opacity-0 group-hover:opacity-100 text-[10px] sm:text-xs font-black text-indigo-600 uppercase relative z-10">P2</span>
                     </button>
                   </div>
                 )}
@@ -935,37 +976,37 @@ export default function ObservationBingo({ isDarkMode = true, initialPlayers = [
         </div>
       </div>
 
-      <div className="flex flex-col items-center space-y-4 w-full max-w-md">
+      <div className="flex flex-col items-center space-y-3 sm:space-y-4 w-full max-w-md">
         {gameState === 'playing' && moves.length > 0 && (
           <button 
             onClick={() => setShowHistory(true)}
-            className={`text-[10px] font-black uppercase tracking-widest transition-colors flex items-center space-x-1 ${isDarkMode ? 'text-slate-500 hover:text-rose-400' : 'text-slate-400 hover:text-rose-600'}`}
+            className={`text-xs sm:text-sm font-black uppercase tracking-widest transition-colors flex items-center space-x-1 ${isDarkMode ? 'text-slate-500 hover:text-rose-400' : 'text-slate-400 hover:text-rose-600'}`}
           >
-            <RotateCcw size={12} className="rotate-90" />
+            <RotateCcw size={12} className="rotate-90 sm:w-4 sm:h-4"/>
             <span>View Move History ({moves.length})</span>
           </button>
         )}
-        <div className="flex space-x-3 w-full">
+        <div className="flex space-x-2 sm:space-x-3 w-full">
           {gameState === 'won' && !showWinScreen ? (
             <button 
               onClick={() => setShowWinScreen(true)}
-              className="flex-1 py-4 bg-rose-600 text-white rounded-2xl font-black shadow-lg hover:bg-rose-700 transition-all flex items-center justify-center space-x-2"
+              className="flex-1 py-3 sm:py-4 bg-rose-600 text-white rounded-2xl font-black shadow-lg hover:bg-rose-700 transition-all flex items-center justify-center space-x-2 text-sm sm:text-base"
             >
-              <Trophy size={20} />
+              <Trophy size={18} className="sm:w-5 sm:h-5"/>
               <span>Show Results</span>
             </button>
           ) : (
             <>
               <button 
                 onClick={() => generateGrid()}
-                className={`flex-1 py-4 border-2 rounded-2xl font-black shadow-sm transition-all flex items-center justify-center space-x-2 ${isDarkMode ? 'bg-slate-900 border-slate-800 text-slate-300 hover:border-rose-500/50 hover:text-rose-400' : 'bg-white border-slate-100 text-slate-500 hover:border-rose-400 hover:text-rose-600'}`}
+                className={`flex-1 py-3 sm:py-4 border-2 rounded-2xl font-black shadow-sm transition-all flex items-center justify-center space-x-2 text-sm sm:text-base ${isDarkMode ? 'bg-slate-900 border-slate-800 text-slate-300 hover:border-rose-500/50 hover:text-rose-400' : 'bg-white border-slate-100 text-slate-500 hover:border-rose-400 hover:text-rose-600'}`}
               >
-                <RotateCcw size={20} />
+                <RotateCcw size={18} className="sm:w-5 sm:h-5"/>
                 <span>Reset</span>
               </button>
               <button 
                 onClick={() => setGameState('setup')}
-                className={`flex-1 py-4 border-2 rounded-2xl font-black shadow-sm transition-all ${isDarkMode ? 'bg-slate-900 border-slate-800 text-slate-300 hover:border-rose-500/50 hover:text-rose-400' : 'bg-white border-slate-100 text-slate-500 hover:border-rose-400 hover:text-rose-600'}`}
+                className={`flex-1 py-3 sm:py-4 border-2 rounded-2xl font-black shadow-sm transition-all text-sm sm:text-base ${isDarkMode ? 'bg-slate-900 border-slate-800 text-slate-300 hover:border-rose-500/50 hover:text-rose-400' : 'bg-white border-slate-100 text-slate-500 hover:border-rose-400 hover:text-rose-600'}`}
               >
                 Mode
               </button>
@@ -974,20 +1015,20 @@ export default function ObservationBingo({ isDarkMode = true, initialPlayers = [
         </div>
 
         {playerMode === '2' && (
-          <div className={`flex items-center space-x-8 p-4 rounded-3xl shadow-sm border w-full justify-center transition-colors duration-300 ${isDarkMode ? 'bg-slate-900 border-slate-800 shadow-black/20' : 'bg-white border-slate-100 shadow-rose-100'}`}>
+          <div className={`flex items-center space-x-4 sm:space-x-8 p-3 sm:p-4 rounded-3xl shadow-sm border w-full justify-center transition-colors duration-300 ${isDarkMode ? 'bg-slate-900 border-slate-800 shadow-black/20' : 'bg-white border-slate-100 shadow-rose-100'}`}>
             <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 rounded-full bg-rose-500" />
-              <span className={`text-xs font-black ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>{p1Name} (X)</span>
+              <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-rose-500"/>
+              <span className={`text-[10px] sm:text-xs font-black ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>{p1Name} (X)</span>
             </div>
             <div className="flex items-center space-x-2">
-              <div className="w-3 h-3 rounded-full bg-indigo-500" />
-              <span className={`text-xs font-black ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>{p2Name} (O)</span>
+              <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-indigo-500"/>
+              <span className={`text-[10px] sm:text-xs font-black ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>{p2Name} (O)</span>
             </div>
           </div>
         )}
 
-        <div className={`flex items-center space-x-2 font-bold text-[10px] uppercase tracking-[0.2em] ${isDarkMode ? 'text-slate-600' : 'text-slate-400'}`}>
-          <Info size={12} />
+        <div className={`flex items-center space-x-2 font-bold text-[8px] sm:text-[10px] uppercase tracking-[0.2em] ${isDarkMode ? 'text-slate-600' : 'text-slate-400'}`}>
+          <Info size={10} className="sm:w-3 sm:h-3"/>
           <span>Observation Challenge</span>
         </div>
       </div>

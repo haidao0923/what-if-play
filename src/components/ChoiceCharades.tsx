@@ -27,7 +27,12 @@ const EASY_WORDS = [
   "Rain", "Snow", "Walk", "Sit", "Stand", "Wave", "Clap", "Kick", "Throw", "Catch",
   "Drink", "Read", "Write", "Draw", "Sing", "Swim", "Fly", "Drive", "Brush", "Wash",
   "Open", "Close", "Push", "Pull", "Climb", "Banana", "Orange", "Pizza", "Ice Cream", "Bicycle",
-  "Airplane", "Boat", "Train", "Bus", "House", "Window", "Door", "Baby", "Doctor", "Fireman"
+  "Airplane", "Boat", "Train", "Bus", "House", "Window", "Door", "Baby", "Doctor", "Fireman",
+  "Police", "Baker", "Farmer", "Teacher", "Nurse", "Chef", "Artist", "Pilot", "Driver", "Singer",
+  "Guitar", "Piano", "Drum", "Trumpet", "Violin", "Flute", "Bell", "Whistle", "Radio", "Phone",
+  "Clock", "Watch", "Ring", "Necklace", "Crown", "Mask", "Cape", "Sword", "Shield", "Bow",
+  "Arrow", "Target", "Flag", "Map", "Compass", "Anchor", "Wheel", "Engine", "Rocket", "Star",
+  "Planet", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto", "Comet", "Meteor"
 ];
 
 const MEDIUM_WORDS = [
@@ -40,7 +45,10 @@ const MEDIUM_WORDS = [
   "Fishing", "Camping", "Hiking", "Skiing", "Skating", "Shopping", "Traveling", "Juggling", "Magic", "Origami",
   "Photography", "Sculpting", "Weaving", "Pottery", "Woodworking", "Metalworking", "Glassblowing", "Brewing", "Baking", "Grilling",
   "Scuba Diving", "Skydiving", "Bungee Jumping", "Rock Climbing", "Horseback Riding", "Sailing", "Kayaking", "Canoeing", "Snorkeling", "Archery",
-  "Fencing", "Karate", "Boxing", "Wrestling", "Gymnastics", "Cheerleading", "Ballet", "Tap Dance", "Hip Hop", "Jazz Dance"
+  "Fencing", "Karate", "Boxing", "Wrestling", "Gymnastics", "Cheerleading", "Ballet", "Tap Dance", "Hip Hop", "Jazz Dance",
+  "Breakdance", "Salsa", "Tango", "Flamenco", "Waltz", "Polka", "Square Dance", "Line Dance", "Limbo", "Conga",
+  "Macarena", "Moonwalk", "Twerk", "Dab", "Floss", "Running Man", "Robot Dance", "Thriller", "YMCA", "Chicken Dance",
+  "Hokey Pokey", "Electric Slide", "Cotton Eye Joe", "Cha Cha Slide", "Cupid Shuffle", "Wobble", "Watch Me", "Lean Back", "Single Ladies", "Gangnam Style"
 ];
 
 const HARD_WORDS = [
@@ -53,7 +61,9 @@ const HARD_WORDS = [
   "Turing test", "Schrodinger's cat", "Piece of cake", "Under the weather", "Break a leg", "Once in a blue moon", "Spill the beans", "Cost an arm and a leg", "Let the cat out of the bag", "Hit the nail on the head",
   "Bite the bullet", "Burn the midnight oil", "Cry over spilled milk", "Don't judge a book by its cover", "Every cloud has a silver lining", "Haste makes waste", "It's raining cats and dogs", "Kill two birds with one stone", "Let sleeping dogs lie", "Practice makes perfect",
   "The early bird catches the worm", "When pigs fly", "Back to the drawing board", "Beat around the bush", "Best of both worlds", "Bite off more than you can chew", "Blessing in disguise", "Burn bridges", "By the skin of your teeth", "Caught between a rock and a hard place",
-  "Cut corners", "Cutting edge", "Devil's advocate", "Down to earth", "Elephant in the room", "Fit as a fiddle", "Go the extra mile", "In the heat of the moment", "Keep your chin up", "Last resort"
+  "Cut corners", "Cutting edge", "Devil's advocate", "Down to earth", "Elephant in the room", "Fit as a fiddle", "Go the extra mile", "In the heat of the moment", "Keep your chin up", "Last resort",
+  "Method to the madness", "No pain no gain", "On the ball", "Penny for your thoughts", "Picture is worth a thousand words", "Pull yourself together", "Speak of the devil", "Steal someone's thunder", "Take with a grain of salt", "Through thick and thin",
+  "Under the radar", "Up in the air", "Whole nine yards", "Wild goose chase", "Wrap your head around something", "You can't have your cake and eat it too", "Your guess is as good as mine", "Zero tolerance", "A dime a dozen", "Ace in the hole"
 ];
 
 export default function ChoiceCharades({ isDarkMode = true, initialPlayers = [] }: { isDarkMode?: boolean, initialPlayers?: string[] }) {
@@ -351,16 +361,23 @@ export default function ChoiceCharades({ isDarkMode = true, initialPlayers = [] 
           </div>
 
           <div className={`rounded-2xl p-4 border transition-colors duration-300 ${isDarkMode ? 'bg-rose-900/20 border-rose-800/30' : 'bg-rose-50 border-rose-100'}`}>
-            <div className={`flex items-center justify-center space-x-2 font-bold mb-2 text-sm ${isDarkMode ? 'text-rose-400' : 'text-rose-600'}`}>
+            <div className={`flex items-center justify-center space-x-2 font-bold mb-3 text-sm ${isDarkMode ? 'text-rose-400' : 'text-rose-600'}`}>
               <Sparkles size={16} />
               <span>How to Play</span>
             </div>
-            <div className={`text-xs leading-relaxed text-center ${isDarkMode ? 'text-rose-300/70' : 'text-rose-700/70'}`}>
-              1. One player acts out words for their team.<br/>
-              2. Three words are shown: Easy (1pt), Medium (2pts), Hard (3pts).<br/>
-              3. Score by tapping the word your team guesses correctly.<br/>
-              4. Skip words if you're stuck (3s cooldown).<br/>
-              5. Score as many points as possible before time runs out!
+            <div className="grid grid-cols-1 gap-3 text-left">
+              <div className="flex items-start space-x-3">
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-rose-500/20 text-rose-400' : 'bg-rose-100 text-rose-600'}`}>1</div>
+                <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>One player acts out words for their team. Choose your difficulty!</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-rose-500/20 text-rose-400' : 'bg-rose-100 text-rose-600'}`}>2</div>
+                <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Score by tapping the word your team guesses correctly (1-3pts).</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-rose-500/20 text-rose-400' : 'bg-rose-100 text-rose-600'}`}>3</div>
+                <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Skip words if you're stuck (3s cooldown). Score most points to win!</p>
+              </div>
             </div>
           </div>
         </motion.div>

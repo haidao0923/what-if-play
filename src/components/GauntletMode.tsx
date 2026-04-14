@@ -6,10 +6,10 @@ import MemoryShape from './MemoryShape';
 import GeoTrivia from './GeoTrivia';
 import ColorMatch from './ColorMatch';
 import { db } from '../firebase';
-import { collection, addDoc, query, where, orderBy, limit, getDocs, serverTimestamp, Timestamp } from 'firebase/firestore';
+import { collection, addDoc, query, where, orderBy, limit, getDocs, serverTimestamp, Timestamp, doc, setDoc, getDoc } from 'firebase/firestore';
 
-type GauntletStep = 'name' | 'selection' | 'playing' | 'results' | 'leaderboard';
-type GauntletType = 'seconds' | 'math' | 'memory-classic' | 'memory-progressive' | 'geotrivia-time' | 'geotrivia-distance' | 'color-match' | 'color-match-easy' | 'color-match-mix';
+type GauntletStep = 'name' | 'playing' | 'results' | 'leaderboard';
+type GauntletType = 'seconds' | 'math' | 'memory-classic' | 'memory-progressive' | 'memory-sequence' | 'geotrivia-time' | 'geotrivia-distance' | 'color-match' | 'color-match-easy' | 'color-match-mix';
 type MathDifficulty = 'easy' | 'medium' | 'hard' | 'insane';
 type Timeframe = 'daily' | 'weekly' | 'monthly' | 'all-time';
 
@@ -74,6 +74,7 @@ export default function GauntletMode({
     if (t === 'math') return 'gauntlet_math_combined';
     if (t === 'memory-classic') return 'gauntlet_memory_classic';
     if (t === 'memory-progressive') return 'gauntlet_memory_progressive';
+    if (t === 'memory-sequence') return 'gauntlet_memory_sequence';
     if (t === 'geotrivia-time') return 'gauntlet_geotrivia_time';
     if (t === 'geotrivia-distance') return 'gauntlet_geotrivia_distance';
     if (t === 'color-match') return 'gauntlet_color_match';
@@ -148,20 +149,42 @@ export default function GauntletMode({
     if (hasSavedScore.current) return;
     hasSavedScore.current = true;
 
-    // Local save
+    const isHigherBetter = t.startsWith('memory-') || t === 'geotrivia-time' || t.startsWith('color-match');
+    const trimmedName = name.trim();
+
+    // Local save - prevent duplicates
     const key = getLeaderboardKey(t);
-    const current = JSON.parse(localStorage.getItem(key) || '[]');
+    const current: LeaderboardEntry[] = JSON.parse(localStorage.getItem(key) || '[]');
+    
+    const existingIndex = current.findIndex(e => e.name.toLowerCase() === trimmedName.toLowerCase());
+    if (existingIndex !== -1) {
+      const existingScore = current[existingIndex].score;
+      if (isHigherBetter) {
+        if (score <= existingScore) {
+          // Current score is not better, but we still want to update the leaderboard state to show the best
+          setLeaderboard(current);
+          return; 
+        }
+      } else {
+        if (score >= existingScore) {
+          setLeaderboard(current);
+          return;
+        }
+      }
+      current.splice(existingIndex, 1);
+    }
+
     const newEntry: LeaderboardEntry = {
-      name: name.trim(),
+      name: trimmedName,
       score: parseFloat(score.toFixed(3)),
       date: new Date().toLocaleDateString()
     };
-    const isHigherBetter = t.startsWith('memory-') || t === 'geotrivia-time' || t.startsWith('color-match');
+    
     const updated = [...current, newEntry].sort((a, b) => isHigherBetter ? b.score - a.score : a.score - b.score).slice(0, 50);
     localStorage.setItem(key, JSON.stringify(updated));
     setLeaderboard(updated);
 
-    // Global save with rate limiting
+    // Global save - prevent duplicates using setDoc with unique ID
     const RATE_LIMIT_KEY = 'gauntlet_global_save_rate_limit';
     const MAX_PER_HOUR = 100;
     const now = Date.now();
@@ -175,8 +198,22 @@ export default function GauntletMode({
 
     if (rateLimitData.count < MAX_PER_HOUR) {
       try {
-        await addDoc(collection(db, 'gauntlet_leaderboards'), {
-          playerName: name.trim(),
+        const docId = `${t}_${trimmedName.replace(/\s+/g, '_').toLowerCase()}`;
+        const docRef = doc(db, 'gauntlet_leaderboards', docId);
+        
+        // Check if global score is better before overwriting
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const existingGlobalScore = docSnap.data().score;
+          if (isHigherBetter) {
+            if (score <= existingGlobalScore) return;
+          } else {
+            if (score >= existingGlobalScore) return;
+          }
+        }
+
+        await setDoc(docRef, {
+          playerName: trimmedName,
           score: parseFloat(score.toFixed(3)),
           gameType: t,
           timestamp: serverTimestamp()
@@ -187,8 +224,6 @@ export default function GauntletMode({
       } catch (e) {
         console.error("Error saving to global leaderboard", e);
       }
-    } else {
-      console.warn("Global leaderboard rate limit reached (100/hr). Score saved locally only.");
     }
   };
 
@@ -392,7 +427,7 @@ export default function GauntletMode({
                 if (!alphaRegex.test(playerName.trim())) {
                   setNameError("Names can only contain letters and spaces.");
                 } else {
-                  setStep('selection');
+                  setStep('leaderboard');
                 }
               }
             }}
@@ -414,7 +449,7 @@ export default function GauntletMode({
             if (!alphaRegex.test(playerName.trim())) {
               setNameError("Names can only contain letters and spaces.");
             } else {
-              setStep('selection');
+              setStep('leaderboard');
             }
           }}
           disabled={!playerName.trim()}
@@ -431,146 +466,66 @@ export default function GauntletMode({
     </motion.div>
   );
 
-  const renderSelectionStep = () => {
-    const games = [
+  const getScoreLabel = (t: GauntletType) => {
+    if (t.startsWith('memory-') || t === 'geotrivia-time' || t.startsWith('color-match')) return 'Final Score:';
+    if (t === 'geotrivia-distance') return 'Total Distance:';
+    return 'Total Error:';
+  };
+
+  const getScoreValue = (t: GauntletType, score: number) => {
+    if (t.startsWith('memory-') || t === 'geotrivia-time' || t.startsWith('color-match')) return `${score} pts`;
+    if (t === 'geotrivia-distance') return `${score.toFixed(0)} km`;
+    return `±${score.toFixed(2)}s`;
+  };
+
+  const renderLeaderboardStep = () => {
+    const gameGroups = [
       { 
         id: 'seconds-math', 
         name: 'Seconds', 
         icon: Timer, 
-        color: 'indigo',
         description: 'Test your internal clock and math skills. Can you stop exactly at the target?',
         modes: [
-          { id: 'seconds', name: '30s Challenge', desc: 'One round. Closest to 30s wins.' },
-          { id: 'math', name: 'Math Gauntlet', desc: '4 rounds. Easy to Insane.' }
-        ]
+          { id: 'seconds', name: '30s', desc: 'One round. Closest to 30s wins.' }, 
+          { id: 'math', name: 'Math', desc: '4 rounds. Easy to Insane.' }
+        ] 
       },
       { 
         id: 'memory', 
         name: 'Memory', 
         icon: Brain, 
-        color: 'violet',
         description: 'Memorize shapes and patterns. How far can your memory go?',
         modes: [
-          { id: 'memory-classic', name: 'Classic', desc: '10 rounds. Total correct.' },
-          { id: 'memory-progressive', name: 'Progressive', desc: 'Infinite rounds. Highest round.' }
-        ]
+          { id: 'memory-classic', name: 'Classic', desc: '10 rounds. Total correct.' }, 
+          { id: 'memory-progressive', name: 'Progressive', desc: 'Infinite rounds. Highest round.' },
+          { id: 'memory-sequence', name: 'Sequence', desc: 'Simon says! Highest sequence.' }
+        ] 
       },
       { 
         id: 'geo', 
-        name: 'Geography', 
+        name: 'Geo', 
         icon: MapPin, 
-        color: 'blue',
         description: 'Find states on the map. Speed or accuracy?',
         modes: [
-          { id: 'geotrivia-time', name: 'GeoTime', desc: 'Find states in 60s.' },
-          { id: 'geotrivia-distance', name: 'GeoDistance', desc: '10 states. Lowest distance.' }
-        ]
+          { id: 'geotrivia-time', name: 'Time', desc: 'Find states in 60s.' }, 
+          { id: 'geotrivia-distance', name: 'Dist', desc: '10 states. Lowest distance.' }
+        ] 
       },
       { 
         id: 'color', 
         name: 'Color', 
         icon: Palette, 
-        color: 'emerald',
         description: 'The Stroop Effect. Match colors, not words!',
         modes: [
-          { id: 'color-match-easy', name: 'Easy', desc: 'Buttons show colors.' },
-          { id: 'color-match', name: 'Standard', desc: 'Buttons shuffle. Hard!' },
-          { id: 'color-match-mix', name: 'Mix Master', desc: 'Mix primary colors!' }
-        ]
+          { id: 'color-match-easy', name: 'Easy', desc: 'Buttons show colors.' }, 
+          { id: 'color-match', name: 'Std', desc: 'Buttons shuffle. Hard!' }, 
+          { id: 'color-match-mix', name: 'Mix', desc: 'Mix primary colors!' }
+        ] 
       }
     ];
 
-    return (
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col items-center justify-center space-y-6 w-full max-w-lg"
-      >
-        <div className="text-center space-y-1">
-          <h2 className={`text-3xl font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>Choose Your Path</h2>
-          <p className={isDarkMode ? 'text-slate-400' : 'text-slate-500'}>Welcome, <span className="text-indigo-400 font-bold">{playerName}</span></p>
-        </div>
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full">
-          {games.map((game) => (
-            <button
-              key={game.id}
-              onClick={() => setSelectedGame(selectedGame === game.id ? null : game.id)}
-              className={`flex flex-col items-center p-4 rounded-3xl border-2 transition-all group ${
-                selectedGame === game.id
-                  ? `border-${game.color}-500 ${isDarkMode ? `bg-${game.color}-900/20` : `bg-${game.color}-50`}`
-                  : isDarkMode ? 'bg-slate-900 border-slate-800 hover:border-slate-700' : 'bg-white border-slate-100 hover:border-slate-200 shadow-sm'
-              }`}
-            >
-              <div className={`p-3 rounded-2xl mb-2 transition-colors ${
-                selectedGame === game.id
-                  ? `text-${game.color}-400`
-                  : isDarkMode ? 'text-slate-500 group-hover:text-slate-300' : 'text-slate-400 group-hover:text-slate-600'
-              }`}>
-                <game.icon size={28} />
-              </div>
-              <span className={`text-[10px] font-black uppercase tracking-widest ${
-                selectedGame === game.id ? `text-${game.color}-400` : isDarkMode ? 'text-slate-500' : 'text-slate-400'
-              }`}>
-                {game.name}
-              </span>
-            </button>
-          ))}
-        </div>
-
-        <AnimatePresence mode="wait">
-          {selectedGame && (
-            <motion.div
-              key={selectedGame}
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="w-full space-y-4 overflow-hidden"
-            >
-              <div className={`p-6 rounded-[2rem] border-2 ${isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100 shadow-sm'}`}>
-                <p className={`text-sm mb-6 text-center ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                  {games.find(g => g.id === selectedGame)?.description}
-                </p>
-                <div className="grid grid-cols-1 gap-3">
-                  {games.find(g => g.id === selectedGame)?.modes.map((mode) => (
-                    <button
-                      key={mode.id}
-                      onClick={() => { setType(mode.id as GauntletType); setStep('leaderboard'); loadLeaderboard(mode.id as GauntletType); }}
-                      className={`p-4 rounded-2xl border transition-all text-left flex items-center justify-between group ${
-                        isDarkMode ? 'bg-slate-800 border-slate-700 hover:border-indigo-500/50' : 'bg-gray-50 border-gray-200 hover:border-indigo-400 shadow-sm'
-                      }`}
-                    >
-                      <div>
-                        <h4 className={`font-bold text-sm ${isDarkMode ? 'text-slate-100' : 'text-slate-900'}`}>{mode.name}</h4>
-                        <p className={`text-[10px] ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>{mode.desc}</p>
-                      </div>
-                      <ChevronRight size={16} className="text-slate-600 group-hover:translate-x-1 transition-transform" />
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <button 
-          onClick={() => setStep('name')}
-          className={`flex items-center space-x-2 text-sm font-bold ${isDarkMode ? 'text-slate-500 hover:text-slate-300' : 'text-slate-400 hover:text-slate-600'}`}
-        >
-          <ArrowLeft size={16} />
-          <span>Change Name</span>
-        </button>
-      </motion.div>
-    );
-  };
-
-  const renderLeaderboardStep = () => {
-    const gameGroups = [
-      { id: 'seconds-math', name: 'Seconds', icon: Timer, modes: [{ id: 'seconds', name: '30s' }, { id: 'math', name: 'Math' }] },
-      { id: 'memory', name: 'Memory', icon: Brain, modes: [{ id: 'memory-classic', name: 'Classic' }, { id: 'memory-progressive', name: 'Prog' }] },
-      { id: 'geo', name: 'Geo', icon: MapPin, modes: [{ id: 'geotrivia-time', name: 'Time' }, { id: 'geotrivia-distance', name: 'Dist' }] },
-      { id: 'color', name: 'Color', icon: Palette, modes: [{ id: 'color-match-easy', name: 'Easy' }, { id: 'color-match', name: 'Std' }, { id: 'color-match-mix', name: 'Mix' }] }
-    ];
+    const currentGroup = gameGroups.find(g => g.modes.some(m => m.id === type));
+    const currentMode = currentGroup?.modes.find(m => m.id === type);
 
     return (
       <motion.div 
@@ -621,6 +576,7 @@ export default function GauntletMode({
             <Medal size={40} />
           </div>
           <h2 className={`text-3xl font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>Leaderboard</h2>
+          <p className={`text-xs ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Welcome, <span className="text-indigo-400 font-bold">{playerName}</span></p>
         </div>
 
         <div className={`w-full p-4 rounded-[2.5rem] border ${isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100 shadow-sm'}`}>
@@ -657,7 +613,7 @@ export default function GauntletMode({
                 <button
                   key={tf}
                   onClick={() => setGlobalTimeframe(tf)}
-                  className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap ${
                     globalTimeframe === tf
                       ? 'bg-indigo-500/20 text-indigo-400 border border-indigo-500/30'
                       : isDarkMode ? 'text-slate-500 hover:text-slate-300' : 'text-slate-400 hover:text-slate-600'
@@ -685,17 +641,17 @@ export default function GauntletMode({
                 }`}
               >
                 <group.icon size={20} />
-                <span className="text-[8px] font-black uppercase mt-1">{group.name}</span>
+                <span className="text-[10px] font-black uppercase mt-1">{group.name}</span>
               </button>
             ))}
           </div>
 
           <div className="flex flex-wrap justify-center gap-2 mb-4">
-            {gameGroups.find(g => g.modes.some(m => m.id === type))?.modes.map((mode) => (
+            {currentGroup?.modes.map((mode) => (
               <button
                 key={mode.id}
                 onClick={() => { setType(mode.id as GauntletType); loadLeaderboard(mode.id as GauntletType); }}
-                className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all ${
+                className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest transition-all ${
                   type === mode.id
                     ? 'bg-indigo-500 text-white'
                     : isDarkMode ? 'bg-slate-800 text-slate-500 hover:text-slate-300' : 'bg-gray-100 text-gray-400 hover:text-gray-600'
@@ -706,43 +662,51 @@ export default function GauntletMode({
             ))}
           </div>
 
+          {/* Mode Description */}
+          <div className={`mb-4 p-4 rounded-xl text-center border ${isDarkMode ? 'bg-slate-800/50 border-slate-700/50' : 'bg-indigo-50/50 border-indigo-100/50'}`}>
+            <p className={`text-base font-bold ${isDarkMode ? 'text-slate-300' : 'text-indigo-900'}`}>
+              {currentMode?.desc}
+            </p>
+            <p className={`text-sm mt-1.5 ${isDarkMode ? 'text-slate-500' : 'text-indigo-400'}`}>
+              {currentGroup?.description}
+            </p>
+          </div>
+
           <div className={`w-full rounded-2xl border overflow-hidden ${isDarkMode ? 'bg-slate-950 border-slate-800' : 'bg-gray-50 border-gray-100'}`}>
             {isLoadingGlobal ? (
               <div className="p-12 text-center space-y-4">
                 <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto" />
-                <p className={`text-xs ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Fetching global scores...</p>
+                <p className={`text-base ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Fetching global scores...</p>
               </div>
             ) : leaderboard.length === 0 ? (
               <div className="p-8 text-center space-y-4">
                 <History size={32} className={`mx-auto opacity-20 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`} />
-                <p className={`text-xs ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>No records yet.</p>
+                <p className={`text-base ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>No records yet.</p>
               </div>
             ) : (
               <div className="divide-y divide-slate-800/50">
                 {leaderboard.map((entry, idx) => (
-                  <div key={idx} className={`flex items-center justify-between p-3 group ${idx === 0 ? isDarkMode ? 'bg-yellow-900/10' : 'bg-yellow-50' : ''}`}>
+                  <div key={idx} className={`flex items-center justify-between p-4 group ${idx === 0 ? isDarkMode ? 'bg-yellow-900/10' : 'bg-yellow-50' : ''}`}>
                     <div className="flex items-center space-x-3">
-                      <span className={`w-4 text-center text-xs font-black ${idx === 0 ? 'text-yellow-500' : isDarkMode ? 'text-slate-600' : 'text-slate-300'}`}>
+                      <span className={`w-6 text-center text-lg font-black ${idx === 0 ? 'text-yellow-500' : isDarkMode ? 'text-slate-600' : 'text-slate-300'}`}>
                         {idx + 1}
                       </span>
                       <div>
-                        <p className={`text-sm font-bold ${isDarkMode ? 'text-slate-100' : 'text-slate-900'}`}>{entry.name}</p>
+                        <p className={`text-xl font-bold ${isDarkMode ? 'text-slate-100' : 'text-slate-900'}`}>{entry.name}</p>
                         <div className="flex items-center space-x-2">
-                          <p className={`text-[8px] ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>{entry.date}</p>
+                          <p className={`text-base ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>{entry.date}</p>
                         </div>
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <span className={`text-sm font-black ${idx === 0 ? 'text-yellow-500' : 'text-indigo-500'}`}>
-                        {type.startsWith('memory-') || type.startsWith('color-match') || type === 'geotrivia-time' ? `${entry.score} pts` : 
-                         type === 'geotrivia-distance' ? `${entry.score.toFixed(0)} km` :
-                         `±${entry.score.toFixed(2)}s`}
+                      <span className={`text-xl font-black ${idx === 0 ? 'text-yellow-500' : 'text-indigo-500'}`}>
+                        {getScoreValue(type, entry.score)}
                       </span>
                       <button 
                         onClick={() => setDeleteConfirm({ entry, index: idx })}
-                        className={`p-1 rounded-lg opacity-0 group-hover:opacity-100 transition-all ${isDarkMode ? 'hover:bg-rose-500/20 text-slate-600 hover:text-rose-500' : 'hover:bg-rose-50 text-slate-300 hover:text-rose-600'}`}
+                        className={`p-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-all ${isDarkMode ? 'hover:bg-rose-500/20 text-slate-600 hover:text-rose-500' : 'hover:bg-rose-50 text-slate-300 hover:text-rose-600'}`}
                       >
-                        <History size={12} />
+                        <History size={18} />
                       </button>
                     </div>
                   </div>
@@ -754,12 +718,12 @@ export default function GauntletMode({
 
         <div className="grid grid-cols-2 gap-4 w-full">
           <button
-            onClick={() => setStep('selection')}
+            onClick={() => setStep('name')}
             className={`py-4 rounded-2xl font-bold transition-all border-2 ${
               isDarkMode ? 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-100' : 'bg-white border-slate-100 text-slate-500 hover:text-slate-900 shadow-sm'
             }`}
           >
-            Back
+            Change Name
           </button>
           <button
             onClick={startGauntlet}
@@ -778,22 +742,22 @@ export default function GauntletMode({
         <div className="w-full max-w-5xl">
           <div className="flex items-center justify-between px-6 py-4">
             <button 
-              onClick={() => setStep('selection')}
-              className={`flex items-center space-x-2 text-sm font-bold ${isDarkMode ? 'text-slate-500 hover:text-slate-300' : 'text-slate-400 hover:text-slate-600'}`}
+              onClick={() => setStep('leaderboard')}
+              className={`flex items-center space-x-2 text-base font-bold ${isDarkMode ? 'text-slate-500 hover:text-slate-300' : 'text-slate-400 hover:text-slate-600'}`}
             >
-              <ArrowLeft size={16} />
+              <ArrowLeft size={18} />
               <span>Quit Gauntlet</span>
             </button>
             <div className="text-right">
-              <p className="text-[10px] font-black uppercase tracking-widest text-violet-500">Gauntlet Mode</p>
-              <h3 className={`text-lg font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>{playerName}</h3>
+              <p className="text-xs font-black uppercase tracking-widest text-violet-500">Gauntlet Mode</p>
+              <h3 className={`text-xl font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>{playerName}</h3>
             </div>
           </div>
           <MemoryShape 
             isDarkMode={isDarkMode} 
             initialPlayers={[playerName]} 
             isGauntlet={true}
-            gauntletMode={type === 'memory-classic' ? 'classic' : 'progressive'}
+            gauntletMode={type === 'memory-classic' ? 'classic' : type === 'memory-progressive' ? 'progressive' : 'sequence'}
             onGameEnd={(score) => {
               setTotalError(score);
               saveToLeaderboard(playerName, score, type);
@@ -809,15 +773,15 @@ export default function GauntletMode({
         <div className="w-full max-w-5xl">
           <div className="flex items-center justify-between px-6 py-4">
             <button 
-              onClick={() => setStep('selection')}
-              className={`flex items-center space-x-2 text-sm font-bold ${isDarkMode ? 'text-slate-500 hover:text-slate-300' : 'text-slate-400 hover:text-slate-600'}`}
+              onClick={() => setStep('leaderboard')}
+              className={`flex items-center space-x-2 text-base font-bold ${isDarkMode ? 'text-slate-500 hover:text-slate-300' : 'text-slate-400 hover:text-slate-600'}`}
             >
-              <ArrowLeft size={16} />
+              <ArrowLeft size={18} />
               <span>Quit Gauntlet</span>
             </button>
             <div className="text-right">
-              <p className="text-[10px] font-black uppercase tracking-widest text-blue-500">Gauntlet Mode</p>
-              <h3 className={`text-lg font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>{playerName}</h3>
+              <p className="text-xs font-black uppercase tracking-widest text-blue-500">Gauntlet Mode</p>
+              <h3 className={`text-xl font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>{playerName}</h3>
             </div>
           </div>
           <GeoTrivia 
@@ -840,15 +804,15 @@ export default function GauntletMode({
         <div className="w-full max-w-5xl">
           <div className="flex items-center justify-between px-6 py-4">
             <button 
-              onClick={() => setStep('selection')}
-              className={`flex items-center space-x-2 text-sm font-bold ${isDarkMode ? 'text-slate-500 hover:text-slate-300' : 'text-slate-400 hover:text-slate-600'}`}
+              onClick={() => setStep('leaderboard')}
+              className={`flex items-center space-x-2 text-base font-bold ${isDarkMode ? 'text-slate-500 hover:text-slate-300' : 'text-slate-400 hover:text-slate-600'}`}
             >
-              <ArrowLeft size={16} />
+              <ArrowLeft size={18} />
               <span>Quit Gauntlet</span>
             </button>
             <div className="text-right">
-              <p className="text-[10px] font-black uppercase tracking-widest text-emerald-500">Gauntlet Mode</p>
-              <h3 className={`text-lg font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>{playerName}</h3>
+              <p className="text-xs font-black uppercase tracking-widest text-emerald-500">Gauntlet Mode</p>
+              <h3 className={`text-xl font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>{playerName}</h3>
             </div>
           </div>
           <ColorMatch 
@@ -974,11 +938,9 @@ export default function GauntletMode({
         <h2 className={`text-4xl font-black ${isDarkMode ? 'text-slate-100' : 'text-gray-900'}`}>Gauntlet Complete!</h2>
         <div className="flex flex-col items-center">
           <p className={`text-xl ${isDarkMode ? 'text-slate-400' : 'text-gray-500'}`}>
-            {type.startsWith('memory-') || type === 'geotrivia-time' || type.startsWith('color-match') ? 'Final Score: ' : 
-             type === 'geotrivia-distance' ? 'Total Distance: ' : 'Total Error: '}
+            {getScoreLabel(type)}{' '}
             <span className="font-black text-indigo-500">
-              {type.startsWith('memory-') || type === 'geotrivia-time' || type.startsWith('color-match') ? `${totalError} pts` : 
-               type === 'geotrivia-distance' ? `${totalError.toFixed(0)} km` : `±${totalError.toFixed(2)}s`}
+              {getScoreValue(type, totalError)}
             </span>
           </p>
           <p className={`text-sm mt-1 ${isDarkMode ? 'text-slate-500' : 'text-gray-400'}`}>
@@ -1051,7 +1013,6 @@ export default function GauntletMode({
       <main className="flex flex-col items-center justify-center p-6 pt-[calc(3rem+env(safe-area-inset-top))]">
         <AnimatePresence mode="wait">
           {step === 'name' && renderNameStep()}
-          {step === 'selection' && renderSelectionStep()}
           {step === 'leaderboard' && renderLeaderboardStep()}
           {step === 'playing' && renderPlayingStep()}
           {step === 'results' && renderResultsStep()}

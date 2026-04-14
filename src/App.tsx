@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Gamepad2, Timer, Sparkles, ChevronRight, Zap, MessageSquare, Users, Search, Share2, Sun, Moon, Plus, X, UserPlus, Medal, Palette, Brain } from 'lucide-react';
+import { Gamepad2, Timer, Sparkles, ChevronRight, Zap, MessageSquare, Users, Search, Share2, Sun, Moon, Plus, X, UserPlus, Medal, Palette, Brain, Map as MapIcon } from 'lucide-react';
 import ShareButton from './components/ShareButton';
 import GuessTheSeconds from './components/GuessTheSeconds';
 import CategoryTimer from './components/CategoryTimer';
@@ -18,7 +18,7 @@ type GameType = 'none' | 'guess-seconds' | 'category-timer' | 'password' | 'choi
 
 export default function App() {
   const [activeGame, setActiveGame] = useState<GameType>('none');
-  const [gauntletConfig, setGauntletConfig] = useState<{ step: 'name' | 'selection' | 'playing' | 'results' | 'leaderboard', type: 'seconds' | 'math' | 'memory-classic' | 'memory-progressive' }>({ step: 'name', type: 'seconds' });
+  const [gauntletConfig, setGauntletConfig] = useState<{ step: 'name' | 'playing' | 'results' | 'leaderboard', type: 'seconds' | 'math' | 'memory-classic' | 'memory-progressive' }>({ step: 'name', type: 'seconds' });
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [players, setPlayers] = useState<string[]>([]);
   const [newPlayerName, setNewPlayerName] = useState('');
@@ -50,8 +50,8 @@ export default function App() {
       id: 'guess-seconds' as GameType,
       title: 'Guess the Seconds',
       description: 'Stop the timer as close to the target as possible without looking.',
-      icon: <Timer className="w-8 h-8 text-indigo-500" />,
-      color: 'bg-indigo-50',
+      icon: <Timer className="w-8 h-8" />,
+      color: 'bg-indigo-500',
       accent: 'indigo',
       minPlayers: 1
     },
@@ -59,8 +59,8 @@ export default function App() {
       id: 'category-timer' as GameType,
       title: 'Category Blitz',
       description: 'Say a word in the category and pass the turn before your time runs out!',
-      icon: <Zap className="w-8 h-8 text-rose-500" />,
-      color: 'bg-rose-50',
+      icon: <Zap className="w-8 h-8" />,
+      color: 'bg-rose-500',
       accent: 'rose',
       minPlayers: 2
     },
@@ -68,8 +68,8 @@ export default function App() {
       id: 'password' as GameType,
       title: 'Password',
       description: 'Give one-word clues to help your team guess the secret word.',
-      icon: <MessageSquare className="w-8 h-8 text-amber-500" />,
-      color: 'bg-amber-50',
+      icon: <MessageSquare className="w-8 h-8" />,
+      color: 'bg-amber-500',
       accent: 'amber',
       minPlayers: 2
     },
@@ -77,8 +77,8 @@ export default function App() {
       id: 'choice-charades' as GameType,
       title: 'Choice Charades',
       description: 'Fast-paced acting with three difficulty levels at once!',
-      icon: <Sparkles className="w-8 h-8 text-rose-500" />,
-      color: 'bg-rose-50',
+      icon: <Sparkles className="w-8 h-8" />,
+      color: 'bg-rose-500',
       accent: 'rose',
       minPlayers: 2
     },
@@ -86,8 +86,8 @@ export default function App() {
       id: 'most-likely-to' as GameType,
       title: 'Most Likely To',
       description: 'Point to the person who fits the prompt best. Perfect for waiting in line!',
-      icon: <Users className="w-8 h-8 text-indigo-500" />,
-      color: 'bg-indigo-50',
+      icon: <Users className="w-8 h-8" />,
+      color: 'bg-indigo-500',
       accent: 'indigo',
       minPlayers: 2
     },
@@ -95,8 +95,8 @@ export default function App() {
       id: 'observation-bingo' as GameType,
       title: 'Observation Bingo',
       description: 'Spot items in the crowd to get 3 in a row. Perfect for people-watching!',
-      icon: <Search className="w-8 h-8 text-rose-500" />,
-      color: 'bg-rose-50',
+      icon: <Search className="w-8 h-8" />,
+      color: 'bg-rose-500',
       accent: 'rose',
       minPlayers: 1
     },
@@ -104,8 +104,8 @@ export default function App() {
       id: 'fake-artist' as GameType,
       title: 'Fake Artist',
       description: 'One person doesn\'t know the word. Draw one stroke at a time to find the imposter!',
-      icon: <Palette className="w-8 h-8 text-indigo-500" />,
-      color: 'bg-indigo-50',
+      icon: <Palette className="w-8 h-8" />,
+      color: 'bg-indigo-500',
       accent: 'indigo',
       minPlayers: 3
     },
@@ -113,8 +113,8 @@ export default function App() {
       id: 'geotrivia' as GameType,
       title: 'GeoTrivia',
       description: 'Test your US geography! Find the state on a blank map before time runs out.',
-      icon: <Search className="w-8 h-8 text-amber-500" />,
-      color: 'bg-amber-50',
+      icon: <MapIcon className="w-8 h-8" />,
+      color: 'bg-amber-500',
       accent: 'amber',
       minPlayers: 1
     },
@@ -122,8 +122,8 @@ export default function App() {
       id: 'memory-shape' as GameType,
       title: 'Memory Shape',
       description: 'Memorize shapes and numbers before they disappear. Can you remember them all?',
-      icon: <Brain className="w-8 h-8 text-violet-500" />,
-      color: 'bg-violet-50',
+      icon: <Brain className="w-8 h-8" />,
+      color: 'bg-violet-500',
       accent: 'violet',
       minPlayers: 1
     },
@@ -131,8 +131,8 @@ export default function App() {
       id: 'color-match' as GameType,
       title: 'Color Match',
       description: 'Don\'t read the word! Tap the color of the ink as fast as you can.',
-      icon: <Palette className="w-8 h-8 text-emerald-500" />,
-      color: 'bg-emerald-50',
+      icon: <Palette className="w-8 h-8" />,
+      color: 'bg-emerald-500',
       accent: 'emerald',
       minPlayers: 1
     },
@@ -140,7 +140,7 @@ export default function App() {
 
   if (activeGame !== 'none') {
     return (
-      <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'bg-slate-950 text-slate-50' : 'bg-slate-50 text-slate-900'}`}>
+      <div className={`h-screen flex flex-col transition-colors duration-300 overflow-hidden ${isDarkMode ? 'bg-slate-950 text-slate-50' : 'bg-slate-50 text-slate-900'}`}>
         <nav className={`p-4 pt-[calc(1rem+env(safe-area-inset-top))] flex items-center justify-between backdrop-blur-md border-b sticky top-0 z-50 transition-colors duration-300 ${isDarkMode ? 'bg-slate-900/50 border-slate-800' : 'bg-white/80 border-slate-200'}`}>
           <div className="flex items-center">
             <button 
@@ -167,7 +167,7 @@ export default function App() {
             />
           </div>
         </nav>
-        <div className={activeGame === 'geotrivia' ? "max-w-7xl mx-auto" : "max-w-5xl mx-auto"}>
+        <div className={`flex-1 overflow-y-auto custom-scrollbar ${activeGame === 'geotrivia' ? "w-full" : "max-w-5xl mx-auto w-full"}`}>
           {activeGame === 'guess-seconds' && <GuessTheSeconds isDarkMode={isDarkMode} initialPlayers={players} />}
           {activeGame === 'category-timer' && <CategoryTimer isDarkMode={isDarkMode} initialPlayers={players} />}
           {activeGame === 'password' && <PasswordGame isDarkMode={isDarkMode} initialPlayers={players} />}
@@ -429,8 +429,14 @@ export default function App() {
               className={`group cursor-pointer p-8 rounded-[2.5rem] shadow-sm transition-all border flex flex-col justify-between ${isDarkMode ? 'bg-slate-900 hover:shadow-2xl hover:shadow-indigo-500/10 border-slate-800' : 'bg-white hover:shadow-xl hover:shadow-indigo-100 border-slate-100'}`}
             >
               <div className="space-y-6">
-                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform border ${isDarkMode ? `${game.color.replace('bg-', 'bg-').replace('-50', '-900/30')} border-${game.accent}-500/20` : `${game.color} border-${game.accent}-100`}`}>
-                  {React.cloneElement(game.icon as React.ReactElement, { className: (game.icon as React.ReactElement).props.className.replace('text-', 'text-').replace('-500', isDarkMode ? '-400' : '-500').replace('-600', isDarkMode ? '-400' : '-600') })}
+                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform border-2 ${
+                  isDarkMode 
+                    ? `bg-${game.accent}-500/20 border-${game.accent}-500/30` 
+                    : `bg-${game.accent}-500 border-${game.accent}-600 shadow-lg shadow-${game.accent}-500/20`
+                }`}>
+                  {React.cloneElement(game.icon as React.ReactElement, { 
+                    className: `w-8 h-8 ${isDarkMode ? `text-${game.accent}-400` : 'text-white'}` 
+                  })}
                 </div>
                 <div className="space-y-2">
                   <h3 className={`text-2xl font-bold ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>{game.title}</h3>

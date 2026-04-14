@@ -255,40 +255,41 @@ export default function ColorMatch({
 
   if (gameState === 'setup' && !isGauntlet) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[80vh] p-6 space-y-8">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center space-y-4 max-w-md">
-          <div className={`inline-flex p-4 rounded-3xl mb-2 border transition-colors duration-300 ${isDarkMode ? 'bg-emerald-900/30 border-emerald-500/20 text-emerald-400' : 'bg-emerald-50 border-emerald-100 text-emerald-600'}`}>
-            <Palette size={40} />
+      <div className="flex flex-col items-center justify-center py-4 sm:py-8 px-4 sm:px-6 space-y-6 sm:space-y-8 w-full max-w-md mx-auto">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center space-y-4 w-full">
+          <div className="space-y-2">
+            <h2 className={`text-3xl sm:text-4xl font-black tracking-tight ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>Color Match</h2>
+            <p className={`text-sm sm:text-base ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+              The Stroop Effect challenge. Match the ink color, not the word!
+            </p>
           </div>
-          <h2 className={`text-4xl font-black tracking-tight ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>Color Match</h2>
-          <p className={isDarkMode ? 'text-slate-400' : 'text-slate-500'}>
-            The Stroop Effect challenge. Match the ink color, not the word!
-          </p>
-          <div className={`p-4 rounded-2xl border ${isDarkMode ? 'bg-indigo-900/10 border-indigo-500/20' : 'bg-indigo-50 border-indigo-100'}`}>
-            <div className="flex items-center space-x-2 mb-2">
-              <Info size={14} className="text-indigo-400" />
-              <h4 className={`text-xs font-black uppercase tracking-widest ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`}>How to Play</h4>
+          <div className={`rounded-2xl p-4 border transition-colors duration-300 ${isDarkMode ? 'bg-indigo-900/20 border-indigo-800/30' : 'bg-indigo-50 border-indigo-100'}`}>
+            <div className={`flex items-center justify-center space-x-2 font-bold mb-3 text-sm ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`}>
+              <Sparkles size={16} />
+              <span>How to Play</span>
             </div>
-            <ul className={`text-xs space-y-1 text-left ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
-              {difficultyMode === 'mix-master' ? (
-                <>
-                  <li>• Word and Ink are <strong>Primary Colors</strong>.</li>
-                  <li>• Tap the color that results from <strong>mixing</strong> them.</li>
-                  <li>• e.g. Red + Yellow = Orange.</li>
-                </>
-              ) : (
-                <>
-                  <li>• A word will appear in a specific color.</li>
-                  <li>• <strong>Ignore the word</strong> itself.</li>
-                  <li>• Tap the button that matches the <strong>ink color</strong>.</li>
-                </>
-              )}
-              <li>• Correct = +1 point. Wrong = -2 points!</li>
-            </ul>
+            <div className="grid grid-cols-1 gap-3 text-left">
+              <div className="flex items-start space-x-3">
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-indigo-500/20 text-indigo-400' : 'bg-indigo-100 text-indigo-600'}`}>1</div>
+                <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                  {difficultyMode === 'mix-master' 
+                    ? "Tap the color that results from mixing the word and ink colors." 
+                    : "Ignore the word itself and tap the button that matches the ink color."}
+                </p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-indigo-500/20 text-indigo-400' : 'bg-indigo-100 text-indigo-600'}`}>2</div>
+                <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Correct answers give +1 point, but wrong answers cost -2 points!</p>
+              </div>
+              <div className="flex items-start space-x-3">
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-indigo-500/20 text-indigo-400' : 'bg-indigo-100 text-indigo-600'}`}>3</div>
+                <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Race against the clock to get the highest score possible!</p>
+              </div>
+            </div>
           </div>
         </motion.div>
 
-        <div className={`w-full max-w-md p-8 rounded-[2.5rem] border transition-all duration-300 ${isDarkMode ? 'bg-slate-900 border-slate-800 shadow-2xl shadow-indigo-900/10' : 'bg-white border-slate-100 shadow-xl shadow-indigo-100'}`}>
+        <div className={`w-full p-6 sm:p-8 rounded-[2.5rem] border transition-all duration-300 ${isDarkMode ? 'bg-slate-900 border-slate-800 shadow-2xl shadow-indigo-900/10' : 'bg-white border-slate-100 shadow-xl shadow-indigo-100'}`}>
           <div className="space-y-6">
             <div className="space-y-4">
               <label className={`flex items-center space-x-2 text-sm font-medium ${isDarkMode ? 'text-slate-300' : 'text-gray-700'}`}>
@@ -343,14 +344,14 @@ export default function ColorMatch({
               <div className="flex items-center justify-center space-x-6">
                 <button 
                   onClick={() => { updateNumPlayers(numPlayers - 1); if (numPlayers - 1 !== 2) setIsDuoMode(false); }}
-                  className={`w-12 h-12 flex items-center justify-center rounded-xl shadow-sm transition-colors ${isDarkMode ? 'bg-slate-800 text-slate-100 hover:bg-slate-700' : 'bg-gray-100 text-slate-900 hover:bg-gray-200'}`}
+                  className={`w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl shadow-sm transition-colors ${isDarkMode ? 'bg-slate-800 text-slate-100 hover:bg-slate-700' : 'bg-gray-100 text-slate-900 hover:bg-gray-200'}`}
                 >
                   -
                 </button>
-                <span className={`text-2xl font-bold ${isDarkMode ? 'text-slate-100' : 'text-slate-900'}`}>{numPlayers}</span>
+                <span className={`text-xl sm:text-2xl font-bold ${isDarkMode ? 'text-slate-100' : 'text-slate-900'}`}>{numPlayers}</span>
                 <button 
                   onClick={() => updateNumPlayers(numPlayers + 1)}
-                  className={`w-12 h-12 flex items-center justify-center rounded-xl shadow-sm transition-colors ${isDarkMode ? 'bg-slate-800 text-slate-100 hover:bg-slate-700' : 'bg-gray-100 text-slate-900 hover:bg-gray-200'}`}
+                  className={`w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl shadow-sm transition-colors ${isDarkMode ? 'bg-slate-800 text-slate-100 hover:bg-slate-700' : 'bg-gray-100 text-slate-900 hover:bg-gray-200'}`}
                 >
                   +
                 </button>
@@ -360,7 +361,7 @@ export default function ColorMatch({
                 <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
                   <button
                     onClick={() => setIsDuoMode(!isDuoMode)}
-                    className={`w-full py-3 rounded-xl border-2 font-bold text-xs transition-all flex items-center justify-center space-x-2 ${
+                    className={`w-full py-3 rounded-xl border-2 font-bold text-[10px] sm:text-xs transition-all flex items-center justify-center space-x-2 ${
                       isDuoMode 
                         ? 'bg-indigo-600 border-indigo-500 text-white shadow-lg' 
                         : isDarkMode ? 'bg-slate-800 border-slate-700 text-slate-500 hover:text-slate-300' : 'bg-gray-50 border-gray-200 text-gray-400 hover:text-gray-600'
@@ -381,7 +382,7 @@ export default function ColorMatch({
                 <Sparkles size={18} className="text-indigo-400" />
                 <span>Player Names</span>
               </label>
-              <div className="space-y-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+              <div className="space-y-2 max-h-32 sm:max-h-48 overflow-y-auto pr-2 custom-scrollbar">
                 {playerNames.slice(0, numPlayers).map((name, i) => (
                   <input
                     key={i}
@@ -389,7 +390,7 @@ export default function ColorMatch({
                     value={name}
                     onChange={(e) => handleNameChange(i, e.target.value)}
                     placeholder={`Player ${i + 1}`}
-                    className={`w-full p-3 rounded-xl border border-transparent outline-none transition-all text-sm ${
+                    className={`w-full p-2 sm:p-3 rounded-xl border border-transparent outline-none transition-all text-xs sm:text-sm ${
                       isDarkMode 
                         ? 'bg-slate-800 text-slate-100 focus:border-indigo-500 focus:bg-slate-700 placeholder:text-slate-500' 
                         : 'bg-gray-50 text-gray-900 focus:border-indigo-500 focus:bg-white placeholder:text-gray-400'
@@ -401,7 +402,7 @@ export default function ColorMatch({
 
             <button
               onClick={startNewGame}
-              className="w-full py-4 bg-indigo-600 text-white rounded-2xl font-black text-lg shadow-xl shadow-indigo-900/20 hover:bg-indigo-500 active:scale-95 transition-all flex items-center justify-center space-x-2"
+              className="w-full py-3 sm:py-4 bg-indigo-600 text-white rounded-2xl font-black text-base sm:text-lg shadow-xl shadow-indigo-900/20 hover:bg-indigo-500 active:scale-95 transition-all flex items-center justify-center space-x-2"
             >
               <span>Start Game</span>
               <ChevronRight size={20} />

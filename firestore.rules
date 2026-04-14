@@ -37,8 +37,8 @@ service cloud.firestore {
     function isValidScore(data) {
       let validGameTypes = [
         'seconds', 'math', 'memory-classic', 'memory-progressive', 
-        'geotrivia-time', 'geotrivia-distance', 'color-match', 
-        'color-match-easy', 'color-match-mix'
+        'memory-sequence', 'geotrivia-time', 'geotrivia-distance', 
+        'color-match', 'color-match-easy', 'color-match-mix'
       ];
       return data.keys().hasAll(['playerName', 'score', 'gameType', 'timestamp']) &&
              data.keys().hasOnly(['playerName', 'score', 'gameType', 'timestamp']) &&

@@ -432,47 +432,60 @@ export default function GeoTrivia({
   }, []);
 
   const renderSetup = () => (
-    <div className="flex flex-col items-center justify-center min-h-[70vh] p-6 space-y-8">
+    <div className="flex flex-col items-center justify-center py-4 sm:py-8 px-4 sm:px-6 space-y-6 sm:space-y-8 w-full max-w-md mx-auto">
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center space-y-4 max-w-md"
+        className="text-center space-y-4 w-full"
       >
         <div className="space-y-2">
-          <div className={`inline-flex p-4 rounded-3xl mb-4 border transition-colors duration-300 ${isDarkMode ? 'bg-indigo-900/30 border-indigo-500/20 text-indigo-400' : 'bg-indigo-50 border-indigo-100 text-indigo-600'}`}>
-            <MapIcon size={48} />
-          </div>
-          <h2 className={`text-4xl font-bold tracking-tight ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>GeoTrivia</h2>
-          <p className={isDarkMode ? 'text-slate-400' : 'text-slate-600'}>How well do you know the US map?</p>
+          <h2 className={`text-3xl sm:text-4xl font-bold tracking-tight ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>GeoTrivia</h2>
+          <p className={`text-sm sm:text-base ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>How well do you know the US map?</p>
         </div>
         
         <div className={`rounded-2xl p-4 border transition-colors duration-300 ${isDarkMode ? 'bg-indigo-900/20 border-indigo-800/30' : 'bg-indigo-50 border-indigo-100'}`}>
-          <div className={`flex items-center justify-center space-x-2 font-bold mb-2 text-sm ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`}>
+          <div className={`flex items-center justify-center space-x-2 font-bold mb-3 text-sm ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`}>
             <Sparkles size={16} />
             <span>How to Play</span>
           </div>
-          <div className={`text-xs leading-relaxed ${isDarkMode ? 'text-indigo-300/70' : 'text-indigo-700/70'}`}>
+          <div className="grid grid-cols-1 gap-3 text-left">
             {gameMode === 'time' ? (
               <>
-                1. Find as many states as you can.<br/>
-                2. Tap the correct state on the blank map.<br/>
-                3. Correct = +1 Point. Wrong = <span className="text-rose-500 font-bold">-3 Seconds</span>.<br/>
-                4. Multi-player: Everyone gets the same sequence of states!
+                <div className="flex items-start space-x-3">
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-indigo-500/20 text-indigo-400' : 'bg-indigo-100 text-indigo-600'}`}>1</div>
+                  <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Find as many states as you can by tapping them on the blank map.</p>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-indigo-500/20 text-indigo-400' : 'bg-indigo-100 text-indigo-600'}`}>2</div>
+                  <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Correct = +1 Point. Wrong = <span className="text-rose-500 font-bold">-3 Seconds</span> penalty.</p>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-indigo-500/20 text-indigo-400' : 'bg-indigo-100 text-indigo-600'}`}>3</div>
+                  <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Multi-player: Everyone gets the same sequence of states to find!</p>
+                </div>
               </>
             ) : (
               <>
-                1. Find {numQuestions} specific states.<br/>
-                2. Tap where you think the center of the state is.<br/>
-                3. <span className="text-indigo-500 font-bold">Pass the phone</span> after each tap.<br/>
-                4. See everyone's pins after each question!
+                <div className="flex items-start space-x-3">
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-indigo-500/20 text-indigo-400' : 'bg-indigo-100 text-indigo-600'}`}>1</div>
+                  <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Find {numQuestions} specific states by tapping where their center is.</p>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-indigo-500/20 text-indigo-400' : 'bg-indigo-100 text-indigo-600'}`}>2</div>
+                  <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Pass the phone after each tap. See everyone's pins after each question!</p>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-indigo-500/20 text-indigo-400' : 'bg-indigo-100 text-indigo-600'}`}>3</div>
+                  <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>The player with the lowest total distance error wins the duel!</p>
+                </div>
               </>
             )}
           </div>
         </div>
       </motion.div>
 
-      <div className="w-full max-w-md space-y-6">
-        <div className={`rounded-3xl shadow-2xl p-8 space-y-8 border transition-colors duration-300 ${isDarkMode ? 'bg-slate-900 shadow-black/50 border-slate-800' : 'bg-white shadow-indigo-100 border-slate-100'}`}>
+      <div className="w-full space-y-6">
+        <div className={`rounded-3xl shadow-2xl p-6 sm:p-8 space-y-6 sm:space-y-8 border transition-colors duration-300 ${isDarkMode ? 'bg-slate-900 shadow-black/50 border-slate-800' : 'bg-white shadow-indigo-100 border-slate-100'}`}>
           <div className="space-y-4">
             <label className={`flex items-center space-x-2 text-sm font-medium ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
               <Zap size={18} className="text-indigo-400" />
@@ -481,7 +494,7 @@ export default function GeoTrivia({
             <div className="grid grid-cols-2 gap-2">
               <button
                 onClick={() => setGameMode('time')}
-                className={`p-3 rounded-2xl text-xs font-bold transition-all border-2 ${
+                className={`p-2 sm:p-3 rounded-2xl text-[10px] sm:text-xs font-bold transition-all border-2 ${
                   gameMode === 'time' 
                     ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-900/20' 
                     : isDarkMode ? 'bg-slate-800 border-slate-700 text-slate-400 hover:border-indigo-500/50' : 'bg-slate-50 border-slate-200 text-slate-500 hover:border-indigo-400'
@@ -491,7 +504,7 @@ export default function GeoTrivia({
               </button>
               <button
                 onClick={() => setGameMode('distance')}
-                className={`p-3 rounded-2xl text-xs font-bold transition-all border-2 ${
+                className={`p-2 sm:p-3 rounded-2xl text-[10px] sm:text-xs font-bold transition-all border-2 ${
                   gameMode === 'distance' 
                     ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-900/20' 
                     : isDarkMode ? 'bg-slate-800 border-slate-700 text-slate-400 hover:border-indigo-500/50' : 'bg-slate-50 border-slate-200 text-slate-500 hover:border-indigo-400'
@@ -513,7 +526,7 @@ export default function GeoTrivia({
                   <button
                     key={t}
                     onClick={() => setDuration(t)}
-                    className={`p-3 rounded-2xl text-xs font-bold transition-all border-2 ${
+                    className={`p-2 sm:p-3 rounded-2xl text-[10px] sm:text-xs font-bold transition-all border-2 ${
                       duration === t 
                         ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-900/20' 
                         : isDarkMode ? 'bg-slate-800 border-slate-700 text-slate-400 hover:border-indigo-500/50' : 'bg-slate-50 border-slate-200 text-slate-500 hover:border-indigo-400'
@@ -535,7 +548,7 @@ export default function GeoTrivia({
                   <button
                     key={n}
                     onClick={() => setNumQuestions(n)}
-                    className={`p-3 rounded-2xl text-xs font-bold transition-all border-2 ${
+                    className={`p-2 sm:p-3 rounded-2xl text-[10px] sm:text-xs font-bold transition-all border-2 ${
                       numQuestions === n 
                         ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-900/20' 
                         : isDarkMode ? 'bg-slate-800 border-slate-700 text-slate-400 hover:border-indigo-500/50' : 'bg-slate-50 border-slate-200 text-slate-500 hover:border-indigo-400'
@@ -553,17 +566,17 @@ export default function GeoTrivia({
               <Users size={18} className="text-indigo-400" />
               <span>Number of Players</span>
             </label>
-            <div className={`flex items-center justify-between p-2 rounded-2xl transition-colors duration-300 ${isDarkMode ? 'bg-slate-800' : 'bg-slate-100'}`}>
+            <div className={`flex items-center justify-between p-1 sm:p-2 rounded-2xl transition-colors duration-300 ${isDarkMode ? 'bg-slate-800' : 'bg-slate-100'}`}>
               <button 
                 onClick={() => updateNumPlayers(numPlayers - 1)}
-                className={`w-12 h-12 flex items-center justify-center rounded-xl shadow-sm transition-colors ${isDarkMode ? 'bg-slate-700 text-slate-100 hover:bg-slate-600' : 'bg-white text-slate-900 hover:bg-slate-50'}`}
+                className={`w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl shadow-sm transition-colors ${isDarkMode ? 'bg-slate-700 text-slate-100 hover:bg-slate-600' : 'bg-white text-gray-900 hover:bg-slate-50'}`}
               >
                 -
               </button>
-              <span className={`text-2xl font-bold ${isDarkMode ? 'text-slate-100' : 'text-slate-900'}`}>{numPlayers}</span>
+              <span className={`text-xl sm:text-2xl font-bold ${isDarkMode ? 'text-slate-100' : 'text-gray-900'}`}>{numPlayers}</span>
               <button 
                 onClick={() => updateNumPlayers(numPlayers + 1)}
-                className={`w-12 h-12 flex items-center justify-center rounded-xl shadow-sm transition-colors ${isDarkMode ? 'bg-slate-700 text-slate-100 hover:bg-slate-600' : 'bg-white text-slate-900 hover:bg-slate-50'}`}
+                className={`w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl shadow-sm transition-colors ${isDarkMode ? 'bg-slate-700 text-slate-100 hover:bg-slate-600' : 'bg-white text-gray-900 hover:bg-slate-50'}`}
               >
                 +
               </button>
@@ -575,7 +588,7 @@ export default function GeoTrivia({
               <Users size={18} className="text-indigo-400" />
               <span>Player Names (Optional)</span>
             </label>
-            <div className="space-y-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+            <div className="space-y-2 max-h-32 sm:max-h-48 overflow-y-auto pr-2 custom-scrollbar">
               {playerNames.map((name, i) => (
                 <input
                   key={i}
@@ -583,7 +596,7 @@ export default function GeoTrivia({
                   value={name}
                   onChange={(e) => handleNameChange(i, e.target.value)}
                   placeholder={`Player ${i + 1}`}
-                  className={`w-full p-3 rounded-xl border border-transparent outline-none transition-all text-sm ${
+                  className={`w-full p-2 sm:p-3 rounded-xl border border-transparent outline-none transition-all text-xs sm:text-sm ${
                     isDarkMode 
                       ? 'bg-slate-800 text-slate-100 focus:border-indigo-500 focus:bg-slate-700 placeholder:text-slate-500' 
                       : 'bg-gray-50 text-gray-900 focus:border-indigo-500 focus:bg-white placeholder:text-gray-400'
@@ -596,7 +609,7 @@ export default function GeoTrivia({
           <button 
             onClick={startNewGame}
             disabled={isLoading}
-            className={`w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold text-lg shadow-lg shadow-indigo-900/20 hover:bg-indigo-500 active:scale-95 flex items-center justify-center space-x-2 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`w-full py-3 sm:py-4 bg-indigo-600 text-white rounded-2xl font-bold text-base sm:text-lg shadow-lg shadow-indigo-900/20 hover:bg-indigo-500 active:scale-95 flex items-center justify-center space-x-2 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
           >
             {isLoading ? (
               <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -616,29 +629,29 @@ export default function GeoTrivia({
     <motion.div 
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="flex flex-col items-center justify-center min-h-[70vh] space-y-8 p-6 text-center"
+      className="flex flex-col items-center justify-center py-4 sm:py-8 px-4 sm:px-6 space-y-6 sm:space-y-8 w-full max-w-md mx-auto text-center"
     >
-      <div className="space-y-4">
+      <div className="space-y-4 w-full">
         <div 
-          className={`inline-flex p-6 rounded-[2.5rem] mb-4 border-4 transition-all duration-500`}
+          className={`inline-flex p-4 sm:p-6 rounded-[2rem] sm:rounded-[2.5rem] mb-2 sm:mb-4 border-4 transition-all duration-500`}
           style={{ backgroundColor: `${PLAYER_COLORS[currentPlayerIndex % PLAYER_COLORS.length]}20`, borderColor: PLAYER_COLORS[currentPlayerIndex % PLAYER_COLORS.length], color: PLAYER_COLORS[currentPlayerIndex % PLAYER_COLORS.length] }}
         >
-          <Users size={64} />
+          <Users size={48} className="sm:w-16 sm:h-16" />
         </div>
-        <p className={`text-xl font-bold uppercase tracking-widest`} style={{ color: PLAYER_COLORS[currentPlayerIndex % PLAYER_COLORS.length] }}>
+        <p className={`text-sm sm:text-xl font-bold uppercase tracking-widest`} style={{ color: PLAYER_COLORS[currentPlayerIndex % PLAYER_COLORS.length] }}>
           {gameMode === 'distance' ? `Question ${currentQuestionIndex + 1}` : 'Next Up'}
         </p>
-        <h2 className={`text-5xl font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>
+        <h2 className={`text-3xl sm:text-5xl font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>
           {playerNames[currentPlayerIndex]}
         </h2>
-        <p className={`text-lg ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+        <p className={`text-sm sm:text-lg ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>
           Pass the phone and get ready!
         </p>
       </div>
 
       <button
         onClick={startTurn}
-        className="w-full max-w-xs py-4 text-white rounded-2xl font-bold text-xl shadow-lg active:scale-95 flex items-center justify-center space-x-2"
+        className="w-full max-w-xs py-3 sm:py-4 text-white rounded-2xl font-bold text-lg sm:text-xl shadow-lg active:scale-95 flex items-center justify-center space-x-2"
         style={{ backgroundColor: PLAYER_COLORS[currentPlayerIndex % PLAYER_COLORS.length] }}
       >
         <Play size={24} fill="currentColor" />
@@ -648,34 +661,34 @@ export default function GeoTrivia({
   );
 
   const renderPlaying = () => (
-    <div className="flex flex-col items-center justify-start min-h-[80vh] p-2 sm:p-4 space-y-4 sm:space-y-6">
+    <div className="flex flex-col items-center justify-start min-h-screen p-2 sm:p-4 space-y-2 sm:space-y-6 overflow-hidden">
       {/* HUD */}
       <div className="w-full max-w-6xl flex justify-between items-center px-2 sm:px-4">
-        <div className="flex items-center space-x-2 sm:space-x-4">
+        <div className="flex items-center space-x-1 sm:space-x-4">
           {gameMode === 'time' ? (
             <>
-              <div className={`p-2 sm:p-3 rounded-xl sm:rounded-2xl border transition-colors ${isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100 shadow-sm'}`}>
-                <p className={`text-[8px] sm:text-[10px] font-black uppercase tracking-widest ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Score</p>
-                <p className={`text-xl sm:text-2xl font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>{score}</p>
+              <div className={`p-1.5 sm:p-3 rounded-xl sm:rounded-2xl border transition-colors ${isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100 shadow-sm'}`}>
+                <p className={`text-[7px] sm:text-[10px] font-black uppercase tracking-widest ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Score</p>
+                <p className={`text-base sm:text-2xl font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>{score}</p>
               </div>
-              <div className={`p-2 sm:p-3 rounded-xl sm:rounded-2xl border transition-colors ${timeLeft < 10 ? 'bg-rose-500/10 border-rose-500/30' : isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100 shadow-sm'}`}>
-                <p className={`text-[8px] sm:text-[10px] font-black uppercase tracking-widest ${timeLeft < 10 ? 'text-rose-500' : isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Time</p>
-                <p className={`text-xl sm:text-2xl font-black ${timeLeft < 10 ? 'text-rose-500' : isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>{timeLeft}s</p>
+              <div className={`p-1.5 sm:p-3 rounded-xl sm:rounded-2xl border transition-colors ${timeLeft < 10 ? 'bg-rose-500/10 border-rose-500/30' : isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100 shadow-sm'}`}>
+                <p className={`text-[7px] sm:text-[10px] font-black uppercase tracking-widest ${timeLeft < 10 ? 'text-rose-500' : isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Time</p>
+                <p className={`text-base sm:text-2xl font-black ${timeLeft < 10 ? 'text-rose-500' : isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>{timeLeft}s</p>
               </div>
             </>
           ) : (
             <>
-              <div className={`p-2 sm:p-3 rounded-xl sm:rounded-2xl border transition-colors ${isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100 shadow-sm'}`}>
-                <p className={`text-[8px] sm:text-[10px] font-black uppercase tracking-widest ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Question</p>
-                <p className={`text-xl sm:text-2xl font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>{currentQuestionIndex + 1}/{numQuestions}</p>
+              <div className={`p-1.5 sm:p-3 rounded-xl sm:rounded-2xl border transition-colors ${isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100 shadow-sm'}`}>
+                <p className={`text-[7px] sm:text-[10px] font-black uppercase tracking-widest ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Q</p>
+                <p className={`text-base sm:text-2xl font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>{currentQuestionIndex + 1}/{numQuestions}</p>
               </div>
-              <div className={`p-2 sm:p-3 rounded-xl sm:rounded-2xl border transition-colors ${duelTimeLeft < 4 ? 'bg-rose-500/10 border-rose-500/30' : isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100 shadow-sm'}`}>
-                <p className={`text-[8px] sm:text-[10px] font-black uppercase tracking-widest ${duelTimeLeft < 4 ? 'text-rose-500' : isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Timer</p>
-                <p className={`text-xl sm:text-2xl font-black ${duelTimeLeft < 4 ? 'text-rose-500' : isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>{duelTimeLeft}s</p>
+              <div className={`p-1.5 sm:p-3 rounded-xl sm:rounded-2xl border transition-colors ${duelTimeLeft < 4 ? 'bg-rose-500/10 border-rose-500/30' : isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100 shadow-sm'}`}>
+                <p className={`text-[7px] sm:text-[10px] font-black uppercase tracking-widest ${duelTimeLeft < 4 ? 'text-rose-500' : isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Timer</p>
+                <p className={`text-base sm:text-2xl font-black ${duelTimeLeft < 4 ? 'text-rose-500' : isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>{duelTimeLeft}s</p>
               </div>
-              <div className={`p-2 sm:p-3 rounded-xl sm:rounded-2xl border transition-colors ${isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100 shadow-sm'}`}>
-                <p className={`text-[8px] sm:text-[10px] font-black uppercase tracking-widest ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>Player</p>
-                <p className={`text-xl sm:text-2xl font-black`} style={{ color: PLAYER_COLORS[currentPlayerIndex % PLAYER_COLORS.length] }}>
+              <div className={`p-1.5 sm:p-3 rounded-xl sm:rounded-2xl border transition-colors ${isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100 shadow-sm'}`}>
+                <p className={`text-[7px] sm:text-[10px] font-black uppercase tracking-widest ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>P</p>
+                <p className={`text-base sm:text-2xl font-black`} style={{ color: PLAYER_COLORS[currentPlayerIndex % PLAYER_COLORS.length] }}>
                   {currentPlayerIndex + 1}/{numPlayers}
                 </p>
               </div>
@@ -684,14 +697,14 @@ export default function GeoTrivia({
         </div>
         
         <div className="text-right">
-          <p className={`text-[10px] font-black uppercase tracking-widest text-indigo-500 mb-0.5 sm:mb-1`}>
+          <p className={`text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-indigo-500 mb-0.5`}>
             {(playerNames[currentPlayerIndex] || `Player ${currentPlayerIndex + 1}`)}'s Turn
           </p>
           <motion.h3 
             key={targetState?.id}
             initial={{ y: -10, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className={`text-2xl sm:text-3xl font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}
+            className={`text-lg sm:text-3xl font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}
           >
             {targetState?.name}
           </motion.h3>
@@ -700,14 +713,14 @@ export default function GeoTrivia({
 
       {/* Orientation Hint */}
       {isPortrait && (
-        <div className="sm:hidden bg-indigo-500/10 border border-indigo-500/30 px-4 py-2 rounded-full flex items-center space-x-2 animate-pulse">
-          <RotateCcw size={14} className="text-indigo-400" />
-          <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-wider">Rotate for a bigger map</span>
+        <div className="sm:hidden bg-indigo-500/10 border border-indigo-500/30 px-3 py-1 rounded-full flex items-center space-x-2 animate-pulse">
+          <RotateCcw size={12} className="text-indigo-400" />
+          <span className="text-[8px] font-bold text-indigo-400 uppercase tracking-wider">Rotate for a bigger map</span>
         </div>
       )}
 
       {/* Map Container */}
-      <div className={`relative w-full max-w-6xl aspect-[1.6] rounded-2xl sm:rounded-[2.5rem] border overflow-hidden transition-colors ${isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-slate-50 border-slate-200 shadow-inner'}`}>
+      <div className={`relative w-full max-w-6xl aspect-[1.6] rounded-xl sm:rounded-[2.5rem] border overflow-hidden transition-colors ${isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-slate-50 border-slate-200 shadow-inner'}`}>
         <svg 
           ref={svgRef}
           viewBox="0 0 960 600" 

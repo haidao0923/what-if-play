@@ -18,11 +18,14 @@ interface Stroke {
 type GameStep = 'setup' | 'reveal' | 'drawing' | 'voting' | 'reveal-fake' | 'results';
 
 const WORDS = [
-  { category: 'Animals', words: ['Elephant', 'Giraffe', 'Penguin', 'Shark', 'Butterfly', 'Lion', 'Kangaroo', 'Octopus', 'Owl', 'Snake'] },
-  { category: 'Food', words: ['Pizza', 'Sushi', 'Taco', 'Ice Cream', 'Hamburger', 'Donut', 'Spaghetti', 'Watermelon', 'Croissant', 'Pineapple'] },
-  { category: 'Objects', words: ['Umbrella', 'Bicycle', 'Camera', 'Telescope', 'Guitar', 'Sunglasses', 'Clock', 'Key', 'Backpack', 'Hammer'] },
-  { category: 'Places', words: ['Eiffel Tower', 'Beach', 'Volcano', 'Library', 'Space Station', 'Pyramid', 'Forest', 'Cinema', 'Airport', 'Castle'] },
-  { category: 'Nature', words: ['Rainbow', 'Waterfall', 'Cactus', 'Moon', 'Thunderstorm', 'Mountain', 'Sunflower', 'Coral Reef', 'Tornado', 'Island'] }
+  { category: 'Animals', words: ['Elephant', 'Giraffe', 'Penguin', 'Shark', 'Butterfly', 'Lion', 'Kangaroo', 'Octopus', 'Owl', 'Snake', 'Tiger', 'Zebra', 'Dolphin', 'Eagle', 'Frog', 'Spider', 'Bee', 'Bear', 'Turtle', 'Whale'] },
+  { category: 'Food', words: ['Pizza', 'Sushi', 'Taco', 'Ice Cream', 'Hamburger', 'Donut', 'Spaghetti', 'Watermelon', 'Croissant', 'Pineapple', 'Burrito', 'Pancakes', 'Waffles', 'Steak', 'Salad', 'Cupcake', 'Cookie', 'Apple', 'Banana', 'Cheese'] },
+  { category: 'Objects', words: ['Umbrella', 'Bicycle', 'Camera', 'Telescope', 'Guitar', 'Sunglasses', 'Clock', 'Key', 'Backpack', 'Hammer', 'Scissors', 'Telephone', 'Toothbrush', 'Glasses', 'Spoon', 'Pillow', 'Watch', 'Chair', 'Table', 'Cup'] },
+  { category: 'Places', words: ['Eiffel Tower', 'Beach', 'Volcano', 'Library', 'Space Station', 'Pyramid', 'Forest', 'Cinema', 'Airport', 'Castle', 'Museum', 'Stadium', 'Island', 'Desert', 'Mountain', 'Waterfall', 'Bridge', 'Park', 'School', 'Hospital'] },
+  { category: 'Nature', words: ['Rainbow', 'Waterfall', 'Cactus', 'Moon', 'Thunderstorm', 'Mountain', 'Sunflower', 'Coral Reef', 'Tornado', 'Island', 'Star', 'Cloud', 'Rain', 'Snow', 'Sun', 'Earth', 'Ocean', 'River', 'Tree', 'Flower'] },
+  { category: 'Sports', words: ['Soccer', 'Basketball', 'Baseball', 'Tennis', 'Golf', 'Swimming', 'Boxing', 'Skiing', 'Surfing', 'Cycling', 'Volleyball', 'Hockey', 'Rugby', 'Cricket', 'Bowling', 'Archery', 'Fencing', 'Karate', 'Gymnastics', 'Skateboarding'] },
+  { category: 'Jobs', words: ['Doctor', 'Fireman', 'Police', 'Chef', 'Pilot', 'Artist', 'Singer', 'Teacher', 'Nurse', 'Astronaut', 'Baker', 'Farmer', 'Dentist', 'Scientist', 'Detective', 'Plumber', 'Judge', 'Lawyer', 'Soldier', 'Mechanic'] },
+  { category: 'Clothing', words: ['Hat', 'Shoe', 'Shirt', 'Pants', 'Dress', 'Skirt', 'Socks', 'Jacket', 'Coat', 'Scarf', 'Gloves', 'Belt', 'Tie', 'Suit', 'Sweater', 'Hoodie', 'Jeans', 'Shorts', 'Boots', 'Sneakers'] }
 ];
 
 const COLORS = [
@@ -262,16 +265,23 @@ export default function FakeArtist({ isDarkMode, initialPlayers }: { isDarkMode:
         </div>
         
         <div className={`rounded-2xl p-4 border transition-colors duration-300 ${isDarkMode ? 'bg-indigo-900/20 border-indigo-800/30' : 'bg-indigo-50 border-indigo-100'}`}>
-          <div className={`flex items-center justify-center space-x-2 font-bold mb-2 text-sm ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`}>
+          <div className={`flex items-center justify-center space-x-2 font-bold mb-3 text-sm ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`}>
             <Sparkles size={16} />
             <span>How to Play</span>
           </div>
-          <div className={`text-xs leading-relaxed text-left space-y-2 ${isDarkMode ? 'text-indigo-300/70' : 'text-indigo-700/70'}`}>
-            <p>1. Everyone sees a word/category, except the **Fake Artist**.</p>
-            <p>2. Players draw a **single stroke** per turn.</p>
-            <p>3. After {numRounds} rounds, vote for the Fake Artist.</p>
-            <p>4. If caught, artists get 1pt. If not, Fake Artist gets 1pt.</p>
-            <p>5. If Fake Artist guesses the word correctly, they get an extra point!</p>
+          <div className="grid grid-cols-1 gap-3 text-left">
+            <div className="flex items-start space-x-3">
+              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-indigo-500/20 text-indigo-400' : 'bg-indigo-100 text-indigo-600'}`}>1</div>
+              <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Everyone sees a word/category, except the **Fake Artist**.</p>
+            </div>
+            <div className="flex items-start space-x-3">
+              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-indigo-500/20 text-indigo-400' : 'bg-indigo-100 text-indigo-600'}`}>2</div>
+              <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>Players draw a single stroke per turn. After {numRounds} rounds, vote for the Fake Artist.</p>
+            </div>
+            <div className="flex items-start space-x-3">
+              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold mt-0.5 shrink-0 ${isDarkMode ? 'bg-indigo-500/20 text-indigo-400' : 'bg-indigo-100 text-indigo-600'}`}>3</div>
+              <p className={`text-sm ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}>If caught, artists get 1pt. If not, Fake Artist gets 1pt. Extra point if Fake Artist guesses the word!</p>
+            </div>
           </div>
         </div>
       </div>
