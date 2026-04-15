@@ -233,7 +233,7 @@ export default function CategoryTimer({ isDarkMode = true, initialPlayers = [] }
 
   if (gameState === 'setup') {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 space-y-4 sm:space-y-8">
+      <div className="flex flex-col items-center justify-center min-h-full p-4 sm:p-6 space-y-4 sm:space-y-8">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -349,7 +349,7 @@ export default function CategoryTimer({ isDarkMode = true, initialPlayers = [] }
 
     return (
       <div 
-        className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 space-y-4 sm:space-y-8 cursor-pointer select-none overflow-hidden"
+        className="flex flex-col items-center justify-center min-h-full p-4 sm:p-6 space-y-4 sm:space-y-8 cursor-pointer select-none overflow-hidden"
         onClick={handleScreenTap}
       >
         <div className="text-center space-y-2 sm:space-y-4">
@@ -436,7 +436,7 @@ export default function CategoryTimer({ isDarkMode = true, initialPlayers = [] }
   const winner = players.find(p => p.rank === 1);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 space-y-6 sm:space-y-8 overflow-y-auto">
+    <div className="flex flex-col items-center justify-center min-h-full p-4 sm:p-6 space-y-6 sm:space-y-8 overflow-y-auto">
       <motion.div 
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}

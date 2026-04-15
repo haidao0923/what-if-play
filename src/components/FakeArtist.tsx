@@ -686,7 +686,7 @@ export default function FakeArtist({ isDarkMode, initialPlayers }: { isDarkMode:
   };
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'bg-slate-950 text-slate-50' : 'bg-slate-50 text-slate-900'}`}>
+    <div className={`min-h-full transition-colors duration-300 ${isDarkMode ? 'bg-slate-950 text-slate-50' : 'bg-slate-50 text-slate-900'}`}>
       <main className="flex flex-col items-center justify-center min-h-[calc(100vh-80px)]">
         <AnimatePresence mode="wait">
           {step === 'setup' && renderSetup()}

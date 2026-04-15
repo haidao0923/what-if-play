@@ -844,7 +844,7 @@ export default function ObservationBingo({ isDarkMode = true, initialPlayers = [
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 space-y-4 sm:space-y-6 overflow-x-hidden">
+    <div className="flex flex-col items-center justify-center min-h-full p-4 sm:p-6 space-y-4 sm:space-y-6 overflow-x-hidden">
       <div className="w-full max-w-md flex justify-between items-center px-2">
         <div className="flex flex-col">
           <span className={`text-base sm:text-lg font-black uppercase tracking-widest ${isDarkMode ? 'text-rose-400' : 'text-rose-600'}`}>

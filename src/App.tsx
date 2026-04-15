@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Gamepad2, Timer, Sparkles, ChevronRight, Zap, MessageSquare, Users, Search, Share2, Sun, Moon, Plus, X, UserPlus, Medal, Palette, Brain, Map as MapIcon, Hourglass } from 'lucide-react';
 import ShareButton from './components/ShareButton';
@@ -24,6 +24,41 @@ export default function App() {
   const [logoError, setLogoError] = useState(false);
   const [newPlayerName, setNewPlayerName] = useState('');
   const [playerFilter, setPlayerFilter] = useState<number>(0);
+
+  // Swipe to back logic
+  useEffect(() => {
+    if (activeGame === 'none') return;
+
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      const touchEndX = e.changedTouches[0].clientX;
+      const touchEndY = e.changedTouches[0].clientY;
+      
+      const deltaX = touchEndX - touchStartX;
+      const deltaY = Math.abs(touchEndY - touchStartY);
+
+      // If start near right edge and swiped left (> 100px) 
+      // and it was mostly horizontal (deltaY < 50px)
+      if (touchStartX > window.innerWidth - 40 && deltaX < -100 && deltaY < 50) {
+        setActiveGame('none');
+      }
+    };
+
+    window.addEventListener('touchstart', handleTouchStart);
+    window.addEventListener('touchend', handleTouchEnd);
+
+    return () => {
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [activeGame]);
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
@@ -141,8 +176,8 @@ export default function App() {
 
   if (activeGame !== 'none') {
     return (
-      <div className={`h-screen flex flex-col transition-colors duration-300 overflow-hidden ${isDarkMode ? 'bg-slate-950 text-slate-50' : 'bg-slate-50 text-slate-900'}`}>
-        <nav className={`p-4 pt-[calc(1rem+env(safe-area-inset-top))] flex items-center justify-between backdrop-blur-md border-b sticky top-0 z-50 transition-colors duration-300 ${isDarkMode ? 'bg-slate-900/50 border-slate-800' : 'bg-white/80 border-slate-200'}`}>
+      <div className={`h-screen flex flex-col transition-colors duration-300 overflow-hidden pt-[env(safe-area-inset-top)] ${isDarkMode ? 'bg-slate-950 text-slate-50' : 'bg-slate-50 text-slate-900'}`}>
+        <nav className={`px-4 py-2 flex items-center justify-between backdrop-blur-md border-b sticky top-0 z-50 transition-colors duration-300 ${isDarkMode ? 'bg-slate-900/50 border-slate-800' : 'bg-white/80 border-slate-200'}`}>
           <div className="flex items-center">
             <button 
               onClick={() => setActiveGame('none')}
@@ -193,10 +228,10 @@ export default function App() {
   }
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 font-sans ${isDarkMode ? 'bg-slate-950 text-slate-50' : 'bg-slate-50 text-slate-900'}`}>
+    <div className={`min-h-screen transition-colors duration-300 font-sans pt-[env(safe-area-inset-top)] ${isDarkMode ? 'bg-slate-950 text-slate-50' : 'bg-slate-50 text-slate-900'}`}>
       {/* Header */}
-      <header className="pt-[calc(4rem+env(safe-area-inset-top))] pb-8 px-6 text-center space-y-4 relative">
-        <div className="absolute top-[calc(1.5rem+env(safe-area-inset-top))] right-6 flex items-center space-x-2">
+      <header className="pt-8 pb-8 px-6 text-center space-y-4 relative">
+        <div className="absolute top-6 right-6 flex items-center space-x-2">
           <button
             onClick={toggleTheme}
             className={`p-3 rounded-2xl transition-all ${isDarkMode ? 'bg-slate-900 text-slate-400 hover:text-yellow-400 border border-slate-800' : 'bg-white text-slate-500 hover:text-indigo-600 border border-slate-200 shadow-sm'}`}

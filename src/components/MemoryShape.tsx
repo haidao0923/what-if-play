@@ -596,7 +596,7 @@ export default function MemoryShape({
   );
 
   const renderMemorize = () => (
-    <div className="flex flex-col items-center justify-start min-h-screen p-2 sm:p-4 space-y-4 sm:space-y-6 overflow-hidden">
+    <div className="flex flex-col items-center justify-start min-h-full p-2 sm:p-4 space-y-4 sm:space-y-6 overflow-hidden">
       <div className="w-full max-w-4xl flex justify-between items-center px-2 sm:px-4">
         <div className="flex items-center space-x-2 sm:space-x-4">
           <div className={`p-2 sm:p-3 rounded-xl sm:rounded-2xl border transition-colors ${isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100 shadow-sm'}`}>
@@ -873,7 +873,7 @@ export default function MemoryShape({
   };
 
   const renderSequence = () => (
-    <div className="flex flex-col items-center justify-start min-h-screen p-4 space-y-8">
+    <div className="flex flex-col items-center justify-start min-h-full p-4 space-y-8">
       <div className="w-full max-w-4xl flex justify-between items-center px-4">
         <div className="flex items-center space-x-4">
           <div className={`p-3 rounded-2xl border transition-colors ${isDarkMode ? 'bg-slate-900 border-slate-800' : 'bg-white border-slate-100 shadow-sm'}`}>
@@ -971,13 +971,13 @@ export default function MemoryShape({
       <motion.div 
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="flex flex-col items-center justify-center min-h-[70vh] space-y-8 p-6 text-center"
+        className="flex flex-col items-center justify-center min-h-full space-y-8 p-6 text-center"
       >
         <div className="space-y-4">
           <div className={`inline-flex p-6 rounded-[2.5rem] mb-4 border-4 transition-all duration-500 bg-yellow-500/10 border-yellow-500 text-yellow-500 rotate-12`}>
             <Trophy size={64} />
           </div>
-          <h2 className={`text-5xl font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>LEADERBOARD</h2>
+          <h2 className={`text-3xl sm:text-4xl font-black ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}>LEADERBOARD</h2>
           <div className="flex justify-center">
             <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${isDarkMode ? 'bg-violet-500/10 border-violet-500/30 text-violet-400' : 'bg-violet-50 border-violet-200 text-violet-600'}`}>
               {gameMode} Mode
@@ -1030,7 +1030,7 @@ export default function MemoryShape({
   };
 
   return (
-    <div className={`min-h-[80vh] transition-colors duration-300 ${isDarkMode ? 'bg-slate-950 text-slate-50' : 'bg-slate-50 text-slate-900'}`}>
+    <div className={`min-h-full transition-colors duration-300 ${isDarkMode ? 'bg-slate-950 text-slate-50' : 'bg-slate-50 text-slate-900'}`}>
       <AnimatePresence mode="wait">
         {gameState === 'setup' && renderSetup()}
         {(gameState === 'sequence-flash' || gameState === 'sequence-input' || gameState === 'sequence-countdown') && renderSequence()}

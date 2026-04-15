@@ -439,7 +439,7 @@ export default function PasswordGame({ isDarkMode = true, initialPlayers = [] }:
     const guessers = currentTeam.players.filter((_, i) => i !== currentTeam.clueGiverIndex);
 
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 space-y-4 sm:space-y-8 overflow-hidden">
+      <div className="flex flex-col items-center justify-center min-h-full p-4 sm:p-6 space-y-4 sm:space-y-8 overflow-hidden">
         {/* Scoreboard Header */}
         <div className="w-full max-w-md flex justify-between items-center px-4">
           {teams.map((team, idx) => (

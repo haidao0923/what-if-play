@@ -661,7 +661,7 @@ export default function GeoTrivia({
   );
 
   const renderPlaying = () => (
-    <div className="flex flex-col items-center justify-start min-h-screen p-2 sm:p-4 space-y-2 sm:space-y-6 overflow-hidden">
+    <div className="flex flex-col items-center justify-start min-h-full p-2 sm:p-4 space-y-2 sm:space-y-6 overflow-hidden">
       {/* HUD */}
       <div className="w-full max-w-6xl flex justify-between items-center px-2 sm:px-4">
         <div className="flex items-center space-x-1 sm:space-x-4">

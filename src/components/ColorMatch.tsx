@@ -493,7 +493,7 @@ export default function ColorMatch({
 
   if (gameState === 'playing' && isDuoMode) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen w-full max-w-lg mx-auto p-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] gap-y-8 overflow-hidden">
+      <div className="flex flex-col items-center justify-center h-screen w-full max-w-lg mx-auto p-4 gap-y-8 overflow-hidden">
         {/* Player 2 (Top) */}
         <div className="w-full flex flex-col items-center space-y-2 rotate-180">
           <div className="w-full flex justify-between items-end px-2">

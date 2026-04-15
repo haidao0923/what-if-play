@@ -1009,8 +1009,8 @@ export default function GauntletMode({
   );
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 font-sans ${isDarkMode ? 'bg-slate-950 text-slate-50' : 'bg-slate-50 text-slate-900'}`}>
-      <main className="flex flex-col items-center justify-center p-6 pt-[calc(3rem+env(safe-area-inset-top))]">
+    <div className={`min-h-full transition-colors duration-300 font-sans ${isDarkMode ? 'bg-slate-950 text-slate-50' : 'bg-slate-50 text-slate-900'}`}>
+      <main className="flex flex-col items-center justify-center p-6 pt-12">
         <AnimatePresence mode="wait">
           {step === 'name' && renderNameStep()}
           {step === 'leaderboard' && renderLeaderboardStep()}
