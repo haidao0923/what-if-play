@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Gamepad2, Timer, Sparkles, ChevronRight, Zap, MessageSquare, Users, Search, Share2, Sun, Moon, Plus, X, UserPlus, Medal, Palette, Brain, Map as MapIcon } from 'lucide-react';
+import { Gamepad2, Timer, Sparkles, ChevronRight, Zap, MessageSquare, Users, Search, Share2, Sun, Moon, Plus, X, UserPlus, Medal, Palette, Brain, Map as MapIcon, Hourglass } from 'lucide-react';
 import ShareButton from './components/ShareButton';
 import GuessTheSeconds from './components/GuessTheSeconds';
 import CategoryTimer from './components/CategoryTimer';
@@ -21,6 +21,7 @@ export default function App() {
   const [gauntletConfig, setGauntletConfig] = useState<{ step: 'name' | 'playing' | 'results' | 'leaderboard', type: 'seconds' | 'math' | 'memory-classic' | 'memory-progressive' }>({ step: 'name', type: 'seconds' });
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [players, setPlayers] = useState<string[]>([]);
+  const [logoError, setLogoError] = useState(false);
   const [newPlayerName, setNewPlayerName] = useState('');
   const [playerFilter, setPlayerFilter] = useState<number>(0);
 
@@ -208,12 +209,19 @@ export default function App() {
           animate={{ scale: 1 }}
           className={`inline-flex p-1 rounded-3xl shadow-2xl mb-4 border overflow-hidden transition-colors duration-300 ${isDarkMode ? 'bg-slate-900 shadow-indigo-900/20 border-slate-800' : 'bg-white shadow-indigo-100 border-slate-100'}`}
         >
-          <img 
-            src="/logo.png" 
-            alt="WI-Play Logo" 
-            className="w-20 h-20 object-cover"
-            referrerPolicy="no-referrer"
-          />
+          {!logoError ? (
+            <img 
+              src="/logo.png" 
+              alt="WI-Play Logo" 
+              className="w-20 h-20 object-cover"
+              referrerPolicy="no-referrer"
+              onError={() => setLogoError(true)}
+            />
+          ) : (
+            <div className={`w-20 h-20 flex items-center justify-center ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`}>
+              <Hourglass size={48} />
+            </div>
+          )}
         </motion.div>
         <motion.h1 
           initial={{ opacity: 0, y: 20 }}
