@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Gamepad2, Timer, Sparkles, ChevronRight, Zap, MessageSquare, Users, Search, Share2, Sun, Moon, Plus, X, UserPlus, Medal, Palette, Brain, Map as MapIcon, Hourglass } from 'lucide-react';
 import ShareButton from './components/ShareButton';
@@ -24,41 +24,6 @@ export default function App() {
   const [logoError, setLogoError] = useState(false);
   const [newPlayerName, setNewPlayerName] = useState('');
   const [playerFilter, setPlayerFilter] = useState<number>(0);
-
-  // Swipe to back logic
-  useEffect(() => {
-    if (activeGame === 'none') return;
-
-    let touchStartX = 0;
-    let touchStartY = 0;
-
-    const handleTouchStart = (e: TouchEvent) => {
-      touchStartX = e.touches[0].clientX;
-      touchStartY = e.touches[0].clientY;
-    };
-
-    const handleTouchEnd = (e: TouchEvent) => {
-      const touchEndX = e.changedTouches[0].clientX;
-      const touchEndY = e.changedTouches[0].clientY;
-      
-      const deltaX = touchEndX - touchStartX;
-      const deltaY = Math.abs(touchEndY - touchStartY);
-
-      // If start near right edge and swiped left (> 100px) 
-      // and it was mostly horizontal (deltaY < 50px)
-      if (touchStartX > window.innerWidth - 40 && deltaX < -100 && deltaY < 50) {
-        setActiveGame('none');
-      }
-    };
-
-    window.addEventListener('touchstart', handleTouchStart);
-    window.addEventListener('touchend', handleTouchEnd);
-
-    return () => {
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchend', handleTouchEnd);
-    };
-  }, [activeGame]);
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
@@ -197,7 +162,7 @@ export default function App() {
               {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
             </button>
             <ShareButton 
-              title="WI-Play"
+              title="QuestIfy"
               text={`Come play ${games.find(g => g.id === activeGame)?.title} with me!`}
               className={`p-2 transition-colors ${isDarkMode ? 'text-slate-400 hover:text-indigo-400' : 'text-slate-500 hover:text-indigo-600'}`}
             />
@@ -247,7 +212,7 @@ export default function App() {
           {!logoError ? (
             <img 
               src="/logo.png" 
-              alt="WI-Play Logo" 
+              alt="QuestIfy Logo" 
               className="w-20 h-20 object-cover"
               referrerPolicy="no-referrer"
               onError={() => setLogoError(true)}
@@ -263,7 +228,7 @@ export default function App() {
           animate={{ opacity: 1, y: 0 }}
           className="text-5xl font-black tracking-tight"
         >
-          WI-<span className="text-indigo-400">Play</span>
+          Quest<span className="text-indigo-400">Ify</span>
         </motion.h1>
         <motion.p 
           initial={{ opacity: 0 }}
@@ -271,7 +236,7 @@ export default function App() {
           transition={{ delay: 0.2 }}
           className={`text-lg max-w-md mx-auto ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}
         >
-          A collection of fun, minimalist games to play with your friends.
+          A collection of creative social games to challenge your friends.
         </motion.p>
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -280,8 +245,8 @@ export default function App() {
           className="pt-4"
         >
           <ShareButton 
-            title="WI-Play"
-            text="Check out these fun party games! Perfect for playing with friends in person or while waiting in line."
+            title="QuestIfy"
+            text="Check out QuestIfy! It's a collection of fun party games perfect for any group gathering."
             className={`inline-flex items-center space-x-2 px-6 py-3 rounded-2xl font-bold transition-all border ${isDarkMode ? 'bg-indigo-900/30 text-indigo-400 hover:bg-indigo-900/50 border-indigo-500/20' : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100 border-indigo-200'}`}
           />
         </motion.div>
@@ -511,7 +476,7 @@ export default function App() {
 
       {/* Footer */}
       <footer className={`text-center py-8 text-sm ${isDarkMode ? 'text-slate-600' : 'text-slate-400'}`}>
-        <p>© 2026 WI-Play</p>
+        <p>© 2026 QuestIfy</p>
       </footer>
     </div>
   );
