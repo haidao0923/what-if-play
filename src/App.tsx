@@ -162,7 +162,7 @@ export default function App() {
               {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
             </button>
             <ShareButton 
-              title="QuestIfy"
+              title="WI-Play"
               text={`Come play ${games.find(g => g.id === activeGame)?.title} with me!`}
               className={`p-2 transition-colors ${isDarkMode ? 'text-slate-400 hover:text-indigo-400' : 'text-slate-500 hover:text-indigo-600'}`}
             />
@@ -212,7 +212,7 @@ export default function App() {
           {!logoError ? (
             <img 
               src="/logo.png" 
-              alt="QuestIfy Logo" 
+              alt="WI-Play Logo" 
               className="w-20 h-20 object-cover"
               referrerPolicy="no-referrer"
               onError={() => setLogoError(true)}
@@ -228,7 +228,7 @@ export default function App() {
           animate={{ opacity: 1, y: 0 }}
           className="text-5xl font-black tracking-tight"
         >
-          Quest<span className="text-indigo-400">Ify</span>
+          WI-<span className="text-indigo-400">Play</span>
         </motion.h1>
         <motion.p 
           initial={{ opacity: 0 }}
@@ -236,7 +236,7 @@ export default function App() {
           transition={{ delay: 0.2 }}
           className={`text-lg max-w-md mx-auto ${isDarkMode ? 'text-slate-400' : 'text-slate-600'}`}
         >
-          A collection of creative social games to challenge your friends.
+          A collection of fun, minimalist games to play with your friends.
         </motion.p>
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
@@ -245,8 +245,8 @@ export default function App() {
           className="pt-4"
         >
           <ShareButton 
-            title="QuestIfy"
-            text="Check out QuestIfy! It's a collection of fun party games perfect for any group gathering."
+            title="WI-Play"
+            text="Check out these fun party games! Perfect for playing with friends in person or while waiting in line."
             className={`inline-flex items-center space-x-2 px-6 py-3 rounded-2xl font-bold transition-all border ${isDarkMode ? 'bg-indigo-900/30 text-indigo-400 hover:bg-indigo-900/50 border-indigo-500/20' : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100 border-indigo-200'}`}
           />
         </motion.div>
@@ -476,7 +476,7 @@ export default function App() {
 
       {/* Footer */}
       <footer className={`text-center py-8 text-sm ${isDarkMode ? 'text-slate-600' : 'text-slate-400'}`}>
-        <p>© 2026 QuestIfy</p>
+        <p>© 2026 WI-Play</p>
       </footer>
     </div>
   );

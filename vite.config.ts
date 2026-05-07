@@ -14,9 +14,9 @@ export default defineConfig(({mode}) => {
         registerType: 'autoUpdate',
         includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
         manifest: {
-          name: 'QuestIfy - Social Party Games',
-          short_name: 'QuestIfy',
-          description: 'A collection of interactive social games for parties and group fun.',
+          name: 'WI-Play',
+          short_name: 'WhatIfPlay',
+          description: 'A collection of fun, minimalist games to play with your friends.',
           theme_color: '#4f46e5',
           icons: [
             {
